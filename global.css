@@ -1,0 +1,17 @@
+/* This file adds the requisite utility classes for Tailwind to work. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --primary: #FFFFFF;
+    --secondary: #e7e3e3;
+    --text: #2d2c2c;
+    --accent: #62a399;
+}
+
+:root.dark {
+    --primary: #121212;
+    --secondary: #2d2c2c;
+    --text: #F1F1F1
+}

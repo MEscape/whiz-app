@@ -1,7 +1,6 @@
 import React, { useLayoutEffect } from 'react'
 
 import { useNavigation } from '@react-navigation/native'
-
 import { Header, HeaderProps, VectorIconLibraries } from 'blueprints'
 
 /**
@@ -20,7 +19,7 @@ export function useHeader(
     navigation.setOptions({
       header: () => <Header {...headerProps} />,
       headerShown: true,
-      headerTransparent: headerProps.backgroundColor === 'transparent'
+      headerTransparent: headerProps.backgroundColor === 'transparent',
     })
   }, [...deps, navigation])
 }

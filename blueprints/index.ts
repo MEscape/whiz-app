@@ -1,3 +1,5 @@
 export * from './Text'
 export * from './Icon'
 export * from './Header'
+export * from './Image'
+export * from './Button'

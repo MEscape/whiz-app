@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 
 import { useIsFocused } from '@react-navigation/native'
 import { Video } from 'expo-av'
@@ -7,15 +7,13 @@ import { Video } from 'expo-av'
 import { PulsatingLoader } from '@/components/PulsatingLoader'
 
 interface BackgroundVideoProps {
-  videoSource: any // Local video (require) or URI
+  videoSource: any
   className?: string // NativeWind styling
   loadingIndicatorColor?: string
-  errorText?: string
 }
 
 export const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
   className = '',
-  errorText = 'Video failed to load. Please try again.',
   loadingIndicatorColor = 'accent',
   videoSource,
 }) => {
@@ -52,11 +50,7 @@ export const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
   return (
     <View className={`absolute inset-0 ${className}`}>
       {isLoading && !hasError && <PulsatingLoader pulseColor={loadingIndicatorColor} />}
-      {hasError && (
-        <View className="absolute inset-0 flex items-center justify-center z-10 bg-black/50">
-          <Text className="text-red-500 text-lg">{errorText}</Text>
-        </View>
-      )}
+      {hasError && <View className="absolute inset-0 bg-fixedBlack" />}
       {!hasError && (
         <Video
           ref={videoRef}
@@ -69,7 +63,7 @@ export const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
           onLoad={handleLoad}
           onError={handleError}
           style={{ flex: 1 }}
-          videoStyle={{ height: '100%' }}
+          videoStyle={{ height: '100%', width: '100%' }}
         />
       )}
     </View>

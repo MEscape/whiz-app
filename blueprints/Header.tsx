@@ -1,11 +1,17 @@
-import { ExtendedEdge, useSafeAreaInsetsStyle } from '@/hooks'
-import { Pressable, PressableProps, View } from 'react-native'
-import { Text, TextProps } from 'blueprints/Text'
 import React, { ReactElement } from 'react'
-import { Icon, IconProps, VectorIconLibraries } from 'blueprints/Icon'
+import { Pressable, PressableProps, View } from 'react-native'
+
+import { ExtendedEdge, useSafeAreaInsetsStyle } from '@/hooks'
 import { translate } from '@/i18n'
 
-export interface HeaderProps<L extends VectorIconLibraries, T extends VectorIconLibraries, R extends VectorIconLibraries> {
+import { Icon, IconProps, VectorIconLibraries } from 'blueprints/Icon'
+import { Text, TextProps } from 'blueprints/Text'
+
+export interface HeaderProps<
+  L extends VectorIconLibraries,
+  T extends VectorIconLibraries,
+  R extends VectorIconLibraries,
+> {
   backgroundColor?: string
   color?: string
   className?: string
@@ -51,12 +57,14 @@ interface HeaderActionProps<T extends VectorIconLibraries> {
   color?: string
 }
 
-const HeaderComponent = (props: HeaderProps<VectorIconLibraries, VectorIconLibraries, VectorIconLibraries>) => {
+const HeaderComponent = (
+  props: HeaderProps<VectorIconLibraries, VectorIconLibraries, VectorIconLibraries>,
+) => {
   const {
-    safeAreaEdges = ['top'],
     backgroundColor = 'primary',
     className = '',
     color = 'text',
+    safeAreaEdges = ['top'],
   } = props
 
   const containerInsets = useSafeAreaInsetsStyle(safeAreaEdges as Array<ExtendedEdge>)
@@ -71,7 +79,7 @@ const HeaderComponent = (props: HeaderProps<VectorIconLibraries, VectorIconLibra
   const rightTextContent = (i18nRightText || props.rightText) as string
 
   const containerStyles = `
-    flex w-full h-12 flex-row items-center px-4
+    flex w-full flex-row items-center px-4
     ${className} bg-${backgroundColor}
   `
 
@@ -122,30 +130,30 @@ const textStyles = ''
 const containerStyles = 'flex flex-row h-full items-center gap-x-1.5'
 
 const HeaderAction = (props: HeaderActionProps<VectorIconLibraries>) => {
-    if (props.ActionComponent) return props.ActionComponent
+  if (props.ActionComponent) return props.ActionComponent
 
-    const order = props.renderOrder || ['icon', 'content']
+  const order = props.renderOrder || ['icon', 'content']
 
-    if (props.content && props.icon) {
-      const renderItems = {
-        content: <Text key="content" variant="h3" text={props.content} textColor={props.color} />,
-        icon: <Icon key="icon" name={props.icon} library={props.library} color={props.color} />
-      }
-
-      return (
-        <Pressable className={`${containerStyles} ${props.baseStyles}`}>
-          {order.map((key) => renderItems[key])}
-        </Pressable>
-      )
+  if (props.content && props.icon) {
+    const renderItems = {
+      content: <Text key="content" variant="h3" text={props.content} textColor={props.color} />,
+      icon: <Icon key="icon" name={props.icon} library={props.library} color={props.color} />,
     }
 
-    if (props.content) {
-      return (
-        <Pressable className={`${containerStyles} ${props.baseStyles}`}>
-          <Text variant="h3" text={props.content} className={textStyles} textColor={props.color} />
-        </Pressable>
-      )
-    }
+    return (
+      <Pressable className={`${containerStyles} ${props.baseStyles}`}>
+        {order.map(key => renderItems[key])}
+      </Pressable>
+    )
+  }
+
+  if (props.content) {
+    return (
+      <Pressable className={`${containerStyles} ${props.baseStyles}`}>
+        <Text variant="h3" text={props.content} className={textStyles} textColor={props.color} />
+      </Pressable>
+    )
+  }
 
   if (props.icon) {
     return <Icon name={props.icon} library={props.library} />

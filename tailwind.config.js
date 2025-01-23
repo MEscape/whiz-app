@@ -12,8 +12,8 @@ module.exports = {
       colors: {
         accent: 'var(--accent)',
         background: 'var(--primary)',
-        fixedBlack: '#121212',
-        fixedWhite: '#FFFFFF',
+        fixedBlack: 'var(--fixed-black)',
+        fixedWhite: 'var(--fixed-white)',
         primary: 'var(--primary)',
         secondary: 'var(--secondary)',
         text: 'var(--text)',

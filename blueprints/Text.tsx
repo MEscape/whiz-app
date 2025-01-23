@@ -48,7 +48,7 @@ export const Text = ({
     className,
     `text-${textAlign}`,
     `text-${textColor}`,
-    fontWeight === 'bold' ? 'font-title' : fontWeight === 'light' ? 'font-body' : '',
+    fontWeight === 'bold' ? 'font-title' : fontWeight === 'light' ? 'font-body' : 'font-caption',
     uppercase ? 'uppercase' : '',
   ]
     .filter(Boolean)

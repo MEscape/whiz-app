@@ -9,6 +9,11 @@ interface TypewriterProps {
   pauseDuration?: number
 }
 
+const textProps = {
+  textColor: 'fixedWhite',
+  variant: 'h1',
+}
+
 export const Typewriter: React.FC<TypewriterProps> = ({
   pauseDuration = 2000,
   sentences,
@@ -77,9 +82,9 @@ export const Typewriter: React.FC<TypewriterProps> = ({
 
   return (
     <View className="flex-row items-center">
-      <Text variant="h1" textColor="fixedWhite">
+      <Text {...textProps}>
         {currentSentence}
-        {cursorVisible && <Text>|</Text>}
+        {cursorVisible && <Text {...textProps}>|</Text>}
       </Text>
     </View>
   )

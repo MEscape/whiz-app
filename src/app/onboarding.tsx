@@ -12,7 +12,7 @@ import {
 } from '@/components/onboarding'
 
 export default function OnboardingScreen() {
-  const slidesRef = useRef<FlatList<OnboardingItemProps>>(null)
+  const slidesRef = useRef<FlatList>(null)
   const scrollX = useRef(new Animated.Value(0)).current
   const flatListIndex = useRef(0)
   const navigation = useNavigation()
@@ -42,8 +42,8 @@ export default function OnboardingScreen() {
           showsHorizontalScrollIndicator={false}
           onViewableItemsChanged={onViewableItemsChanged}
           bounces={false}
-          data={slides as OnboardingItemProps[]}
-          keyExtractor={item => item.id}
+          data={slides}
+          keyExtractor={(item: OnboardingItemProps) => item.id}
           onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
             useNativeDriver: true,
           })}

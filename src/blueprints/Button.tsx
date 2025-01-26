@@ -32,7 +32,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({
   const [isAnimating, setIsAnimating] = useState(false)
 
   const i18nText = tx && translate(tx, txOptions)
-  const content = i18nText || text || children
+  const content = (i18nText || text || children) as string
 
   const baseStyle =
     'rounded-lg px-4 py-2 items-center justify-center transition-transform duration-150'

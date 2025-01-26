@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { View } from 'react-native'
 
-import { Text } from '@/blueprints'
+import { Text, TextVariants } from '@/blueprints'
 
 interface TypewriterProps {
   sentences: string[]
@@ -11,7 +11,7 @@ interface TypewriterProps {
 
 const textProps = {
   textColor: 'white',
-  variant: 'h1',
+  variant: 'h1' as TextVariants,
 }
 
 export const Typewriter: React.FC<TypewriterProps> = ({

@@ -48,7 +48,7 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) =
   // Load theme from storage or use the system preference
   useEffect(() => {
     const loadTheme = async () => {
-      const storedTheme = await storage.load<boolean>(StorageKeys.APP_THEME)
+      const storedTheme = await storage.load(StorageKeys.APP_THEME)
       const initialTheme = (
         storedTheme !== undefined ? storedTheme : colorScheme === 'dark'
       ) as boolean

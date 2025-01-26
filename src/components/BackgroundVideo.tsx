@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { View } from 'react-native'
 
 import { useIsFocused } from '@react-navigation/native'
-import { Video } from 'expo-av'
+import { ResizeMode, Video } from 'expo-av'
 
 import { PulsatingLoader } from '@/blueprints'
 
@@ -55,7 +55,7 @@ export const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
         <Video
           ref={videoRef}
           source={videoSource}
-          resizeMode="cover"
+          resizeMode={'cover' as ResizeMode}
           shouldPlay={false}
           isLooping
           isMuted

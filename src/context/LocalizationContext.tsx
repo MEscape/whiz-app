@@ -26,26 +26,36 @@ export const LocalizationProvider = ({ children }: React.PropsWithChildren) => {
   const [language, setLanguage] = useState<ContentLanguage>(ContentLanguage.English)
 
   // Set Language and persist to storage
-  const setAppLanguage = useCallback(async (newLanguage: ContentLanguage) => {
-    await storage.save(StorageKeys.APP_LANGUAGE, newLanguage)
-    i18n.locale = newLanguage
-    setLanguage(newLanguage)
-  }, [setLanguage])
+  const setAppLanguage = useCallback(
+    async (newLanguage: ContentLanguage) => {
+      await storage.save(StorageKeys.APP_LANGUAGE, newLanguage)
+      i18n.locale = newLanguage
+      setLanguage(newLanguage)
+    },
+    [setLanguage],
+  )
 
   // Memoized context value
-  const contextValue: LocalizationAppContextType = useMemo(() => ({
+  const contextValue: LocalizationAppContextType = useMemo(
+    () => ({
       language,
       setAppLanguage,
-  }), [language, setAppLanguage])
+    }),
+    [language, setAppLanguage],
+  )
 
   // Load language from storage
   useEffect(() => {
     const loadLanguage = async () => {
-        const storedLanguage = await storage.load<ContentLanguage>(StorageKeys.APP_LANGUAGE) as ContentLanguage
-        if (storedLanguage) await setAppLanguage(storedLanguage)
+      const storedLanguage = (await storage.load(StorageKeys.APP_LANGUAGE)) as ContentLanguage
+      if (storedLanguage) await setAppLanguage(storedLanguage)
     }
     loadLanguage()
   }, [setLanguage, setAppLanguage])
 
-  return <LocalizationAppContext.Provider value={contextValue}>{children}</LocalizationAppContext.Provider>
+  return (
+    <LocalizationAppContext.Provider value={contextValue}>
+      {children}
+    </LocalizationAppContext.Provider>
+  )
 }

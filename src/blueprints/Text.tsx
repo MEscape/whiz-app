@@ -6,7 +6,7 @@ import i18n from 'i18n-js'
 import { translate, TxKeyPath } from '@/i18n'
 
 export interface TextProps extends Omit<RNTextProps, 'className'> {
-  variant?: 'h1' | 'h2' | 'h3' | 'body' | 'caption'
+  variant?: TextVariants
   className?: string
   textAlign?: 'left' | 'center' | 'right' | 'justify'
   textColor?: string
@@ -24,6 +24,8 @@ const variantStyles = {
   h2: 'text-xl font-heading',
   h3: 'text-lg font-subheading',
 }
+
+export type TextVariants = keyof typeof variantStyles
 
 export const Text = ({
   children,

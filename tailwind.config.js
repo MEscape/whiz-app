@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{js,tsx,ts,jsx}', './blueprints/**/*.{js,ts,jsx,tsx}'],
+  content: ['./src/**/*.{js,tsx,ts,jsx}'],
   darkMode: 'class',
   nativewind: {
     cssInterop: true,
@@ -12,11 +12,11 @@ module.exports = {
       colors: {
         accent: 'var(--accent)',
         background: 'var(--primary)',
-        fixedBlack: 'var(--fixed-black)',
-        fixedWhite: 'var(--fixed-white)',
+        black: 'var(--fixed-black)',
         primary: 'var(--primary)',
         secondary: 'var(--secondary)',
         text: 'var(--text)',
+        white: 'var(--fixed-white)',
       },
       fontFamily: {
         body: ['OpenSansLight', 'sans-serif'],

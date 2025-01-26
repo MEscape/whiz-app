@@ -1,19 +1,19 @@
 import React, { useState } from 'react'
 import { View } from 'react-native'
 
-import { Image as ExpoImage, ImageContentFit } from 'expo-image'
+import { Image as ExpoImage, ImageProps as ExpoImageProps, ImageContentFit } from 'expo-image'
 
-import { PulsatingLoader } from '@/components'
 import { useAppContext } from '@/context'
 
-import Placeholder from 'blueprints/Placeholder'
+import Placeholder from './Placeholder'
+import { PulsatingLoader } from './PulsatingLoader'
 
-interface ImageSrc {
+export interface ImageSrc {
   dark: any
   light: any
 }
 
-interface ImageProps {
+interface ImageProps extends ExpoImageProps {
   src: ImageSrc | any
   altText?: string
   contentFit?: ImageContentFit
@@ -30,10 +30,16 @@ const ImageComponent: React.FC<ImageProps> = ({
   contentFit = 'cover' as ImageContentFit,
   loadingIndicatorColor = 'accent',
   src,
+  ...props
 }) => {
   const { isDarkMode } = useAppContext()
 
-  const imageSource = 'dark' in src && 'light' in src ? (isDarkMode ? src.dark : src.light) : src
+  const imageSource =
+    src && typeof src === 'object' && 'dark' in src && 'light' in src
+      ? isDarkMode
+        ? src.dark
+        : src.light
+      : src
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
 
@@ -61,11 +67,12 @@ const ImageComponent: React.FC<ImageProps> = ({
         <ExpoImage
           source={imageSource}
           contentFit={contentFit}
-          className={`h-full w-full ${className}`}
+          className={`w-full h-full ${className}`}
           cachePolicy={cachePolicy}
           onLoadStart={handleLoadStart}
           onLoad={handleLoad}
           onError={handleError}
+          {...props}
         />
       )}
     </View>

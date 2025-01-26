@@ -4,7 +4,7 @@ import { View } from 'react-native'
 import { useIsFocused } from '@react-navigation/native'
 import { Video } from 'expo-av'
 
-import { PulsatingLoader } from '@/components/PulsatingLoader'
+import { PulsatingLoader } from '@/blueprints'
 
 interface BackgroundVideoProps {
   videoSource: any

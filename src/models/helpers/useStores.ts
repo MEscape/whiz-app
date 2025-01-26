@@ -43,14 +43,7 @@ export const RootStoreProvider = RootStoreContext.Provider
  */
 export const useStores = () => useContext(RootStoreContext)
 
-/**
- * Used only in the app.tsx file, this hook sets up the RootStore
- * and then rehydrates it. It connects everything with Reactotron
- * and then lets the app know that everything is ready to go.
- * @param {() => void | Promise<void>} callback - an optional callback that's invoked once the store is ready
- * @returns the RootStore and rehydrated state
- */
-export const useInitialRootStore = (callback?: () => void | Promise<void>) => {
+export const useInitialRootStore = () => {
   const rootStore = useStores()
   const [rehydrated, setRehydrated] = useState(false)
 
@@ -64,9 +57,6 @@ export const useInitialRootStore = (callback?: () => void | Promise<void>) => {
 
       // let the app know we've finished rehydrating
       setRehydrated(true)
-
-      // invoke the callback, if provided
-      if (callback) callback()
     })()
 
     return () => {

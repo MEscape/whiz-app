@@ -1,4 +1,4 @@
-export const blackGradient = [
+export const blackGradient: readonly [string, string, ...string[]] = [
   'rgba(0,0,0,0)',
   'rgba(0,0,0,0.5)',
   'rgba(0,0,0,0.8)',

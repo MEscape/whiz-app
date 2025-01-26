@@ -4,8 +4,8 @@ import { Pressable, PressableProps, View } from 'react-native'
 import { ExtendedEdge, useSafeAreaInsetsStyle } from '@/hooks'
 import { translate } from '@/i18n'
 
-import { Icon, IconProps, VectorIconLibraries } from 'blueprints/Icon'
-import { Text, TextProps } from 'blueprints/Text'
+import { Icon, IconProps, VectorIconLibraries } from '@/blueprints/Icon'
+import { Text, TextProps } from '@/blueprints/Text'
 
 export interface HeaderProps<
   L extends VectorIconLibraries,

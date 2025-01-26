@@ -1,4 +1,6 @@
-import React from 'react'
+import { usePreloadAssets } from '@/hooks'
+
+import React, { useEffect } from 'react'
 
 import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
@@ -13,23 +15,26 @@ import { useInitialRootStore } from '@/models'
 
 SplashScreen.preventAutoHideAsync()
 
+const stackScreenOptions = { headerShown: false }
+
 export default function RootLayout() {
   const [areFontsLoaded, fontLoadError] = useFonts(customFontsToLoad)
+  const isLoadingAssets = usePreloadAssets()
 
-  const { rehydrated } = useInitialRootStore(() => {
-    // This runs after the root store has been initialized and rehydrated.
-    setTimeout(SplashScreen.hideAsync, 500)
-  })
+  const { rehydrated } = useInitialRootStore()
 
-  if (!rehydrated || (!areFontsLoaded && !fontLoadError)) {
+  if (!rehydrated || (!areFontsLoaded && !fontLoadError) || isLoadingAssets) {
     return null
   }
+
+  setTimeout(SplashScreen.hideAsync, 500)
 
   return (
     <ThemeProvider>
       <LocalizationProvider>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack screenOptions={stackScreenOptions}>
+          <Stack.Screen name="onboarding" />
+          <Stack.Screen name="(tabs)" />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />

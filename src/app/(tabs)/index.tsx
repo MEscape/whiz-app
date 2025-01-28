@@ -1,7 +1,7 @@
 import React from 'react'
-import { SafeAreaView, View } from 'react-native'
+import { Image as ImageRN, SafeAreaView, View } from 'react-native'
 
-import { Button, Image, TextField } from 'blueprints'
+import { Button, Image } from 'blueprints'
 import { LinearGradient } from 'expo-linear-gradient'
 
 import { BackgroundVideo, Typewriter } from '@/components'
@@ -43,7 +43,7 @@ export default function HomeScreen() {
               pauseDuration={1500}
             />
           </View>
-          <View className="flex flex-1 gap-y-2 bg-primary">
+          <View className="flex flex-1 gap-y-2">
             <Button className="h-12" text="Lobby erstellen" variant="primary" />
             <Button
               className="h-12"
@@ -51,7 +51,6 @@ export default function HomeScreen() {
               variant="primary"
               onPress={toggleTheme}
             />
-            <TextField error="fehler" placeholder="Test" iconLeft="home" secureTextEntry />
           </View>
         </View>
       </LinearGradient>

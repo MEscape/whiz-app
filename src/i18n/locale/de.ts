@@ -1,8 +1,10 @@
 const de = {
+  error: {
+    unexpected: 'Unbekannter Fehler',
+  },
   onboarding: {
     data: {
-      description:
-        'Lass uns beginnen, indem du dein Profil einrichtest. Füge einen Benutzernamen und ein Profilbild hinzu, um dein Whiz-Erlebnis zu personalisieren!',
+      description: 'Lass uns beginnen, füge einen Benutzernamen und ein Profilbild hinzu!',
       title: 'Personalisier dein Profil',
     },
     features: {
@@ -20,6 +22,12 @@ const de = {
         'Willkommen bei Whiz, dem ultimativen Party-Erlebnis, bei dem Spaß, Herausforderungen und Spannung aufeinandertreffen! Lass die Spiele beginnen.',
       title: 'Willkommen bei Whiz!',
     },
+  },
+  permissions: {
+    chosePhoto: 'Berechtigung zum Zugriff auf die Galerie ist erforderlich!',
+  },
+  placeholder: {
+    username: 'Benutzername',
   },
   tabs: {
     home: 'Start',

@@ -1,17 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { View } from 'react-native'
 
-import { Text, TextVariants } from 'blueprints'
+import { Text } from 'blueprints'
 
 interface TypewriterProps {
   sentences: string[]
   typingSpeed?: number
   pauseDuration?: number
-}
-
-const textProps = {
-  textColor: 'white',
-  variant: 'h1' as TextVariants,
 }
 
 export const Typewriter: React.FC<TypewriterProps> = ({
@@ -82,9 +77,13 @@ export const Typewriter: React.FC<TypewriterProps> = ({
 
   return (
     <View className="flex flex-row items-center my-16">
-      <Text {...textProps} uppercase>
+      <Text variant="h1" textColor="text-white" uppercase>
         {currentSentence}
-        {cursorVisible && <Text {...textProps}>|</Text>}
+        {cursorVisible && (
+          <Text variant="h1" textColor="text-white">
+            |
+          </Text>
+        )}
       </Text>
     </View>
   )

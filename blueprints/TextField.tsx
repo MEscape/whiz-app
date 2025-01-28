@@ -1,32 +1,32 @@
 import React, { useState } from 'react'
 import { TextInput, TextInputProps, View } from 'react-native'
 
+import { translate } from '@/i18n'
+
 import { Icon, IconProps, VectorIconLibraries } from './Icon'
-import { Text } from './Text'
+import { Text, TextProps } from './Text'
 
 interface TextFieldProps<L extends VectorIconLibraries, R extends VectorIconLibraries>
   extends TextInputProps {
   placeholder?: string
   error?: string
-  variant?: 'standard' | 'rounded' | 'outlined'
+  variant?: 'standard' | 'underlined'
   iconLeft?: IconProps<L>['name']
   iconLeftLibrary?: L
   iconRight?: IconProps<R>['name']
   iconRightLibrary?: R
+  placeholderTx?: TextProps['tx']
+  placeholderTxOptions?: TextProps['txOptions']
 }
 
 const variants = {
-  outlined: {
-    focus: '',
-    theme: '',
-  },
-  rounded: {
-    focus: '',
-    theme: '',
-  },
   standard: {
-    focus: 'border-accent',
-    theme: 'border-secondary border-[1px] rounded-lg shadow-lg bg-primary focus:border-accent',
+    focus: 'border-text',
+    theme: 'border-secondary border-[1px] rounded-lg bg-primary focus:border-accent',
+  },
+  underlined: {
+    focus: 'border-text',
+    theme: 'bg-primary border-b-2 border-secondary',
   },
 }
 
@@ -38,7 +38,10 @@ export const TextField = ({
   iconRight,
   iconRightLibrary = 'Ionicons',
   placeholder,
+  placeholderTx,
+  placeholderTxOptions,
   secureTextEntry,
+  value,
   variant = 'standard',
   ...props
 }: TextFieldProps<VectorIconLibraries, VectorIconLibraries>) => {
@@ -46,14 +49,21 @@ export const TextField = ({
   const [focused, setFocused] = useState(false)
   const variantStyles = variants[variant]
 
+  const i18nPlaceholderText = placeholderTx && translate(placeholderTx, placeholderTxOptions)
+  const placeholderContent = (i18nPlaceholderText || placeholder) as string
+
   const toggleSecureTextEntry = () => {
     setShowPassword(prevState => !prevState)
   }
 
+  const isValuePresent = value?.length > 0
+
   return (
     <View className="w-full py-2">
       <View
-        className={`${variantStyles.theme} flex-row items-center mb-1 h-12 ${overrideClassName} ${focused && variantStyles.focus}`}>
+        className={`${variantStyles.theme} flex-row items-center mb-1 h-12 transition-all duration-300 ease-in-out ${overrideClassName} ${
+          focused && variantStyles.focus
+        }`}>
         {iconLeft && (
           <Icon
             name={iconLeft}
@@ -62,22 +72,29 @@ export const TextField = ({
             className="pl-2 pr-1"
           />
         )}
-        <Text
-          variant="h3"
-          text={placeholder}
-          className={`absolute left-10 px-1 pointer-events-none ${focused && '-translate-y-[23px] -translate-x-9 bg-primary'}`}
-        />
+        {(variant === 'standard' || !isValuePresent) && (
+          <Text
+            variant="h3"
+            text={placeholderContent}
+            textColor={variant === 'standard' && focused ? 'text-text' : 'text-secondary'}
+            className={`absolute left-10 px-1 pointer-events-none transition-transform duration-200 ease-in-out ${
+              variant === 'standard' && (focused || isValuePresent)
+                ? '-translate-y-[23px] -translate-x-8 bg-primary text-sm'
+                : 'translate-y-0 translate-x-0'
+            }`}
+          />
+        )}
         <TextInput
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
-          className="flex-grow"
+          className="flex-grow text-md caret-accent"
           secureTextEntry={secureTextEntry && !showPassword}
           {...props}
         />
         {(iconRight || secureTextEntry) && (
           <Icon
             color="text-secondary"
-            name={showPassword ? 'eye-off' : 'eye'}
+            name={showPassword ? 'eye' : 'eye-off'}
             library={iconRightLibrary}
             onPress={toggleSecureTextEntry}
             className="pl-1 pr-2"
@@ -85,7 +102,7 @@ export const TextField = ({
         )}
       </View>
       {error && (
-        <Text variant="caption" textColor="text-accent">
+        <Text variant="caption" textColor="text-accent" className="pl-2">
           {error}
         </Text>
       )}

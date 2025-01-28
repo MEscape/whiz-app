@@ -1,8 +1,10 @@
 const en = {
+  error: {
+    unexpected: 'Unexpected error',
+  },
   onboarding: {
     data: {
-      description:
-        'Let’s get started by setting up your profile. Add a username and a profile picture to personalize your Whiz experience!',
+      description: 'Let’s get started add a username and a profile picture!',
       title: 'Personalize Your Profile',
     },
     features: {
@@ -20,6 +22,12 @@ const en = {
         'Welcome to Whiz, the ultimate party experience where fun, challenges, and excitement come together! Let the games begin.',
       title: 'Welcome to Whiz!',
     },
+  },
+  permissions: {
+    chosePhoto: 'Permission to access the gallery is required!',
+  },
+  placeholder: {
+    username: 'Username',
   },
   tabs: {
     home: 'Start',

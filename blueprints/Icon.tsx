@@ -1,6 +1,7 @@
 import React from 'react'
 
 import * as VectorIcons from '@expo/vector-icons'
+import { cssInterop } from 'nativewind'
 
 /**
  * Define the supported vector icon libraries and their icon names.
@@ -56,6 +57,13 @@ function IconComponent<T extends VectorIconLibraries>(props: IconProps<T>): Reac
   const combinedClassName = [color, className].filter(Boolean).join(' ')
 
   const VectorIcon = VectorIcons[library]
+
+  cssInterop(VectorIcon, {
+    className: {
+      nativeStyleToProp: { height: true, size: true, width: true },
+      target: 'style',
+    },
+  })
 
   return <VectorIcon name={name} size={size} className={combinedClassName} onPress={onPress} />
 }

@@ -1,6 +1,4 @@
-import { usePreloadAssets } from '@/hooks'
-
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
@@ -11,6 +9,7 @@ import 'react-native-reanimated'
 import '../../global.css'
 import { customFontsToLoad } from '@/constants'
 import { LocalizationProvider, ThemeProvider } from '@/context'
+import { usePreloadAssets } from '@/hooks'
 import { useInitialRootStore } from '@/models'
 
 SplashScreen.preventAutoHideAsync()

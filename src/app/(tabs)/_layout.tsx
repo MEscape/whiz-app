@@ -33,7 +33,7 @@ export default function TabLayout() {
   useEffect(() => {
     ;(async () => {
       const isFirstAppLaunch = await checkFirstAppLaunch()
-      if (isFirstAppLaunch) {
+      if (!isFirstAppLaunch) {
         router.replace('/onboarding')
       }
     })()

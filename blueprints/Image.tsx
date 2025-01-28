@@ -24,7 +24,7 @@ interface ImageProps extends ExpoImageProps {
 }
 
 const ImageComponent: React.FC<ImageProps> = ({
-  cachePolicy = 'disk',
+  cachePolicy = 'memory-disk',
   className,
   classNameContainer,
   contentFit = 'cover' as ImageContentFit,

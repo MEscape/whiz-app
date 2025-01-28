@@ -6,7 +6,7 @@ const slides: OnboardingItemProps[] = [
   {
     description: 'onboarding.welcome.description',
     id: '1',
-    image: { dark: ImageUris[Images.LOGO_DARK], light: ImageUris[Images.LOGO_LIGHT] },
+    image: { dark: ImageUris[Images.LOGO_LIGHT], light: ImageUris[Images.LOGO_DARK] },
     title: 'onboarding.welcome.title',
   },
   {

@@ -7,7 +7,7 @@ import { ResizeMode, Video } from 'expo-av'
 
 interface BackgroundVideoProps {
   videoSource: any
-  className?: string // NativeWind styling
+  className?: string
   loadingIndicatorColor?: string
 }
 

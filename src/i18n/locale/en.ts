@@ -1,15 +1,23 @@
 const en = {
   onboarding: {
+    data: {
+      description:
+        'Let’s get started by setting up your profile. Add a username and a profile picture to personalize your Whiz experience!',
+      title: 'Personalize Your Profile',
+    },
     features: {
-      description: 'Explore awesome features tailored for you.',
-      title: 'Amazing Features',
+      description:
+        'Discover amazing features crafted to make your parties unforgettable. Create lobbies, play minigames, and enjoy competitive fun!',
+      title: 'Exciting Features',
     },
     getStarted: {
-      description: 'Join now and start your party journey!',
-      title: "Let's Get Started",
+      description:
+        "Ready to dive in? Create or join lobbies, play games, and make unforgettable memories with friends. Let's get started!",
+      title: 'Let’s Start the Party!',
     },
     welcome: {
-      description: 'Get ready for the best party experience.',
+      description:
+        'Welcome to Whiz, the ultimate party experience where fun, challenges, and excitement come together! Let the games begin.',
       title: 'Welcome to Whiz!',
     },
   },

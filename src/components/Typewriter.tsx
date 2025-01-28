@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { View } from 'react-native'
 
-import { Text, TextVariants } from '@/blueprints'
+import { Text, TextVariants } from 'blueprints'
 
 interface TypewriterProps {
   sentences: string[]

@@ -1,9 +1,9 @@
 import React from 'react'
 import { SafeAreaView, View } from 'react-native'
 
+import { Button, Image, TextField } from 'blueprints'
 import { LinearGradient } from 'expo-linear-gradient'
 
-import { Button, Image } from '@/blueprints'
 import { BackgroundVideo, Typewriter } from '@/components'
 import { blackGradient } from '@/constants'
 import { useAppContext } from '@/context'
@@ -28,7 +28,7 @@ export default function HomeScreen() {
   )
 
   return (
-    <SafeAreaView className="flex h-full bg-fixedBlack">
+    <SafeAreaView className="flex h-full bg-black">
       <BackgroundVideo videoSource={VideoUris[Videos.PARTY_VIDEO]} />
       <LinearGradient
         colors={blackGradient}
@@ -43,7 +43,7 @@ export default function HomeScreen() {
               pauseDuration={1500}
             />
           </View>
-          <View className="flex flex-1 gap-y-2">
+          <View className="flex flex-1 gap-y-2 bg-primary">
             <Button className="h-12" text="Lobby erstellen" variant="primary" />
             <Button
               className="h-12"
@@ -51,6 +51,7 @@ export default function HomeScreen() {
               variant="primary"
               onPress={toggleTheme}
             />
+            <TextField error="fehler" placeholder="Test" iconLeft="home" secureTextEntry />
           </View>
         </View>
       </LinearGradient>

@@ -20,7 +20,7 @@ export function Paginator({
         const dotScale = scrollX.interpolate({
           extrapolate: 'clamp',
           inputRange,
-          outputRange: [0.8, 1.5, 0.8],
+          outputRange: [1, 1.4, 1],
         })
 
         const opacity = scrollX.interpolate({

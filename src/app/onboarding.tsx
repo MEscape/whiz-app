@@ -1,7 +1,9 @@
 import React, { useRef } from 'react'
-import { Animated, FlatList, View, ViewToken } from 'react-native'
+import { Animated, FlatList, SafeAreaView, View, ViewToken } from 'react-native'
 
-import { useNavigation } from 'expo-router'
+import { observer } from 'mobx-react-lite'
+
+import { useAppContext } from '@/context'
 
 import {
   GoOnButton,
@@ -11,15 +13,18 @@ import {
   slides,
 } from '@/components/onboarding'
 
-export default function OnboardingScreen() {
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
+
+export default observer(function OnboardingScreen() {
   const slidesRef = useRef<FlatList>(null)
   const scrollX = useRef(new Animated.Value(0)).current
   const flatListIndex = useRef(0)
-  const navigation = useNavigation()
+  const { router, userStore } = useAppContext()
 
   const onViewableItemsChanged = ({ viewableItems }: { viewableItems: ViewToken[] }) => {
     if (viewableItems[0].index !== null && viewableItems[0].index !== undefined) {
       flatListIndex.current = viewableItems[0].index
+      userStore.setIsActive(viewableItems[0].index === 2)
     }
   }
 
@@ -27,14 +32,12 @@ export default function OnboardingScreen() {
     if (slidesRef.current && flatListIndex.current + 1 < slides.length) {
       slidesRef.current.scrollToIndex({ animated: true, index: flatListIndex.current + 1 })
     } else {
-      navigation.navigate('(tabs)')
+      router.replace('/(tabs)')
     }
   }
 
-  const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
-
   return (
-    <View className="flex flex-1 h-full w-full bg-primary">
+    <SafeAreaView className="flex flex-1 h-full w-full bg-primary">
       <View className="h-3/4">
         <AnimatedFlatList
           pagingEnabled
@@ -49,14 +52,15 @@ export default function OnboardingScreen() {
           })}
           ref={slidesRef}
           scrollEventThrottle={16}
+          scrollEnabled={userStore.canProceed}
           renderItem={({ item }) => <OnboardingItem item={item} />}
         />
       </View>
 
       <View className="h-1/4 flex justify-center">
         <Paginator data={slides as OnboardingItemProps[]} scrollX={scrollX} />
-        <GoOnButton scrollTo={scrollTo} />
+        <GoOnButton scrollTo={scrollTo} disabled={!userStore.canProceed} />
       </View>
-    </View>
+    </SafeAreaView>
   )
-}
+})

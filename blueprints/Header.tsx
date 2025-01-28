@@ -4,8 +4,8 @@ import { Pressable, PressableProps, View } from 'react-native'
 import { ExtendedEdge, useSafeAreaInsetsStyle } from '@/hooks'
 import { translate } from '@/i18n'
 
-import { Icon, IconProps, VectorIconLibraries } from '@/blueprints/Icon'
-import { Text, TextProps } from '@/blueprints/Text'
+import { Icon, IconProps, VectorIconLibraries } from './Icon'
+import { Text, TextProps } from './Text'
 
 export interface HeaderProps<
   L extends VectorIconLibraries,
@@ -18,7 +18,7 @@ export interface HeaderProps<
   safeAreaEdges?: ExtendedEdge[]
   children?: React.ReactNode
 
-  titleIcon?: IconProps<T>['icon']
+  titleIcon?: IconProps<T>['name']
   titleIconLibrary?: T
   title?: TextProps['text']
   titleTx?: TextProps['tx']
@@ -27,7 +27,7 @@ export interface HeaderProps<
   TitleActionComponent?: ReactElement
   onTitlePress?: PressableProps['onPress']
 
-  leftIcon?: IconProps<L>['icon']
+  leftIcon?: IconProps<L>['name']
   leftIconLibrary?: L
   leftText?: TextProps['text']
   leftTx?: TextProps['tx']
@@ -36,7 +36,7 @@ export interface HeaderProps<
   leftTxOptions?: TextProps['txOptions']
   onLeftPress?: PressableProps['onPress']
 
-  rightIcon?: IconProps<R>['icon']
+  rightIcon?: IconProps<R>['name']
   rightIconLibrary?: R
   rightText?: TextProps['text']
   rightTx?: TextProps['tx']
@@ -48,7 +48,7 @@ export interface HeaderProps<
 
 interface HeaderActionProps<T extends VectorIconLibraries> {
   content?: string
-  icon?: IconProps<T>['icon']
+  icon?: IconProps<T>['name']
   library?: T
   onPress?: PressableProps['onPress']
   ActionComponent?: ReactElement

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs'
+import { Icon, Text } from 'blueprints'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Tabs, useRouter } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { Icon, Text } from '@/blueprints'
 import { blackGradient } from '@/constants'
 import { checkFirstAppLaunch } from '@/util'
 
@@ -45,9 +45,9 @@ export default function TabLayout() {
         name="index"
         options={{
           tabBarIcon: ({ focused }) => (
-            <Icon library="Ionicons" name={focused ? 'home' : 'home-outline'} color="accent" />
+            <Icon library="Ionicons" name={focused ? 'home' : 'home-outline'} color="text-white" />
           ),
-          tabBarLabel: () => <Text variant="caption" textColor="white" tx="tabs.home"></Text>,
+          tabBarLabel: () => <Text variant="caption" textColor="text-white" tx="tabs.home"></Text>,
         }}
       />
     </Tabs>

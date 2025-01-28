@@ -2,18 +2,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-    --primary: #FFFFFF;
-    --secondary: #e7e3e3;
-    --text: #2d2c2c;
-    --accent: #62a399;
-    --fixed-black: #121212;
-    --fixed-white: #FFFFFF;
-}
-
-:root.dark {
-    --primary: #121212;
-    --secondary: #2d2c2c;
-    --text: #FFFFFF;
-}

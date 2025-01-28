@@ -10,7 +10,7 @@ export interface TextProps extends Omit<RNTextProps, 'className'> {
   className?: string
   textAlign?: 'left' | 'center' | 'right' | 'justify'
   textColor?: string
-  fontWeight?: 'light' | 'normal' | 'bold'
+  fontWeight?: FontWeight
   uppercase?: boolean
   tx?: TxKeyPath
   text?: string
@@ -25,15 +25,29 @@ const variantStyles = {
   h3: 'text-lg font-subheading',
 }
 
+const textAlignVariants = {
+  center: 'text-center',
+  justify: 'text-justify',
+  left: 'text-left',
+  right: 'text-right',
+}
+
+const fontWeightVariants = {
+  bold: 'font-bold',
+  light: 'font-light',
+  normal: 'font-normal',
+}
+
 export type TextVariants = keyof typeof variantStyles
+export type FontWeight = keyof typeof fontWeightVariants
 
 export const Text = ({
   children,
   className = '',
   fontWeight = 'normal',
   text,
-  textAlign = 'left',
-  textColor = 'text',
+  textAlign = 'text-left',
+  textColor = 'text-text',
   tx,
   txOptions,
   uppercase = false,
@@ -41,17 +55,20 @@ export const Text = ({
   ...props
 }: TextProps) => {
   const presetStyle = variantStyles[variant] || variantStyles.body
+  const alignStyle = textAlignVariants[textAlign] || textAlignVariants.left
+  const weightStyle = fontWeightVariants[fontWeight] || fontWeightVariants.normal
+  const upperCaseStyle = uppercase ? 'uppercase' : ''
 
   const i18nText = tx && translate(tx, txOptions)
   const content = i18nText || text || children
 
   const combinedClassName = [
     presetStyle,
+    alignStyle,
+    textColor,
+    weightStyle,
+    upperCaseStyle,
     className,
-    `text-${textAlign}`,
-    `text-${textColor}`,
-    fontWeight === 'bold' ? 'font-title' : fontWeight === 'light' ? 'font-body' : 'font-caption',
-    uppercase ? 'uppercase' : '',
   ]
     .filter(Boolean)
     .join(' ')

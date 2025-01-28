@@ -2,9 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { View } from 'react-native'
 
 import { useIsFocused } from '@react-navigation/native'
+import { PulsatingLoader } from 'blueprints'
 import { ResizeMode, Video } from 'expo-av'
-
-import { PulsatingLoader } from '@/blueprints'
 
 interface BackgroundVideoProps {
   videoSource: any
@@ -50,7 +49,6 @@ export const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
   return (
     <View className={`absolute inset-0 ${className}`}>
       {isLoading && !hasError && <PulsatingLoader pulseColor={loadingIndicatorColor} />}
-      {hasError && <View className="absolute inset-0 bg-fixedBlack" />}
       {!hasError && (
         <Video
           ref={videoRef}

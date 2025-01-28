@@ -12,13 +12,19 @@ const slides: OnboardingItemProps[] = [
   {
     description: 'onboarding.features.description',
     id: '2',
-    image: { dark: ImageUris[Images.PARTY], light: ImageUris[Images.PARTY] }, // Add the dark and light properties
+    image: ImageUris[Images.PARTY],
     title: 'onboarding.features.title',
   },
   {
-    description: 'onboarding.getStarted.description',
+    description: 'onboarding.data.description',
     id: '3',
-    image: { dark: ImageUris[Images.START], light: ImageUris[Images.START] }, // Add the dark and light properties
+    image: ImageUris[Images.DATA],
+    title: 'onboarding.data.title',
+  },
+  {
+    description: 'onboarding.getStarted.description',
+    id: '4',
+    image: ImageUris[Images.START],
     title: 'onboarding.getStarted.title',
   },
 ]

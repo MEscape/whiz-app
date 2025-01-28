@@ -1,7 +1,9 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { View } from 'react-native'
 
 import { useColorScheme } from 'nativewind'
 
+import { themes } from '@/constants'
 import { StorageKeys } from '@/storage'
 import * as storage from '@/storage'
 
@@ -59,5 +61,11 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) =
   }, [colorScheme])
 
   // Provide context to children
-  return <AppThemeContext.Provider value={contextValue}>{children}</AppThemeContext.Provider>
+  return (
+    <AppThemeContext.Provider value={contextValue}>
+      <View style={themes[colorScheme]} className="flex-1">
+        {children}
+      </View>
+    </AppThemeContext.Provider>
+  )
 }

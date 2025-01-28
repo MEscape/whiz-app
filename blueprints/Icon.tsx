@@ -52,12 +52,12 @@ export interface IconProps<T extends VectorIconLibraries> {
  * @returns {React.ReactElement} The rendered icon component.
  */
 function IconComponent<T extends VectorIconLibraries>(props: IconProps<T>): React.ReactElement {
-  let { className = '', color = 'text', library, name, onPress, size = 20 } = props
-  className += ` text-${color}`
+  const { className = '', color = 'text-text', library, name, onPress, size = 20 } = props
+  const combinedClassName = [color, className].filter(Boolean).join(' ')
 
   const VectorIcon = VectorIcons[library]
 
-  return <VectorIcon name={name} size={size} className={className} onPress={onPress} />
+  return <VectorIcon name={name} size={size} className={combinedClassName} onPress={onPress} />
 }
 
 const MemorizedIcon = React.memo(IconComponent)

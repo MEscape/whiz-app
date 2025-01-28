@@ -72,7 +72,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({
       <View className={combinedClassName}>
         <Text
           variant="body"
-          textColor={variant === 'secondary' ? 'accent' : 'text'}
+          textColor={variant === 'secondary' ? 'text-accent' : 'text-text'}
           fontWeight="bold"
           {...props.textProps}>
           {content}

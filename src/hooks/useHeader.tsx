@@ -1,8 +1,7 @@
 import React, { useLayoutEffect } from 'react'
 
 import { useNavigation } from '@react-navigation/native'
-
-import { Header, HeaderProps, VectorIconLibraries } from '@/blueprints'
+import { Header, HeaderProps, VectorIconLibraries } from 'blueprints'
 
 /**
  * A hook that can be used to easily set the Header of a react-navigation screen from within the screen's component.

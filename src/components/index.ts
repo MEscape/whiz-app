@@ -1,5 +1,5 @@
 export * from './BackgroundVideo'
 export * from './Typewriter'
 export * from './onboarding'
-export * from './ProfileSetup'
+export * from './onboarding/ProfileSetup'
 export * from './ProfileImage'

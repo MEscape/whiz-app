@@ -5,7 +5,7 @@ import { Image, ImageSrc, Text } from 'blueprints'
 
 import { TxKeyPath } from '@/i18n'
 
-import { ProfileSetup } from '../ProfileSetup'
+import { ProfileSetup } from './ProfileSetup'
 
 export interface OnboardingItemProps {
   id: string

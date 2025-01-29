@@ -1,5 +1,5 @@
-import React from 'react'
-import { Image as ImageRN, SafeAreaView, View } from 'react-native'
+import React, { useEffect } from 'react'
+import { SafeAreaView, View } from 'react-native'
 
 import { Button, Image } from 'blueprints'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -7,8 +7,10 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { BackgroundVideo, Typewriter } from '@/components'
 import { blackGradient } from '@/constants'
 import { useAppContext } from '@/context'
+import { useAudioPlayer } from '@/hooks'
 import { translate } from '@/i18n'
 
+import { Audios, AudioUris } from 'assets/audios'
 import { Images, ImageUris } from 'assets/images'
 import { Videos, VideoUris } from 'assets/videos'
 
@@ -16,6 +18,7 @@ import { useHeader } from '@/hooks/useHeader'
 
 export default function HomeScreen() {
   const { toggleTheme } = useAppContext()
+  const { loadAudio } = useAudioPlayer()
 
   useHeader(
     {
@@ -26,6 +29,15 @@ export default function HomeScreen() {
     },
     [],
   )
+
+  useEffect(() => {
+    loadAudio(AudioUris[Audios.LOBBY_AUDIO], {
+      isLooping: true,
+      rate: 1.0,
+      shouldPlay: true,
+      volume: 1.0,
+    })
+  }, [loadAudio])
 
   return (
     <SafeAreaView className="flex h-full bg-black">

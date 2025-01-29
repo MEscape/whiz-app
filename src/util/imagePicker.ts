@@ -1,6 +1,6 @@
 import * as ImagePicker from 'expo-image-picker'
 
-import { showErrorToast } from '@/util'
+import { showErrorToast } from './toast'
 
 /**
  * Function to pick an image from the device's library or camera.

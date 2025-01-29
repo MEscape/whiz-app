@@ -87,7 +87,7 @@ export const TextField = ({
         <TextInput
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
-          className="flex-grow text-md caret-accent"
+          className="flex-grow text-md caret-accent text-text"
           secureTextEntry={secureTextEntry && !showPassword}
           {...props}
         />

@@ -11,6 +11,9 @@ export const UserStoreModel = types
     get canProceed() {
       return !self.isActive || self.username.trim().length > 0
     },
+    get userExists() {
+      return self.username.trim().length > 0
+    },
   }))
   .actions(self => ({
     clearProfile() {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 
 import { Icon, Image } from 'blueprints'
@@ -9,18 +9,18 @@ interface ProfileImageProps {
   showHint?: boolean
 }
 
-const ProfileImage: React.FC<ProfileImageProps> = ({ imageUrl, onPress, showHint }) => {
+const ProfileImageComponent: React.FC<ProfileImageProps> = ({ imageUrl, onPress, showHint }) => {
   return (
     <TouchableOpacity
       className="h-20 w-20 bg-secondary rounded-full overflow-hidden items-center justify-center"
       onPress={onPress}>
       {imageUrl ? (
-        <Image src={imageUrl} classNameContainer="w-full h-full" />
+        <Image src={{ uri: imageUrl }} classNameContainer="w-full h-full" />
       ) : (
         <>
           <Icon library="Ionicons" name="person" size={70} color="text-white" />
           {showHint && (
-            <View className="absolute inset-0 bg-black opacity-50 justify-center items-center">
+            <View className="absolute inset-0 bg-secondary opacity-50 justify-center items-center">
               <Icon name="camera" library="Ionicons" color="text-black" size={30} />
             </View>
           )}
@@ -29,5 +29,8 @@ const ProfileImage: React.FC<ProfileImageProps> = ({ imageUrl, onPress, showHint
     </TouchableOpacity>
   )
 }
+
+const ProfileImage = memo(ProfileImageComponent)
+ProfileImage.displayName = 'ProfileImage'
 
 export default ProfileImage

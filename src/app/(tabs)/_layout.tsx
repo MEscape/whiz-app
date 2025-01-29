@@ -3,15 +3,16 @@ import React, { useEffect } from 'react'
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs'
 import { Icon, Text } from 'blueprints'
 import { LinearGradient } from 'expo-linear-gradient'
-import { Tabs, useRouter } from 'expo-router'
+import { Tabs, useRootNavigationState } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { blackGradient } from '@/constants'
-import { checkFirstAppLaunch } from '@/util'
+import { useAppContext } from '@/context'
 
 export default function TabLayout() {
-  const router = useRouter()
+  const { router, userStore } = useAppContext()
   const { bottom } = useSafeAreaInsets()
+  const rootNavigationState = useRootNavigationState()
   const tabHeight = bottom + 50
 
   const screenOptions: BottomTabNavigationOptions = {
@@ -31,13 +32,10 @@ export default function TabLayout() {
   }
 
   useEffect(() => {
-    ;(async () => {
-      const isFirstAppLaunch = await checkFirstAppLaunch()
-      if (!isFirstAppLaunch) {
-        router.replace('/onboarding')
-      }
-    })()
-  }, [])
+    if (rootNavigationState?.key != null && !userStore.userExists) {
+      //router.replace('/onboarding')
+    }
+  }, [rootNavigationState, userStore.userExists])
 
   return (
     <Tabs screenOptions={screenOptions}>

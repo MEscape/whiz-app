@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Pressable, PressableProps, View } from 'react-native'
 
 import i18n from 'i18n-js'
 
+import { useAudioPlayer } from '@/hooks'
 import { translate, TxKeyPath } from '@/i18n'
 
 import { Text, TextProps } from './Text'
@@ -18,6 +19,14 @@ interface ButtonProps extends PressableProps {
   textProps?: TextProps
 }
 
+const baseStyle =
+  'rounded-lg px-4 py-2 items-center justify-center transition-transform duration-150'
+const variantStyles = {
+  primary: 'bg-accent text-text',
+  secondary: 'text-accent border-2 border-accent',
+  tertiary: 'bg-secondary text-text',
+}
+
 const ButtonComponent: React.FC<ButtonProps> = ({
   children,
   className = '',
@@ -30,17 +39,11 @@ const ButtonComponent: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const [isAnimating, setIsAnimating] = useState(false)
+  const { isPlaying, loadAudio, playAudio, stopAudio } = useAudioPlayer()
 
   const i18nText = tx && translate(tx, txOptions)
   const content = (i18nText || text || children) as string
 
-  const baseStyle =
-    'rounded-lg px-4 py-2 items-center justify-center transition-transform duration-150'
-  const variantStyles = {
-    primary: 'bg-accent text-text',
-    secondary: 'text-accent border-2 border-accent',
-    tertiary: 'bg-secondary text-text',
-  }
   const disabledStyle = disabled ? 'opacity-50' : ''
   const pressedStyle = isAnimating ? 'scale-95' : 'scale-100'
 
@@ -62,11 +65,22 @@ const ButtonComponent: React.FC<ButtonProps> = ({
     setTimeout(() => setIsAnimating(false), 150) // Reset after 150ms
   }
 
+  const handleOnPress = () => {
+    if (onPress) onPress()
+    if (isPlaying) stopAudio()
+
+    playAudio()
+  }
+
+  useEffect(() => {
+    loadAudio('click')
+  }, [])
+
   return (
     <Pressable
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      onPress={onPress}
+      onPress={handleOnPress}
       disabled={disabled}
       {...props}>
       <View className={combinedClassName}>

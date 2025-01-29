@@ -33,9 +33,7 @@ export default function HomeScreen() {
   useEffect(() => {
     loadAudio(AudioUris[Audios.LOBBY_AUDIO], {
       isLooping: true,
-      rate: 1.0,
       shouldPlay: true,
-      volume: 1.0,
     })
   }, [loadAudio])
 

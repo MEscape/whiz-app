@@ -48,6 +48,21 @@ export default function TabLayout() {
           tabBarLabel: () => <Text variant="caption" textColor="text-white" tx="tabs.home"></Text>,
         }}
       />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              library="Ionicons"
+              name={focused ? 'person' : 'person-outline'}
+              color="text-white"
+            />
+          ),
+          tabBarLabel: () => (
+            <Text variant="caption" textColor="text-white" tx="tabs.profile"></Text>
+          ),
+        }}
+      />
     </Tabs>
   )
 }

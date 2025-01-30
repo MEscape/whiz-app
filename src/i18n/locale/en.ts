@@ -3,7 +3,6 @@ const en = {
     unexpected: 'Unexpected error',
     username: {
       less: 'Too few characters',
-      much: 'Too much characters',
     },
   },
   onboarding: {

@@ -3,7 +3,6 @@ const de = {
     unexpected: 'Unbekannter Fehler',
     username: {
       less: 'Zu wenig Zeichen',
-      much: 'Zu viele Zeichen',
     },
   },
   onboarding: {

@@ -8,6 +8,10 @@ import { useHeader } from '@/hooks'
 
 import { Inventory, LevelProgress, Rewards, UsernameEditor } from '@/components/profile'
 import ProfileImage from '@/components/ProfileImage'
+import { PartyStats } from '@/components/profile/PartyStats'
+import { LevelUpAnimation } from '@/components/animations/LevelUpAnimation'
+import { EmojiInventory } from '@/components/profile/EmojiInventory'
+import { LevelProgress as LevelProgressComponent } from '@/components/profile/LevelProgress'
 
 const ProfileScreen = observer(() => {
   const { userStore } = useAppContext()
@@ -34,14 +38,29 @@ const ProfileScreen = observer(() => {
         <UsernameEditor />
       </View>
 
-      {/* Level Progress */}
-      <LevelProgress />
+      {/* Level Progress with Gradient */}
+      <LevelProgressComponent
+        level={userStore.level}
+        experience={userStore.experience}
+        experienceToNextLevel={userStore.experienceToNextLevel}
+        experienceProgress={userStore.experienceProgress}
+      />
+
+      {/* Party Stats */}
+      <PartyStats stats={userStore.stats} />
 
       {/* Rewards */}
       <Rewards />
 
-      {/* Inventory */}
-      <Inventory />
+      {/* Replace the old inventory section with the new EmojiInventory */}
+      <EmojiInventory userLevel={userStore.level} />
+
+      {userStore.isLevelingUp && (
+        <LevelUpAnimation
+          level={userStore.level}
+          onAnimationFinish={() => userStore.setIsLevelingUp(false)}
+        />
+      )}
     </View>
   )
 })

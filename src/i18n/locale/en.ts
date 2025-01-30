@@ -1,4 +1,7 @@
 const en = {
+  common: {
+    collect: 'Collect',
+  },
   error: {
     unexpected: 'Unexpected error',
     username: {
@@ -35,6 +38,13 @@ const en = {
   profile: {
     availableRewards: 'Available Rewards',
     inventory: 'Inventory',
+    stats: {
+      gamesPlayed: 'Games Played',
+      partiesHosted: 'Parties Hosted',
+      playTime: 'Play Time',
+      title: 'Party Stats',
+      winRate: 'Win rate',
+    },
   },
   pushNotifications: {
     message: [

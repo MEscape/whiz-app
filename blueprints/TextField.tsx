@@ -74,7 +74,7 @@ const TextField = forwardRef<TextInput, TextFieldProps<VectorIconLibraries, Vect
     const isValuePresent = value?.length > 0
 
     return (
-      <View className={`w-full py-2 ${overrideClassName}`}>
+      <View className={`flex-1 py-2 ${overrideClassName}`}>
         <View
           className={`${variantStyles.theme} flex-row items-center mb-1 h-12 transition-all duration-300 ease-in-out ${
             focused && variantStyles.focus

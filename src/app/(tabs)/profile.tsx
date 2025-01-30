@@ -6,19 +6,15 @@ import { observer } from 'mobx-react-lite'
 import { useAppContext } from '@/context'
 import { useHeader } from '@/hooks'
 
-import { Inventory, LevelProgress, Rewards, UsernameEditor } from '@/components/profile'
-import ProfileImage from '@/components/ProfileImage'
-import { PartyStats } from '@/components/profile/PartyStats'
 import { LevelUpAnimation } from '@/components/animations/LevelUpAnimation'
-import { EmojiInventory } from '@/components/profile/EmojiInventory'
-import { LevelProgress as LevelProgressComponent } from '@/components/profile/LevelProgress'
+import { Inventory, LevelProgress, PartyStats, Rewards, UsernameEditor } from '@/components/profile'
+import ProfileImage from '@/components/ProfileImage'
 
 const ProfileScreen = observer(() => {
   const { userStore } = useAppContext()
 
   useHeader({
     leftTx: 'tabs.profile',
-    onRightPress: undefined,
     rightIcon: 'settings',
     rightIconLibrary: 'Ionicons',
   })
@@ -39,7 +35,7 @@ const ProfileScreen = observer(() => {
       </View>
 
       {/* Level Progress with Gradient */}
-      <LevelProgressComponent
+      <LevelProgress
         level={userStore.level}
         experience={userStore.experience}
         experienceToNextLevel={userStore.experienceToNextLevel}
@@ -53,7 +49,7 @@ const ProfileScreen = observer(() => {
       <Rewards />
 
       {/* Replace the old inventory section with the new EmojiInventory */}
-      <EmojiInventory userLevel={userStore.level} />
+      <Inventory userLevel={userStore.level} />
 
       {userStore.isLevelingUp && (
         <LevelUpAnimation

@@ -1,25 +1,31 @@
 import React, { memo } from 'react'
 import { View } from 'react-native'
-import { Icon, Text } from 'blueprints'
 
-interface StatItemProps {
-  icon: string
-  label: string
+import { FlashList } from '@shopify/flash-list'
+import { Icon, IconProps, Text, VectorIconLibraries } from 'blueprints'
+
+import { translate, TxKeyPath } from '@/i18n'
+
+interface StatItemProps<T extends VectorIconLibraries> {
+  icon: IconProps<T>['name']
+  label: TxKeyPath
   value: string | number
   color?: string
 }
 
-const StatItem = memo(({ icon, label, value, color = 'text-accent' }: StatItemProps) => (
-  <View className="items-center p-3 bg-secondary rounded-lg">
-    <Icon name={icon} library="Ionicons" color={color} size={24} />
-    <Text variant="h3" className="mt-1" textColor={color}>
-      {value}
-    </Text>
-    <Text variant="caption" className="mt-1">
-      {label}
-    </Text>
-  </View>
-))
+const StatItem = memo(
+  ({ color = 'text-accent', icon, label, value }: StatItemProps<VectorIconLibraries>) => (
+    <View className="items-center p-3 bg-secondary rounded-lg min-w-32">
+      <Icon name={icon} library="Ionicons" color={color} size={24} />
+      <Text variant="h3" className="mt-1" textColor={color}>
+        {value}
+      </Text>
+      <Text variant="caption" className="mt-1">
+        {translate(label)}
+      </Text>
+    </View>
+  ),
+)
 
 interface PartyStatsProps {
   stats: {
@@ -32,35 +38,33 @@ interface PartyStatsProps {
 }
 
 export const PartyStats = memo(({ stats }: PartyStatsProps) => {
+  const statItems: StatItemProps<VectorIconLibraries>[] = [
+    {
+      color: 'text-accent',
+      icon: 'trophy',
+      label: 'profile.stats.winRate',
+      value: `${stats.winRate}%`,
+    },
+    { icon: 'game-controller', label: 'profile.stats.gamesPlayed', value: stats.totalGamesPlayed },
+    { icon: 'time', label: 'profile.stats.playTime', value: stats.formattedPlayTime },
+    { icon: 'people', label: 'profile.stats.partiesHosted', value: stats.totalPartiesHosted },
+  ]
+
   return (
     <View className="px-4 py-2">
-      <Text variant="h3" className="mb-4">
-        Party Stats
-      </Text>
-      
-      <View className="flex-row flex-wrap justify-between gap-2">
-        <StatItem
-          icon="trophy"
-          label="Win Rate"
-          value={`${stats.winRate}%`}
-          color="text-accent"
-        />
-        <StatItem
-          icon="game-controller"
-          label="Games Played"
-          value={stats.totalGamesPlayed}
-        />
-        <StatItem
-          icon="time"
-          label="Play Time"
-          value={stats.formattedPlayTime}
-        />
-        <StatItem
-          icon="people"
-          label="Parties Hosted"
-          value={stats.totalPartiesHosted}
-        />
-      </View>
+      <Text variant="h3" className="mb-2" tx="profile.stats.title" />
+
+      <FlashList
+        data={statItems}
+        keyExtractor={item => item.label}
+        renderItem={({ item }) => <StatItem {...item} />}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        estimatedItemSize={100}
+        ItemSeparatorComponent={() => <View style={{ width: 8 }} />}
+        bounces={false}
+        overScrollMode="never"
+      />
     </View>
   )
-}) 
+})

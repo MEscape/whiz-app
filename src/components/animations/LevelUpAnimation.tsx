@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react'
 import { View } from 'react-native'
-import LottieView from 'lottie-react-native'
 
 import { Text } from 'blueprints'
-import { Animations } from 'assets/animations'
+import LottieView from 'lottie-react-native'
+
+import { Animations, AnimationUris } from 'assets/animations'
 
 interface LevelUpAnimationProps {
   level: number
@@ -24,10 +25,10 @@ export const LevelUpAnimation = ({ level, onAnimationFinish }: LevelUpAnimationP
       <View className="items-center">
         <LottieView
           ref={animationRef}
-          source={Animations.LEVEL_UP}
+          source={AnimationUris[Animations.LEVEL_UP]}
           autoPlay={false}
           loop={false}
-          style={{ width: 200, height: 200 }}
+          style={{ height: 200, width: 200 }}
           onAnimationFinish={onAnimationFinish}
         />
         <Text
@@ -39,4 +40,4 @@ export const LevelUpAnimation = ({ level, onAnimationFinish }: LevelUpAnimationP
       </View>
     </View>
   )
-} 
+}

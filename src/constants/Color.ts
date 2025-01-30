@@ -9,6 +9,20 @@ export const blackGradient: readonly [string, string, ...string[]] = [
   'rgba(0,0,0,1)',
 ]
 
+export const progressGradient: readonly [string, string, ...string[]] = [
+  '#62a399',
+  '#7ab5ac',
+  '#8ec7be',
+  '#a1d9d0',
+]
+
+export const progressGradientDark: readonly [string, string, ...string[]] = [
+  '#4a8177',
+  '#62a399',
+  '#7ab5ac',
+  '#8ec7be',
+]
+
 export type ThemeData = {
   '--primary': string
   '--secondary': string

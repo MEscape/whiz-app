@@ -51,12 +51,11 @@ export const UsernameEditor = () => {
   return (
     <View className="flex-1 ml-4">
       {isEditing ? (
-        <View className="flex-row items-center justify-around">
+        <View className="flex-row items-center justify-around gap-x-2">
           <TextField
             ref={textFieldRef}
             value={editedUsername}
             onChangeText={handleOnChangeText}
-            className="w-2/3"
             placeholder="Username"
             maxLength={15}
             errorTx={error}

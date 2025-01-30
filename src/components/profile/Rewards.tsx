@@ -23,15 +23,16 @@ export const Rewards = () => {
         data={rewards}
         horizontal
         estimatedItemSize={200}
+        ItemSeparatorComponent={() => <View style={{ width: 8 }} />}
         renderItem={({ item }) => (
-          <View className="mr-4 bg-secondary p-3 rounded-lg w-40">
+          <View className="bg-secondary p-3 rounded-lg w-40">
             <Text variant="caption">{item.title}</Text>
             <Text variant="caption" textColor="text-accent">
               +{item.xp} XP
             </Text>
             <Button
               variant={userStore.gamesPlayed < item.requirement ? 'secondary' : 'primary'}
-              text="Collect"
+              tx="common.collect"
               className="mt-2"
               disabled={userStore.gamesPlayed < item.requirement}
               onPress={() => {

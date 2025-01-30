@@ -1,4 +1,7 @@
 const de = {
+  common: {
+    collect: 'Einsammeln',
+  },
   error: {
     unexpected: 'Unbekannter Fehler',
     username: {
@@ -35,6 +38,13 @@ const de = {
   profile: {
     availableRewards: 'Verfügbare Belohnungen',
     inventory: 'Inventar',
+    stats: {
+      gamesPlayed: 'Gespielte Spiele',
+      partiesHosted: 'Gehostete Partien',
+      playTime: 'Spielzeit',
+      title: 'Party Stats',
+      winRate: 'Gewinnrate',
+    },
   },
   pushNotifications: {
     message: [

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Pressable, PressableProps, View } from 'react-native'
+import { Pressable, PressableProps, Vibration, View } from 'react-native'
 
 import i18n from 'i18n-js'
 
 import { useAudioPlayer } from '@/hooks'
 import { translate, TxKeyPath } from '@/i18n'
+
+import { Audios, AudioUris } from 'assets/audios'
 
 import { Text, TextProps } from './Text'
 
@@ -59,28 +61,25 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 
   const handlePressIn = () => {
     setIsAnimating(true)
+    Vibration.vibrate(10)
+    if (isPlaying) stopAudio()
+
+    playAudio()
   }
 
   const handlePressOut = () => {
     setTimeout(() => setIsAnimating(false), 150) // Reset after 150ms
   }
 
-  const handleOnPress = () => {
-    if (onPress) onPress()
-    if (isPlaying) stopAudio()
-
-    playAudio()
-  }
-
   useEffect(() => {
-    loadAudio('click')
+    loadAudio(AudioUris[Audios.BUTTON_SOUND])
   }, [])
 
   return (
     <Pressable
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      onPress={handleOnPress}
+      onPress={onPress}
       disabled={disabled}
       {...props}>
       <View className={combinedClassName}>

@@ -29,6 +29,15 @@ const de = {
   placeholder: {
     username: 'Benutzername',
   },
+  pushNotifications: {
+    message: [
+      'Genieße die Freitag Nacht in vollen Zügen!',
+      'Lass uns das Wochenende mit einer Party beginnen!',
+      'Zeit, das Wochenende zu feiern und zu entspannen.',
+      'Bereit für ein unvergessliches Wochenende?',
+    ],
+    title: ['Freitag Nacht!', "Let's Party!", 'Wochenend-Vibes', 'Es ist Partyzeit!'],
+  },
   tabs: {
     home: 'Start',
   },

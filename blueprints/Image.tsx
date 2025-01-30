@@ -22,6 +22,7 @@ interface ImageProps extends ExpoImageProps {
   loadingIndicatorColor?: string
   classNameContainer?: string
   placeholderEnabled?: boolean
+  loadingEnabled?: boolean
   cachePolicy?: 'none' | 'disk' | 'memory' | 'memory-disk' | /** @hidden */ null
 }
 
@@ -30,6 +31,7 @@ const ImageComponent: React.FC<ImageProps> = ({
   className,
   classNameContainer,
   contentFit = 'cover' as ImageContentFit,
+  loadingEnabled,
   loadingIndicatorColor = 'accent',
   placeholderEnabled,
   src,
@@ -64,7 +66,7 @@ const ImageComponent: React.FC<ImageProps> = ({
 
   return (
     <View className={classNameContainer}>
-      {isLoading && !hasError && (
+      {isLoading && loadingEnabled && !hasError && (
         <PulsatingLoader className="rounded-md" pulseColor={loadingIndicatorColor} />
       )}
       {hasError && placeholderEnabled && <Placeholder />}

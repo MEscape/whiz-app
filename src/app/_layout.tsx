@@ -9,7 +9,7 @@ import 'react-native-reanimated'
 import '../../global.css'
 import { customFontsToLoad } from '@/constants'
 import { LocalizationProvider, ThemeProvider } from '@/context'
-import { usePreloadAssets } from '@/hooks'
+import { usePreloadAssets, useWeeklyNotification } from '@/hooks'
 import { useInitialRootStore } from '@/models'
 
 SplashScreen.preventAutoHideAsync()
@@ -21,6 +21,7 @@ export default function RootLayout() {
   const isLoadingAssets = usePreloadAssets()
 
   const { rehydrated } = useInitialRootStore()
+  useWeeklyNotification()
 
   if (!rehydrated || (!areFontsLoaded && !fontLoadError) || isLoadingAssets) {
     return null

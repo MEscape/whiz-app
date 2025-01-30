@@ -44,7 +44,7 @@ export default function HomeScreen() {
         colors={blackGradient}
         start={[1, 1]}
         end={[1, 0]}
-        className="h-full w-full absolute z-20">
+        className="h-full w-full absolute">
         <View className="flex flex-1 mx-[30px] my-[80px]">
           <View className="flex flex-1">
             <Typewriter

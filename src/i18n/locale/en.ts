@@ -29,6 +29,15 @@ const en = {
   placeholder: {
     username: 'Username',
   },
+  pushNotifications: {
+    message: [
+      'Enjoy the Friday night to the fullest!',
+      "Let's kick off the weekend with a party!",
+      'Time to celebrate and relax for the weekend.',
+      'Ready for an unforgettable weekend?',
+    ],
+    title: ['Friday Night!', "Let's Party!", 'Weekend Vibes', "It's Party Time!"],
+  },
   tabs: {
     home: 'Start',
   },

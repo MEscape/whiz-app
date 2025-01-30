@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 
+import { Asset } from 'expo-asset'
 import { Audio } from 'expo-av'
 
 interface AudioPlayerOptions {
@@ -15,17 +16,36 @@ export const useAudioPlayer = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const requestPermissions = async () => {
+    const { status } = await Audio.requestPermissionsAsync()
+    if (status !== 'granted') {
+      setError('Permission to access audio was denied')
+      return false
+    }
+    return true
+  }
+
   // Function to load the audio
   const loadAudio = useCallback(async (source: string, options: AudioPlayerOptions = {}) => {
+    if (!(await requestPermissions())) return
+
     try {
       setIsLoading(true)
       setError(null)
 
       const { isLooping = false, rate = 1.0, shouldPlay = false, volume = 1.0 } = options
 
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+        playsInSilentModeIOS: true,
+        playThroughEarpieceAndroid: false,
+        shouldDuckAndroid: true,
+        staysActiveInBackground: false,
+      })
+
       // Load sound
       const { sound } = await Audio.Sound.createAsync(
-        { uri: source }, // You can also pass an asset path here
+        { uri: Asset.fromModule(source).localUri },
         { isLooping, rate, shouldPlay, volume },
       )
 

@@ -1,6 +1,10 @@
 const de = {
   error: {
     unexpected: 'Unbekannter Fehler',
+    username: {
+      less: 'Zu wenig Zeichen',
+      much: 'Zu viele Zeichen',
+    },
   },
   onboarding: {
     data: {
@@ -29,6 +33,10 @@ const de = {
   placeholder: {
     username: 'Benutzername',
   },
+  profile: {
+    availableRewards: 'Verfügbare Belohnungen',
+    inventory: 'Inventar',
+  },
   pushNotifications: {
     message: [
       'Genieße die Freitag Nacht in vollen Zügen!',
@@ -40,6 +48,7 @@ const de = {
   },
   tabs: {
     home: 'Start',
+    profile: 'Profil',
   },
   whiz: {
     sentences: [

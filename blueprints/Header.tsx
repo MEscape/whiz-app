@@ -63,7 +63,7 @@ const HeaderComponent = (
   const {
     backgroundColor = 'primary',
     className = '',
-    color = 'text',
+    color = 'text-text',
     safeAreaEdges = ['top'],
   } = props
 
@@ -79,7 +79,7 @@ const HeaderComponent = (
   const rightTextContent = (i18nRightText || props.rightText) as string
 
   const containerStyles = `
-    flex w-full flex-row items-center px-4
+    flex w-full flex-row items-center p-4
     ${className} bg-${backgroundColor}
   `
 
@@ -136,12 +136,12 @@ const HeaderAction = (props: HeaderActionProps<VectorIconLibraries>) => {
 
   if (props.content && props.icon) {
     const renderItems = {
-      content: <Text key="content" variant="h3" text={props.content} textColor={props.color} />,
+      content: <Text key="content" variant="h1" text={props.content} textColor={props.color} />,
       icon: <Icon key="icon" name={props.icon} library={props.library} color={props.color} />,
     }
 
     return (
-      <Pressable className={`${containerStyles} ${props.baseStyles}`}>
+      <Pressable className={`${containerStyles} ${props.baseStyles} mt-4`}>
         {order.map(key => renderItems[key])}
       </Pressable>
     )
@@ -150,14 +150,19 @@ const HeaderAction = (props: HeaderActionProps<VectorIconLibraries>) => {
   if (props.content) {
     return (
       <Pressable className={`${containerStyles} ${props.baseStyles}`}>
-        <Text variant="h3" text={props.content} className={textStyles} textColor={props.color} />
+        <Text
+          variant="h1"
+          text={props.content}
+          className={`${textStyles} mt-4`}
+          textColor={props.color}
+        />
       </Pressable>
     )
   }
 
   if (props.icon) {
-    return <Icon name={props.icon} library={props.library} />
+    return <Icon name={props.icon} library={props.library} className="mt-4" />
   }
 
-  return <View className={`${containerStyles} flex-1`} />
+  return <View className={`${containerStyles} flex-1 mt-4`} />
 }

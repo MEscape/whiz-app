@@ -1,51 +1,70 @@
-import React, { useState } from 'react'
-import { View } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { TextInput, View } from 'react-native'
+
 import { FlashList } from '@shopify/flash-list'
+import { Button, Icon, Text, TextField } from 'blueprints'
 import { observer } from 'mobx-react-lite'
 
-import { Button, Header, Icon, Text, TextField } from 'blueprints'
-import ProfileImage from '@/components/ProfileImage'
 import { useAppContext } from '@/context'
 import { useHeader } from '@/hooks'
+import { TxKeyPath } from '@/i18n'
+
+import ProfileImage from '@/components/ProfileImage'
 
 const ProfileScreen = observer(() => {
   const { userStore } = useAppContext()
   const [isEditing, setIsEditing] = useState(false)
   const [editedUsername, setEditedUsername] = useState(userStore.username)
+  const [error, setError] = useState<TxKeyPath | null>(null)
+  const textFieldRef = useRef<TextInput>(null)
 
   useHeader({
-    title: 'Profile',
+    leftTx: 'tabs.profile',
+    onRightPress: undefined,
     rightIcon: 'settings',
     rightIconLibrary: 'Ionicons',
-    onRightPress: () => {
-      // Handle settings navigation
-    },
   })
 
   const handleEditPress = () => {
     setIsEditing(true)
     setEditedUsername(userStore.username)
+    if (textFieldRef.current) {
+      console.log('A')
+      textFieldRef.current.focus()
+    }
   }
 
   const handleSave = () => {
-    if (editedUsername.length >= 4 && editedUsername.length <= 15) {
-      userStore.setUsername(editedUsername)
-      setIsEditing(false)
+    if (editedUsername.length < 4) {
+      return setError('error.username.less')
     }
+
+    if (editedUsername.length > 15) {
+      return setError('error.username.much')
+    }
+
+    userStore.setUsername(editedUsername)
+    setIsEditing(false)
+    setError(null)
   }
 
   const handleCancel = () => {
     setIsEditing(false)
+    setError(null)
     setEditedUsername(userStore.username)
   }
 
   const rewards = [
-    { id: '1', title: 'Played 1 game', requirement: 1, xp: 100 },
-    { id: '2', title: 'Reached level 5', requirement: 5, xp: 500 },
+    { id: '1', requirement: 1, title: 'Played 1 game', xp: 100 },
+    { id: '2', requirement: 5, title: 'Reached level 5', xp: 500 },
     // Add more rewards as needed
   ]
 
   const emojis = ['🎮', '🎲', '🎯', '🎪', '🎨', '🎭', '🎪', '🎯']
+
+  useEffect(() => {
+    console.log(editedUsername)
+  }, [editedUsername])
 
   return (
     <View className="flex-1 bg-primary">
@@ -58,43 +77,47 @@ const ProfileScreen = observer(() => {
           }}
           showHint
         />
-        
+
         <View className="flex-1 ml-4">
           {isEditing ? (
-            <View className="flex-row items-center">
+            <View className="flex-row items-center justify-around">
               <TextField
+                ref={textFieldRef}
                 value={editedUsername}
                 onChangeText={setEditedUsername}
-                className="flex-1 mr-2"
+                className="w-2/3"
                 placeholder="Username"
                 maxLength={15}
+                errorTx={error}
               />
-              <Icon
-                name="checkmark-circle"
-                library="Ionicons"
-                color="text-accent"
-                size={24}
-                onPress={handleSave}
-                className="mr-2"
-              />
-              <Icon
-                name="close-circle"
-                library="Ionicons"
-                color="text-accent"
-                size={24}
-                onPress={handleCancel}
-              />
+              <View className="flex-row items-center">
+                <Icon
+                  name="checkmark-circle"
+                  library="Ionicons"
+                  color="text-accent"
+                  size={24}
+                  onPress={handleSave}
+                  className="mr-2"
+                />
+                <Icon
+                  name="close-circle"
+                  library="Ionicons"
+                  color="text-accent"
+                  size={24}
+                  onPress={handleCancel}
+                />
+              </View>
             </View>
           ) : (
             <View className="flex-row items-center">
-              <Text variant="h2" className="flex-1">
+              <Text variant="h2" className="mr-2">
                 {userStore.username}
               </Text>
               <Icon
                 name="pencil"
                 library="Ionicons"
                 color="text-accent"
-                size={20}
+                size={16}
                 onPress={handleEditPress}
               />
             </View>
@@ -120,46 +143,40 @@ const ProfileScreen = observer(() => {
 
       {/* Rewards */}
       <View className="px-4 py-2">
-        <Text variant="h3" className="mb-2">
-          Available Rewards
-        </Text>
-        <View className="h-24">
-          <FlashList
-            data={rewards}
-            horizontal
-            estimatedItemSize={200}
-            renderItem={({ item }) => (
-              <View className="mr-4 bg-secondary p-3 rounded-lg w-40">
-                <Text variant="caption">{item.title}</Text>
-                <Text variant="caption" textColor="text-accent">
-                  +{item.xp} XP
-                </Text>
-                <Button
-                  variant="primary"
-                  text="Collect"
-                  className="mt-2"
-                  disabled={userStore.gamesPlayed < item.requirement}
-                  onPress={() => {
-                    userStore.claimReward(item.id)
-                    userStore.addExperience(item.xp)
-                  }}
-                />
-              </View>
-            )}
-          />
-        </View>
+        <Text variant="h3" className="mb-2" tx="profile.availableRewards" />
+        <FlashList
+          data={rewards}
+          horizontal
+          estimatedItemSize={200}
+          renderItem={({ item }) => (
+            <View className="mr-4 bg-secondary p-3 rounded-lg w-40">
+              <Text variant="caption">{item.title}</Text>
+              <Text variant="caption" textColor="text-accent">
+                +{item.xp} XP
+              </Text>
+              <Button
+                variant={userStore.gamesPlayed < item.requirement ? 'secondary' : 'primary'}
+                text="Collect"
+                className="mt-2"
+                disabled={userStore.gamesPlayed < item.requirement}
+                onPress={() => {
+                  userStore.claimReward(item.id)
+                  userStore.addExperience(item.xp)
+                }}
+              />
+            </View>
+          )}
+        />
       </View>
 
       {/* Inventory */}
       <View className="px-4 py-2">
-        <Text variant="h3" className="mb-2">
-          Inventory
-        </Text>
-        <View className="flex-row flex-wrap">
+        <Text variant="h3" className="mb-2" tx="profile.inventory" />
+        <View className="flex-row flex-wrap gap-2">
           {emojis.map((emoji, index) => (
             <View
               key={index}
-              className="w-12 h-12 m-1 bg-secondary rounded-lg items-center justify-center">
+              className="w-12 h-12 bg-secondary rounded-lg items-center justify-center">
               <Text variant="h2">{emoji}</Text>
             </View>
           ))}

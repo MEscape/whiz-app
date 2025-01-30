@@ -1,6 +1,10 @@
 const en = {
   error: {
     unexpected: 'Unexpected error',
+    username: {
+      less: 'Too few characters',
+      much: 'Too much characters',
+    },
   },
   onboarding: {
     data: {
@@ -29,6 +33,10 @@ const en = {
   placeholder: {
     username: 'Username',
   },
+  profile: {
+    availableRewards: 'Available Rewards',
+    inventory: 'Inventory',
+  },
   pushNotifications: {
     message: [
       'Enjoy the Friday night to the fullest!',
@@ -40,6 +48,7 @@ const en = {
   },
   tabs: {
     home: 'Start',
+    profile: 'Profile',
   },
   whiz: {
     sentences: [

@@ -12,17 +12,15 @@ import ProfileImage from '../ProfileImage'
 export const ProfileSetup = observer(() => {
   const { userStore } = useAppContext()
   const [username, setUsername] = useState('')
-  const [profileImage, setProfileImage] = useState(null)
 
   const handleChosePhoto = useCallback(async () => {
     const uri = await pickImage()
     userStore.setProfileImage(uri)
-    setProfileImage(uri)
   }, [userStore])
 
   return (
     <View className="flex-1 w-full items-center justify-center py-4 h-full">
-      <ProfileImage onPress={handleChosePhoto} showHint imageUrl={profileImage} />
+      <ProfileImage onPress={handleChosePhoto} showHint imageUrl={userStore.profileImage} />
       <TextField
         placeholderTx="placeholder.username"
         iconLeft="person"
@@ -30,6 +28,7 @@ export const ProfileSetup = observer(() => {
         variant="underlined"
         onChangeText={setUsername}
         onEndEditing={() => userStore.setUsername(username)}
+        maxLength={15}
       />
     </View>
   )

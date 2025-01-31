@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react'
 import { View } from 'react-native'
 import { observer } from 'mobx-react-lite'
-import { FlashList } from '@shopify/flash-list'
 import { useAppContext } from '@/context'
 import { Button } from 'blueprints/Button'
 import { Text } from 'blueprints/Text'
 import { rewards } from '@/constants/rewards'
+import { FlatList } from 'react-native-gesture-handler'
 
 export const Rewards = observer(() => {
   const { userStore } = useAppContext()
@@ -22,16 +22,16 @@ export const Rewards = observer(() => {
     return { availableRewards: available, lockedRewards: locked }
   }, [userStore.gamesPlayed])
 
-  const combinedRewards = [...availableRewards, ...lockedRewards]
+  const combinedRewards = [...availableRewards, ...lockedRewards].filter(item => !userStore.claimedRewards.includes(item.id))
 
   return (
     <View className="px-4 py-6">
       <Text variant="h3" className="mb-2" tx="profile.availableRewards" />
-      <FlashList
+      <FlatList
         data={combinedRewards}
         horizontal
         showsHorizontalScrollIndicator={false}
-        estimatedItemSize={200}
+        keyExtractor={item => item.id}
         overScrollMode="never"
         ItemSeparatorComponent={() => <View style={{ width: 8 }} />}
         renderItem={({ item }) => (
@@ -48,10 +48,7 @@ export const Rewards = observer(() => {
               tx="common.collect"
               className="mt-2"
               disabled={userStore.gamesPlayed < item.requirement}
-              onPress={() => {
-                userStore.claimReward(item.id)
-                userStore.addExperience(item.xp)
-              }}
+              onPress={() => userStore.claimReward(item)}
             />
           </View>
         )}

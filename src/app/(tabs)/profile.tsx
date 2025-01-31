@@ -18,12 +18,13 @@ import {
 import ProfileImage from '@/components/ProfileImage'
 
 const ProfileScreen = observer(() => {
-  const { userStore } = useAppContext()
+  const { userStore, router } = useAppContext()
 
   useHeader({
     leftTx: 'tabs.profile',
     rightIcon: 'settings',
     rightIconLibrary: 'Ionicons',
+    onRightPress: () => router.push('/settings')
   })
 
   if (!userStore.level || !userStore.stats || userStore.profileImage === undefined) {

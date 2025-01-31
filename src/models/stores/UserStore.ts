@@ -1,3 +1,4 @@
+import { RewardItem } from '@/constants/rewards'
 import { Instance, SnapshotOut, types } from 'mobx-state-tree'
 
 export const PartyStatsModel = types
@@ -71,8 +72,11 @@ export const UserStoreModel = types
         self.isLevelingUp = true
       }
     },
-    claimReward(rewardId: string) {
-      self.claimedRewards.push(rewardId)
+    claimReward(reward: RewardItem) {
+      if (!self.claimedRewards.includes(reward.id)) {
+        self.claimedRewards.push(reward.id)
+        self.addExperience(reward.xp)
+      }
     },
     clearProfile() {
       self.username = ''

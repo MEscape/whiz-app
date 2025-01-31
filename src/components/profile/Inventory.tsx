@@ -1,9 +1,14 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect } from 'react'
 import { Pressable, View } from 'react-native'
+
 import { Icon, Text } from 'blueprints'
+
+import { useAppContext } from '@/context'
+
+import { Audios, AudioUris } from 'assets/audios'
+
 import { EMOJI_INVENTORY } from '@/constants/emojis'
 import { useAudioPlayer } from '@/hooks/useAudioPlayer'
-import { useAppContext } from '@/context'
 
 interface EmojiInventoryProps {
   userLevel: number
@@ -12,10 +17,10 @@ interface EmojiInventoryProps {
 const EmojiItem = memo(
   ({
     emoji,
-    isLocked,
-    requiredLevel,
     isEquipped,
+    isLocked,
     onPress,
+    requiredLevel,
   }: {
     emoji: string
     isLocked: boolean
@@ -54,18 +59,17 @@ export const Inventory = memo(({ userLevel }: EmojiInventoryProps) => {
   const { userStore } = useAppContext()
   const { loadAudio, playAudio } = useAudioPlayer()
 
-  const playEquipSound = async () => {
-    await loadAudio(require('@/assets/sounds/equip.mp3'))
-    await playAudio()
-  }
+  useEffect(() => {
+    loadAudio(AudioUris[Audios.EQUIP_SOUND])
+  }, [])
 
   const handleEmojiPress = async (emojiId: string) => {
     if (!userStore.canEquipEmoji(EMOJI_INVENTORY.find(e => e.id === emojiId)?.requiredLevel ?? 0)) {
       return
     }
 
-    await playEquipSound()
-    
+    await playAudio()
+
     if (userStore.equippedEmoji === emojiId) {
       userStore.equipEmoji(null)
     } else {

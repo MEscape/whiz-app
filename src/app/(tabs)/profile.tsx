@@ -7,7 +7,14 @@ import { useAppContext } from '@/context'
 import { useHeader } from '@/hooks'
 
 import { LevelUpAnimation } from '@/components/animations/LevelUpAnimation'
-import { Inventory, LevelProgress, PartyStats, Rewards, UsernameEditor, ProfileSkeleton } from '@/components/profile'
+import {
+  Inventory,
+  LevelProgress,
+  PartyStats,
+  ProfileSkeleton,
+  Rewards,
+  UsernameEditor,
+} from '@/components/profile'
 import ProfileImage from '@/components/ProfileImage'
 
 const ProfileScreen = observer(() => {
@@ -19,8 +26,7 @@ const ProfileScreen = observer(() => {
     rightIconLibrary: 'Ionicons',
   })
 
-  // Check if essential data exists
-  if (!userStore.level || !userStore.stats || !userStore.profileImage) {
+  if (!userStore.level || !userStore.stats || userStore.profileImage === undefined) {
     return <ProfileSkeleton />
   }
 
@@ -30,7 +36,7 @@ const ProfileScreen = observer(() => {
       <View className="flex-row items-center p-4">
         <ProfileImage
           imageUrl={userStore.profileImage}
-          onPress={(imageUri) => {
+          onPress={imageUri => {
             userStore.setProfileImage(imageUri)
           }}
           showHint

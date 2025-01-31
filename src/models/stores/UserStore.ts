@@ -30,6 +30,7 @@ export const UserStoreModel = types
   .model('UserStore')
   .props({
     claimedRewards: types.optional(types.array(types.string), []),
+    equippedEmoji: types.maybeNull(types.string),
     experience: types.optional(types.number, 0),
     gamesPlayed: types.optional(types.number, 0),
     isActive: types.optional(types.boolean, false),
@@ -38,9 +39,11 @@ export const UserStoreModel = types
     profileImage: types.maybeNull(types.string),
     stats: types.optional(PartyStatsModel, {}),
     username: types.optional(types.string, ''),
-    equippedEmoji: types.maybeNull(types.string),
   })
   .views(self => ({
+    canEquipEmoji(requiredLevel: number) {
+      return self.level >= requiredLevel
+    },
     get canProceed() {
       return !self.isActive || self.username.trim().length > 0
     },
@@ -52,9 +55,6 @@ export const UserStoreModel = types
     },
     get userExists() {
       return self.username.trim().length > 0
-    },
-    canEquipEmoji(requiredLevel: number) {
-      return self.level >= requiredLevel
     },
   }))
   .actions(self => ({
@@ -93,6 +93,9 @@ export const UserStoreModel = types
       self.stats.totalPartiesJoined = 0
       self.stats.totalPlayTime = 0
     },
+    equipEmoji(emojiId: string | null) {
+      self.equippedEmoji = emojiId
+    },
     incrementGamesPlayed() {
       self.gamesPlayed += 1
     },
@@ -121,9 +124,6 @@ export const UserStoreModel = types
       self.stats.totalPlayTime += playTime
       self.stats.lastPlayedAt = new Date()
       self.stats.favoriteGameType = gameType
-    },
-    equipEmoji(emojiId: string | null) {
-      self.equippedEmoji = emojiId
     },
   }))
 

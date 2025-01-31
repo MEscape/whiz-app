@@ -1,27 +1,35 @@
 import React from 'react'
 import { View } from 'react-native'
-import { BottomSheet as GorhomBottomSheet } from '@gorhom/bottom-sheet'
-import { Text } from './Text'
-import { Icon } from './Icon'
+
+import GorhomBottomSheet from '@gorhom/bottom-sheet'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+
+import { TxKeyPath } from '@/i18n'
+
+import { Icon, IconProps, VectorIconLibraries } from './Icon'
+import { Text } from './Text'
 
 interface BottomSheetProps {
   isVisible: boolean
   onClose: () => void
-  title?: string
+  title?: TxKeyPath
   children: React.ReactNode
 }
 
-interface BottomSheetOptionProps {
-  label: string
+interface BottomSheetOptionProps<T extends VectorIconLibraries> {
+  label: TxKeyPath
   icon?: {
-    name: string
-    library: string
+    name: IconProps<T>['name']
+    library: T
   }
   onPress: () => void
 }
 
-export const BottomSheetOption = ({ label, icon, onPress }: BottomSheetOptionProps) => (
+export const BottomSheetOption = ({
+  icon,
+  label,
+  onPress,
+}: BottomSheetOptionProps<VectorIconLibraries>) => (
   <TouchableOpacity
     onPress={onPress}
     className="flex-row items-center px-4 py-3 border-b border-secondary">
@@ -38,7 +46,7 @@ export const BottomSheetOption = ({ label, icon, onPress }: BottomSheetOptionPro
   </TouchableOpacity>
 )
 
-export const BottomSheet = ({ isVisible, onClose, title, children }: BottomSheetProps) => {
+export const BottomSheet = ({ children, isVisible, onClose, title }: BottomSheetProps) => {
   return (
     <GorhomBottomSheet
       index={isVisible ? 0 : -1}
@@ -55,4 +63,4 @@ export const BottomSheet = ({ isVisible, onClose, title, children }: BottomSheet
       </View>
     </GorhomBottomSheet>
   )
-} 
+}

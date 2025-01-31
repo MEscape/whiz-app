@@ -7,6 +7,8 @@ import { StatusBar } from 'expo-status-bar'
 import 'react-native-reanimated'
 
 import '../../global.css'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+
 import { customFontsToLoad } from '@/constants'
 import { LocalizationProvider, ThemeProvider } from '@/context'
 import { usePreloadAssets, useWeeklyNotification } from '@/hooks'
@@ -32,12 +34,14 @@ export default function RootLayout() {
   return (
     <ThemeProvider>
       <LocalizationProvider>
-        <Stack screenOptions={stackScreenOptions}>
-          <Stack.Screen name="onboarding" />
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="inverted" />
+        <GestureHandlerRootView>
+          <Stack screenOptions={stackScreenOptions}>
+            <Stack.Screen name="onboarding" />
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="inverted" />
+        </GestureHandlerRootView>
       </LocalizationProvider>
     </ThemeProvider>
   )

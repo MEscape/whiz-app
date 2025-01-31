@@ -16,45 +16,45 @@ export const LevelUpAnimation = ({ level, onAnimationFinish }: LevelUpAnimationP
   const animationRef = useRef<LottieView>(null)
 
   useEffect(() => {
-    if (animationRef.current) {
-      console.log('Animation ref is set, playing animation...')
-      animationRef.current.play()
-    } else {
-      console.log('animationRef is still null')
-    }
-  }, [level])
+    // Small delay to ensure component is mounted
+    const timer = setTimeout(() => {
+      if (animationRef.current) {
+        animationRef.current.reset()
+        animationRef.current.play()
+      }
+    }, 100)
+
+    return () => clearTimeout(timer)
+  }, [])
 
   cssInterop(LottieView, { className: 'style' })
 
   const handleManualAnimationFinish = () => {
-    if (animationRef.current) {
-      animationRef.current.reset()
+    if (onAnimationFinish) {
+      onAnimationFinish()
     }
-
-    onAnimationFinish()
   }
 
   return (
     <>
       <Pressable
-        className="absolute inset-0 items-center justify-center bg-black opacity-50 transition-opacity ease-in-out duration-200"
+        className="absolute inset-0 items-center justify-center bg-black/50"
         onPress={handleManualAnimationFinish}
       />
       <View className="absolute inset-0 flex items-center justify-center">
         <LottieView
           ref={animationRef}
           source={AnimationUris[Animations.LEVEL_UP]}
-          autoPlay={false}
+          autoPlay={true}
           loop={false}
           className="mb-4 h-56 w-56"
-          onAnimationFinish={onAnimationFinish}
+          onAnimationFinish={handleManualAnimationFinish}
         />
         <Text
           variant="h1"
           textColor="text-accent"
           className="mt-4 text-center animate-bounce text-7xl"
           text={`Level ${level}!`}
-          onPress={() => animationRef.current.play()}
         />
       </View>
     </>

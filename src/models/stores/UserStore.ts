@@ -38,6 +38,7 @@ export const UserStoreModel = types
     profileImage: types.maybeNull(types.string),
     stats: types.optional(PartyStatsModel, {}),
     username: types.optional(types.string, ''),
+    equippedEmoji: types.maybeNull(types.string),
   })
   .views(self => ({
     get canProceed() {
@@ -51,6 +52,9 @@ export const UserStoreModel = types
     },
     get userExists() {
       return self.username.trim().length > 0
+    },
+    canEquipEmoji(requiredLevel: number) {
+      return self.level >= requiredLevel
     },
   }))
   .actions(self => ({
@@ -117,6 +121,9 @@ export const UserStoreModel = types
       self.stats.totalPlayTime += playTime
       self.stats.lastPlayedAt = new Date()
       self.stats.favoriteGameType = gameType
+    },
+    equipEmoji(emojiId: string | null) {
+      self.equippedEmoji = emojiId
     },
   }))
 

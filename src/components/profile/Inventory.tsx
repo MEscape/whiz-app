@@ -1,9 +1,9 @@
 import React, { memo } from 'react'
 import { Pressable, View } from 'react-native'
-
 import { Icon, Text } from 'blueprints'
-
 import { EMOJI_INVENTORY } from '@/constants/emojis'
+import { useAudioPlayer } from '@/hooks/useAudioPlayer'
+import { useAppContext } from '@/context'
 
 interface EmojiInventoryProps {
   userLevel: number
@@ -14,51 +14,78 @@ const EmojiItem = memo(
     emoji,
     isLocked,
     requiredLevel,
+    isEquipped,
+    onPress,
   }: {
     emoji: string
     isLocked: boolean
     requiredLevel: number
+    isEquipped: boolean
+    onPress: () => void
   }) => (
-    <View className="relative">
-      <View
-        className={`w-12 h-12 rounded-lg items-center justify-center ${
-          isLocked ? 'bg-secondary/50' : 'bg-secondary'
-        }`}>
-        {isLocked ? (
-          <View className="items-center">
-            <Icon name="lock-closed" library="Ionicons" color="text-secondary" size={20} />
-            <Text variant="caption" textColor="text-secondary" className="mt-1">
-              Lvl {requiredLevel}
-            </Text>
+    <Pressable onPress={onPress}>
+      <View className="relative">
+        <View
+          className={`w-12 h-12 rounded-lg items-center justify-center ${
+            isLocked ? 'bg-secondary/50' : isEquipped ? 'bg-accent' : 'bg-secondary'
+          }`}>
+          {isLocked ? (
+            <View className="items-center">
+              <Icon name="lock-closed" library="Ionicons" color="text-secondary" size={20} />
+              <Text variant="caption" textColor="text-secondary" className="mt-1">
+                Lvl {requiredLevel}
+              </Text>
+            </View>
+          ) : (
+            <Text variant="h2">{emoji}</Text>
+          )}
+        </View>
+        {isEquipped && (
+          <View className="absolute -top-1 -right-1 bg-accent rounded-full p-1">
+            <Icon name="checkmark-circle" library="Ionicons" color="text-white" size={14} />
           </View>
-        ) : (
-          <Text variant="h2">{emoji}</Text>
         )}
       </View>
-    </View>
+    </Pressable>
   ),
 )
 
 export const Inventory = memo(({ userLevel }: EmojiInventoryProps) => {
+  const { userStore } = useAppContext()
+  const { loadAudio, playAudio } = useAudioPlayer()
+
+  const playEquipSound = async () => {
+    await loadAudio(require('@/assets/sounds/equip.mp3'))
+    await playAudio()
+  }
+
+  const handleEmojiPress = async (emojiId: string) => {
+    if (!userStore.canEquipEmoji(EMOJI_INVENTORY.find(e => e.id === emojiId)?.requiredLevel ?? 0)) {
+      return
+    }
+
+    await playEquipSound()
+    
+    if (userStore.equippedEmoji === emojiId) {
+      userStore.equipEmoji(null)
+    } else {
+      userStore.equipEmoji(emojiId)
+    }
+  }
+
   return (
     <View className="px-4 py-6">
       <Text variant="h3" className="mb-2" tx="profile.inventory" />
       <View className="flex-row flex-wrap justify-start gap-2">
         {EMOJI_INVENTORY.map(item => (
-          <Pressable
+          <EmojiItem
             key={item.id}
-            onPress={() => {
-              // Optional: Show tooltip or description when pressed
-              if (userLevel >= item.requiredLevel) {
-                // Handle emoji selection
-              }
-            }}>
-            <EmojiItem
-              emoji={item.emoji}
-              isLocked={userLevel < item.requiredLevel}
-              requiredLevel={item.requiredLevel}
-            />
-          </Pressable>
+            emoji={item.emoji}
+            isLocked={userLevel < item.requiredLevel}
+            requiredLevel={item.requiredLevel}
+            isEquipped={userStore.equippedEmoji === item.id}
+            onPress={() => handleEmojiPress(item.id)}
+          />
         ))}
       </View>
     </View>

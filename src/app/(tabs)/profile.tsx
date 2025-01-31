@@ -7,7 +7,7 @@ import { useAppContext } from '@/context'
 import { useHeader } from '@/hooks'
 
 import { LevelUpAnimation } from '@/components/animations/LevelUpAnimation'
-import { Inventory, LevelProgress, PartyStats, Rewards, UsernameEditor } from '@/components/profile'
+import { Inventory, LevelProgress, PartyStats, Rewards, UsernameEditor, ProfileSkeleton } from '@/components/profile'
 import ProfileImage from '@/components/ProfileImage'
 
 const ProfileScreen = observer(() => {
@@ -19,16 +19,22 @@ const ProfileScreen = observer(() => {
     rightIconLibrary: 'Ionicons',
   })
 
+  // Check if essential data exists
+  if (!userStore.level || !userStore.stats || !userStore.profileImage) {
+    return <ProfileSkeleton />
+  }
+
   return (
     <ScrollView className="flex-1 bg-primary">
       {/* Profile Header */}
       <View className="flex-row items-center p-4">
         <ProfileImage
           imageUrl={userStore.profileImage}
-          onPress={() => {
-            // Handle profile image update
+          onPress={(imageUri) => {
+            userStore.setProfileImage(imageUri)
           }}
           showHint
+          equippedEmojiId={userStore.equippedEmoji}
         />
 
         <UsernameEditor />

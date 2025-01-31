@@ -76,7 +76,7 @@ const ProfileImageComponent: React.FC<ProfileImageProps> = ({
 
       {/* BottomSheet should now open properly */}
       <BottomSheet
-        key={isBottomSheetVisible.toString()} // Ensure re-render
+        snapPoints={['25%']}
         isVisible={isBottomSheetVisible}
         onClose={() => setIsBottomSheetVisible(false)}
         title="profile.imageOptions">

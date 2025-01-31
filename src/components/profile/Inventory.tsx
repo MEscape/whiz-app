@@ -1,5 +1,5 @@
 import React, { memo, useEffect } from 'react'
-import { Pressable, View } from 'react-native'
+import { Pressable, Vibration, View } from 'react-native'
 
 import { Icon, Text } from 'blueprints'
 
@@ -9,10 +9,7 @@ import { Audios, AudioUris } from 'assets/audios'
 
 import { EMOJI_INVENTORY } from '@/constants/emojis'
 import { useAudioPlayer } from '@/hooks/useAudioPlayer'
-
-interface EmojiInventoryProps {
-  userLevel: number
-}
+import { observer } from 'mobx-react-lite'
 
 const EmojiItem = memo(
   ({
@@ -55,7 +52,7 @@ const EmojiItem = memo(
   ),
 )
 
-export const Inventory = memo(({ userLevel }: EmojiInventoryProps) => {
+export const Inventory = memo(observer(() => {
   const { userStore } = useAppContext()
   const { loadAudio, playAudio } = useAudioPlayer()
 
@@ -69,6 +66,7 @@ export const Inventory = memo(({ userLevel }: EmojiInventoryProps) => {
     }
 
     await playAudio()
+    Vibration.vibrate(10)
 
     if (userStore.equippedEmoji === emojiId) {
       userStore.equipEmoji(null)
@@ -85,7 +83,7 @@ export const Inventory = memo(({ userLevel }: EmojiInventoryProps) => {
           <EmojiItem
             key={item.id}
             emoji={item.emoji}
-            isLocked={userLevel < item.requiredLevel}
+            isLocked={userStore.level < item.requiredLevel}
             requiredLevel={item.requiredLevel}
             isEquipped={userStore.equippedEmoji === item.id}
             onPress={() => handleEmojiPress(item.id)}
@@ -94,4 +92,4 @@ export const Inventory = memo(({ userLevel }: EmojiInventoryProps) => {
       </View>
     </View>
   )
-})
+}))

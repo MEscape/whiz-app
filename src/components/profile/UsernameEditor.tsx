@@ -58,6 +58,7 @@ export const UsernameEditor = () => {
             onChangeText={handleOnChangeText}
             placeholder="Username"
             maxLength={15}
+            variant="underlined"
             errorTx={error}
           />
           <View className="flex-row items-center">

@@ -1,10 +1,10 @@
 import React, { memo } from 'react'
 import { View } from 'react-native'
-
+import { observer } from 'mobx-react-lite'
 import { FlashList } from '@shopify/flash-list'
 import { Icon, IconProps, Text, VectorIconLibraries } from 'blueprints'
-
 import { translate, TxKeyPath } from '@/i18n'
+import { useAppContext } from '@/context'
 
 interface StatItemProps<T extends VectorIconLibraries> {
   icon: IconProps<T>['name']
@@ -27,17 +27,10 @@ const StatItem = memo(
   ),
 )
 
-interface PartyStatsProps {
-  stats: {
-    totalPartiesHosted: number
-    totalPartiesJoined: number
-    winRate: number
-    totalGamesPlayed: number
-    formattedPlayTime: string
-  }
-}
+export const PartyStats = observer(() => {
+  const { userStore } = useAppContext()
+  const stats = userStore.stats
 
-export const PartyStats = memo(({ stats }: PartyStatsProps) => {
   const statItems: StatItemProps<VectorIconLibraries>[] = [
     {
       color: 'text-accent',

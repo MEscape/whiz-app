@@ -37,7 +37,10 @@ const de = {
   },
   profile: {
     availableRewards: 'Verfügbare Belohnungen',
+    imageOptions: 'Profilbild Optionen',
     inventory: 'Inventar',
+    newImage: 'Neues Foto aufnehmen',
+    removeImage: 'Foto entfernen',
     stats: {
       gamesPlayed: 'Gespielte Spiele',
       partiesHosted: 'Gehostete Partien',

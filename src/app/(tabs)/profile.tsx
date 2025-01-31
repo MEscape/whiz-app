@@ -46,22 +46,10 @@ const ProfileScreen = observer(() => {
         <UsernameEditor />
       </View>
 
-      {/* Level Progress with Gradient */}
-      <LevelProgress
-        level={userStore.level}
-        experience={userStore.experience}
-        experienceToNextLevel={userStore.experienceToNextLevel}
-        experienceProgress={userStore.experienceProgress}
-      />
-
-      {/* Party Stats */}
-      <PartyStats stats={userStore.stats} />
-
-      {/* Rewards */}
+      <LevelProgress />
+      <PartyStats />
       <Rewards />
-
-      {/* Replace the old inventory section with the new EmojiInventory */}
-      <Inventory userLevel={userStore.level} />
+      <Inventory />
 
       {userStore.isLevelingUp && (
         <LevelUpAnimation

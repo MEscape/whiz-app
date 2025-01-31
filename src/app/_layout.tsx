@@ -13,6 +13,7 @@ import { customFontsToLoad } from '@/constants'
 import { LocalizationProvider, ThemeProvider } from '@/context'
 import { usePreloadAssets, useWeeklyNotification } from '@/hooks'
 import { useInitialRootStore } from '@/models'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -35,12 +36,14 @@ export default function RootLayout() {
     <ThemeProvider>
       <LocalizationProvider>
         <GestureHandlerRootView>
-          <Stack screenOptions={stackScreenOptions}>
-            <Stack.Screen name="onboarding" />
-            <Stack.Screen name="(tabs)" />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-          <StatusBar style="inverted" />
+          <BottomSheetModalProvider>
+            <Stack screenOptions={stackScreenOptions}>
+              <Stack.Screen name="onboarding" />
+              <Stack.Screen name="(tabs)" />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+            <StatusBar style="inverted" />
+          </BottomSheetModalProvider>
         </GestureHandlerRootView>
       </LocalizationProvider>
     </ThemeProvider>

@@ -10,7 +10,7 @@ const en = {
   },
   onboarding: {
     data: {
-      description: 'Let’s get started add a username and a profile picture!',
+      description: "Let's get started add a username and a profile picture!",
       title: 'Personalize Your Profile',
     },
     features: {
@@ -21,7 +21,7 @@ const en = {
     getStarted: {
       description:
         "Ready to dive in? Create or join lobbies, play games, and make unforgettable memories with friends. Let's get started!",
-      title: 'Let’s Start the Party!',
+      title: "Let's Start the Party!",
     },
     welcome: {
       description:
@@ -37,7 +37,10 @@ const en = {
   },
   profile: {
     availableRewards: 'Available Rewards',
+    imageOptions: 'Profile Image Options',
     inventory: 'Inventory',
+    newImage: 'Take New Photo',
+    removeImage: 'Remove Photo',
     stats: {
       gamesPlayed: 'Games Played',
       partiesHosted: 'Parties Hosted',
@@ -78,10 +81,10 @@ const en = {
   },
   whiz: {
     sentences: [
-      'Welcome, party people – it’s going to be a legendary night!',
-      'Get ready for a night full of fun and surprises!',
-      'Grab your drink and let’s make this night unforgettable!',
-      'The night is young and the possibilities are endless – enjoy every minute!',
+      "Welcome, party people – it's going to be a legendary night!",
+      "Get ready for a night full of fun and surprises!",
+      "Grab your drink and let's make this night unforgettable!",
+      "The night is young and the possibilities are endless – enjoy every minute!",
     ],
   },
 }

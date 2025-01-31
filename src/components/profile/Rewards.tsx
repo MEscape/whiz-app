@@ -1,16 +1,13 @@
 import React, { useMemo } from 'react'
 import { View } from 'react-native'
-
+import { observer } from 'mobx-react-lite'
 import { FlashList } from '@shopify/flash-list'
-
 import { useAppContext } from '@/context'
-
 import { Button } from 'blueprints/Button'
 import { Text } from 'blueprints/Text'
-
 import { rewards } from '@/constants/rewards'
 
-export const Rewards = () => {
+export const Rewards = observer(() => {
   const { userStore } = useAppContext()
 
   const { availableRewards, lockedRewards } = useMemo(() => {
@@ -61,4 +58,4 @@ export const Rewards = () => {
       />
     </View>
   )
-}
+})

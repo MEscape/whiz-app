@@ -51,7 +51,7 @@ export const PartyStats = memo(({ stats }: PartyStatsProps) => {
   ]
 
   return (
-    <View className="px-4 py-2">
+    <View className="px-4 py-6">
       <Text variant="h3" className="mb-2" tx="profile.stats.title" />
 
       <FlashList

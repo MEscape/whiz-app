@@ -11,7 +11,8 @@
     "assetBundlePatterns": [
       "assets/images/*",
       "assets/videos/*",
-      "assets/audios/*"
+      "assets/audios/*",
+      "assets/animations/*"
     ],
     "ios": {
       "supportsTablet": true,

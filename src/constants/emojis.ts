@@ -6,12 +6,12 @@ export interface EmojiItem {
 }
 
 export const EMOJI_INVENTORY: EmojiItem[] = [
-  { id: '1', emoji: '🎮', requiredLevel: 1, description: 'Gamer' },
-  { id: '2', emoji: '🎲', requiredLevel: 2, description: 'Dice Master' },
-  { id: '3', emoji: '🎯', requiredLevel: 3, description: 'Sharpshooter' },
-  { id: '4', emoji: '🎪', requiredLevel: 4, description: 'Party Host' },
-  { id: '5', emoji: '🎨', requiredLevel: 5, description: 'Artist' },
-  { id: '6', emoji: '🎭', requiredLevel: 7, description: 'Performer' },
-  { id: '7', emoji: '🏆', requiredLevel: 10, description: 'Champion' },
-  { id: '8', emoji: '👑', requiredLevel: 15, description: 'Party King' },
-] 
+  { description: 'Gamer', emoji: '🎮', id: '1', requiredLevel: 1 },
+  { description: 'Dice Master', emoji: '🎲', id: '2', requiredLevel: 2 },
+  { description: 'Sharpshooter', emoji: '🎯', id: '3', requiredLevel: 3 },
+  { description: 'Party Host', emoji: '🎪', id: '4', requiredLevel: 4 },
+  { description: 'Artist', emoji: '🎨', id: '5', requiredLevel: 5 },
+  { description: 'Performer', emoji: '🎭', id: '6', requiredLevel: 7 },
+  { description: 'Champion', emoji: '🏆', id: '7', requiredLevel: 10 },
+  { description: 'Party King', emoji: '👑', id: '8', requiredLevel: 15 },
+]

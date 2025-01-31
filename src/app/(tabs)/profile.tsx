@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { ScrollView, View } from 'react-native'
 
 import { observer } from 'mobx-react-lite'
 
@@ -20,7 +20,7 @@ const ProfileScreen = observer(() => {
   })
 
   return (
-    <View className="flex-1 bg-primary">
+    <ScrollView className="flex-1 bg-primary">
       {/* Profile Header */}
       <View className="flex-row items-center p-4">
         <ProfileImage
@@ -57,7 +57,7 @@ const ProfileScreen = observer(() => {
           onAnimationFinish={() => userStore.setIsLevelingUp(false)}
         />
       )}
-    </View>
+    </ScrollView>
   )
 })
 

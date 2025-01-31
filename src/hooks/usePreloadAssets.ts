@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 
 import { Asset } from 'expo-asset'
 
+import { AnimationUris } from 'assets/animations'
 import { AudioUris } from 'assets/audios'
 import { ImageUris } from 'assets/images'
 import { VideoUris } from 'assets/videos'

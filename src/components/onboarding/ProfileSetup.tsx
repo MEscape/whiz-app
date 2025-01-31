@@ -40,6 +40,7 @@ export const ProfileSetup = observer(() => {
         placeholderTx="placeholder.username"
         iconLeft="person"
         value={username}
+        className="w-full"
         variant="underlined"
         onChangeText={handleOnChangeText}
         onEndEditing={handleOnEndEditing}

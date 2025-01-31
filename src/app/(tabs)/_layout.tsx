@@ -33,7 +33,7 @@ export default function TabLayout() {
 
   useEffect(() => {
     if (rootNavigationState?.key != null && !userStore.userExists) {
-      //router.replace('/onboarding')
+      router.replace('/onboarding')
     }
   }, [rootNavigationState, userStore.userExists])
 

@@ -17,7 +17,7 @@ import { Videos, VideoUris } from 'assets/videos'
 import { useHeader } from '@/hooks/useHeader'
 
 export default function HomeScreen() {
-  const { toggleTheme } = useAppContext()
+  const { toggleTheme, userStore } = useAppContext()
   const { loadAudio } = useAudioPlayer()
 
   useHeader(
@@ -54,7 +54,12 @@ export default function HomeScreen() {
             />
           </View>
           <View className="flex flex-1 gap-y-2">
-            <Button className="h-12" text="Lobby erstellen" variant="primary" />
+            <Button
+              className="h-12"
+              text="Lobby erstellen"
+              variant="primary"
+              onPress={userStore.clearProfile}
+            />
             <Button
               className="h-12"
               text="Lobby beitreten"

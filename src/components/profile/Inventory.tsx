@@ -41,7 +41,7 @@ const EmojiItem = memo(
 
 export const Inventory = memo(({ userLevel }: EmojiInventoryProps) => {
   return (
-    <View className="px-4 py-2">
+    <View className="px-4 py-6">
       <Text variant="h3" className="mb-2" tx="profile.inventory" />
       <View className="flex-row flex-wrap justify-start gap-2">
         {EMOJI_INVENTORY.map(item => (

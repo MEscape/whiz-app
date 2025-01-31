@@ -34,6 +34,7 @@ export default function HomeScreen() {
     loadAudio(AudioUris[Audios.LOBBY_AUDIO], {
       isLooping: true,
       shouldPlay: true,
+      volume: 0.2,
     })
   }, [loadAudio])
 

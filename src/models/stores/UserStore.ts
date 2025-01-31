@@ -78,11 +78,12 @@ export const UserStoreModel = types
       self.username = ''
       self.profileImage = null
       self.experience = 0
-      self.gamesPlayed = 0
+      self.gamesPlayed = 1
       self.isActive = false
       self.isLevelingUp = false
       self.level = 1
       self.claimedRewards.clear()
+      self.equippedEmoji = null
 
       // Reset stats model
       self.stats.favoriteGameType = null

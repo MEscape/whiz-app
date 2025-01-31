@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { View } from 'react-native'
 
 import { TextField } from 'blueprints'
@@ -6,7 +6,6 @@ import { observer } from 'mobx-react-lite'
 
 import { useAppContext } from '@/context'
 import { TxKeyPath } from '@/i18n'
-import { pickImage } from '@/util'
 
 import ProfileImage from '../ProfileImage'
 
@@ -14,11 +13,6 @@ export const ProfileSetup = observer(() => {
   const { userStore } = useAppContext()
   const [username, setUsername] = useState('')
   const [error, setError] = useState<TxKeyPath | null>(null)
-
-  const handleChosePhoto = useCallback(async () => {
-    const uri = await pickImage()
-    userStore.setProfileImage(uri)
-  }, [userStore])
 
   const handleOnEndEditing = () => {
     if (username.length < 4) {
@@ -35,7 +29,13 @@ export const ProfileSetup = observer(() => {
 
   return (
     <View className="flex-1 w-full items-center justify-center py-4 h-full">
-      <ProfileImage onPress={handleChosePhoto} showHint imageUrl={userStore.profileImage} />
+      <ProfileImage
+        onPress={imageUri => {
+          userStore.setProfileImage(imageUri)
+        }}
+        showHint
+        imageUrl={userStore.profileImage}
+      />
       <TextField
         placeholderTx="placeholder.username"
         iconLeft="person"

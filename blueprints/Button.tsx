@@ -8,9 +8,11 @@ import { translate, TxKeyPath } from '@/i18n'
 
 import { Audios, AudioUris } from 'assets/audios'
 
+import { Icon, IconProps, VectorIconLibraries } from './Icon'
 import { Text, TextProps } from './Text'
 
-interface ButtonProps extends PressableProps {
+interface ButtonProps<L extends VectorIconLibraries, R extends VectorIconLibraries>
+  extends PressableProps {
   variant?: 'primary' | 'secondary' | 'tertiary'
   onPress?: () => void
   disabled?: boolean
@@ -19,21 +21,29 @@ interface ButtonProps extends PressableProps {
   tx?: TxKeyPath
   txOptions?: i18n.TranslateOptions
   textProps?: TextProps
+  leftIcon?: IconProps<L>['name']
+  rightIcon?: IconProps<R>['name']
+  leftIconLibrary?: L
+  rightIconLibrary?: R
 }
 
 const baseStyle =
-  'rounded-lg px-4 py-2 items-center justify-center transition-transform duration-150'
+  'rounded-lg px-4 py-2 flex-row items-center justify-center transition-transform duration-150'
 const variantStyles = {
   primary: 'bg-accent text-text',
   secondary: 'text-accent border-2 border-accent',
   tertiary: 'bg-secondary text-text',
 }
 
-const ButtonComponent: React.FC<ButtonProps> = ({
+const ButtonComponent: React.FC<ButtonProps<VectorIconLibraries, VectorIconLibraries>> = ({
   children,
   className = '',
   disabled = false,
+  leftIcon,
+  leftIconLibrary = 'Ionicons',
   onPress,
+  rightIcon,
+  rightIconLibrary = 'Ionicons',
   text,
   tx,
   txOptions,
@@ -75,6 +85,8 @@ const ButtonComponent: React.FC<ButtonProps> = ({
     loadAudio(AudioUris[Audios.BUTTON_SOUND])
   }, [])
 
+  const textColor = variant === 'secondary' ? 'text-accent' : 'text-text'
+
   return (
     <Pressable
       onPressIn={handlePressIn}
@@ -83,13 +95,27 @@ const ButtonComponent: React.FC<ButtonProps> = ({
       disabled={disabled}
       {...props}>
       <View className={combinedClassName}>
-        <Text
-          variant="body"
-          textColor={variant === 'secondary' ? 'text-accent' : 'text-text'}
-          fontWeight="bold"
-          {...props.textProps}>
+        {leftIcon && (
+          <Icon
+            name={leftIcon}
+            library={leftIconLibrary}
+            className="mr-2"
+            size={20}
+            color={textColor}
+          />
+        )}
+        <Text variant="body" textColor={textColor} fontWeight="bold" {...props.textProps}>
           {content}
         </Text>
+        {rightIcon && (
+          <Icon
+            name={rightIcon}
+            library={rightIconLibrary}
+            className="ml-2"
+            size={20}
+            color={textColor}
+          />
+        )}
       </View>
     </Pressable>
   )

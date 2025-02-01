@@ -64,8 +64,6 @@ const ImageComponent: React.FC<ImageProps> = ({
 
   cssInterop(ExpoImage, { className: 'style' })
 
-  console.log('AA')
-
   return (
     <View className={classNameContainer}>
       {isLoading && loadingEnabled && !hasError && (

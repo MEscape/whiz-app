@@ -53,6 +53,11 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "APP_STORE_URL": "https://apps.apple.com/app/your-app-id",
+      "PLAY_STORE_URL": "https://play.google.com/store/apps/details?id=your.package.name",
+      "SUPPORT_URL": "https://your-support-page.com"
     }
   }
 }

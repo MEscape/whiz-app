@@ -1,9 +1,12 @@
 import React from 'react'
 
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack'
 import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
+
 import 'react-native-reanimated'
 
 import '../../global.css'
@@ -13,11 +16,14 @@ import { customFontsToLoad } from '@/constants'
 import { LocalizationProvider, ThemeProvider } from '@/context'
 import { usePreloadAssets, useWeeklyNotification } from '@/hooks'
 import { useInitialRootStore } from '@/models'
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 
 SplashScreen.preventAutoHideAsync()
 
-const stackScreenOptions = { headerShown: false }
+const stackScreenOptions: NativeStackNavigationOptions = {
+  animation: 'slide_from_right',
+  headerShown: false,
+  presentation: 'transparentModal',
+}
 
 export default function RootLayout() {
   const [areFontsLoaded, fontLoadError] = useFonts(customFontsToLoad)

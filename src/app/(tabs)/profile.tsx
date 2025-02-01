@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, View } from 'react-native'
+import { SafeAreaView, ScrollView, View } from 'react-native'
 
 import { observer } from 'mobx-react-lite'
 
@@ -18,13 +18,13 @@ import {
 import ProfileImage from '@/components/ProfileImage'
 
 const ProfileScreen = observer(() => {
-  const { userStore, router } = useAppContext()
+  const { router, userStore } = useAppContext()
 
   useHeader({
     leftTx: 'tabs.profile',
+    onRightPress: () => router.push('/settings'),
     rightIcon: 'settings',
     rightIconLibrary: 'Ionicons',
-    onRightPress: () => router.push('/settings')
   })
 
   if (!userStore.level || !userStore.stats || userStore.profileImage === undefined) {
@@ -32,33 +32,35 @@ const ProfileScreen = observer(() => {
   }
 
   return (
-    <ScrollView className="flex-1 bg-primary">
-      {/* Profile Header */}
-      <View className="flex-row items-center p-4">
-        <ProfileImage
-          imageUrl={userStore.profileImage}
-          onPress={imageUri => {
-            userStore.setProfileImage(imageUri)
-          }}
-          showHint
-          equippedEmojiId={userStore.equippedEmoji}
-        />
+    <SafeAreaView className="flex-1 bg-primary">
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+        {/* Profile Header */}
+        <View className="flex-row items-center p-4">
+          <ProfileImage
+            imageUrl={userStore.profileImage}
+            onPress={imageUri => {
+              userStore.setProfileImage(imageUri)
+            }}
+            showHint
+            equippedEmojiId={userStore.equippedEmoji}
+          />
 
-        <UsernameEditor />
-      </View>
+          <UsernameEditor />
+        </View>
 
-      <LevelProgress />
-      <PartyStats />
-      <Rewards />
-      <Inventory />
+        <LevelProgress />
+        <PartyStats />
+        <Rewards />
+        <Inventory />
 
-      {userStore.isLevelingUp && (
-        <LevelUpAnimation
-          level={userStore.level}
-          onAnimationFinish={() => userStore.setIsLevelingUp(false)}
-        />
-      )}
-    </ScrollView>
+        {userStore.isLevelingUp && (
+          <LevelUpAnimation
+            level={userStore.level}
+            onAnimationFinish={() => userStore.setIsLevelingUp(false)}
+          />
+        )}
+      </ScrollView>
+    </SafeAreaView>
   )
 })
 

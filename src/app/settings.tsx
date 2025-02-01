@@ -1,57 +1,77 @@
-import React, { useState } from 'react';
-import { ScrollView, View } from 'react-native';
-import { Text } from 'blueprints';
-import { Switch } from 'blueprints'; // Assuming you will create this component
-import { Slider } from 'blueprints'; // Assuming you will create this component
-import { useAppContext } from '@/context';
-import { translate } from '@/i18n';
+import React from 'react'
+import { SafeAreaView, ScrollView, View } from 'react-native'
+
+import { Button, Icon, Image, Slider, Switch, Text } from 'blueprints'
+
+import { AppConfig } from '@/constants'
+import { useAppContext } from '@/context'
+import { useHeader } from '@/hooks'
+import { ContentLanguage } from '@/i18n'
+import { openLink, shareApp } from '@/util'
+
+import { Images, ImageUris } from 'assets/images'
 
 const SettingsScreen = () => {
-  const { isDarkMode, toggleTheme } = useAppContext();
-  const [language, setLanguage] = useState('en');
-  const [musicVolume, setMusicVolume] = useState(50);
-  const [soundVolume, setSoundVolume] = useState(50);
+  const { isDarkMode, language, router, setAppLanguage, toggleTheme } = useAppContext()
 
-  const toggleLanguage = () => {
-    setLanguage(prev => (prev === 'en' ? 'de' : 'en'));
-  };
+  useHeader(
+    {
+      leftIcon: 'arrow-back',
+      leftIconLibrary: 'Ionicons',
+      leftTx: 'tabs.settings',
+      onLeftPress: () => router.back(),
+    },
+    [router],
+  )
+
+  const handleLanguageChange = () => {
+    setAppLanguage(language === 'de' ? ('en' as ContentLanguage) : ('de' as ContentLanguage))
+  }
 
   return (
-    <ScrollView className="flex-1 bg-primary">
-      {/* Logo Section */}
-      <View className="flex items-center p-4">
-        <Text variant="h1" text={translate('whiz.sentences.0')} />
-        <Text variant="body" text={translate('whiz.sentences.1')} />
-      </View>
+    <SafeAreaView className="flex-1">
+      <ScrollView className="flex-1 bg-primary">
+        <View className="h-32 flex p-4 flex-row items-center">
+          <Image
+            loadingEnabled
+            src={{ dark: ImageUris[Images.LOGO_LIGHT], light: ImageUris[Images.LOGO_DARK] }}
+            classNameContainer="w-20"
+          />
+          <View className="px-4">
+            <Text variant="h1" text="Whiz" uppercase />
+            <Text variant="h3" tx="whiz.slogan" />
+          </View>
+        </View>
 
-      {/* Language Switch */}
-      <View className="flex-row items-center justify-between p-4">
-        <Text variant="body" text="Language" />
-        <Switch value={language === 'de'} onValueChange={toggleLanguage} />
-      </View>
+        <View className="flex flex-col gap-y-2 p-4">
+          <Button
+            variant="secondary"
+            onPress={() => openLink(AppConfig.SUPPORT_URL)}
+            text="Support"
+            leftIcon="heart"
+          />
+          <Button
+            variant="primary"
+            onPress={shareApp}
+            tx="settings.shareApp"
+            leftIcon="share-social"
+          />
+        </View>
 
-      {/* Dark Mode Switch */}
-      <View className="flex-row items-center justify-between p-4">
-        <Text variant="body" text="Dark Mode" />
-        <Switch value={isDarkMode} onValueChange={toggleTheme} />
-      </View>
+        <View className="flex bg-secondary p-4 mx-4 rounded-md">
+          <Text variant="h2" text="Grafische Einstellungen" />
+          <Switch value={isDarkMode} onValueChange={toggleTheme} />
+          <Switch value={language === 'de'} onValueChange={handleLanguageChange} />
+        </View>
 
-      {/* Sound Settings */}
-      <View className="p-4">
-        <Text variant="h2" text="Sound Settings" />
-        <Text variant="body" text="Music Volume" />
-        <Slider value={musicVolume} onValueChange={setMusicVolume} />
-        <Text variant="body" text="Sound Effects Volume" />
-        <Slider value={soundVolume} onValueChange={setSoundVolume} />
-      </View>
+        <View className="flex bg-secondary p-4 mx-4 my-2 rounded-md">
+          <Text variant="h2" text="Sound Einstellungen" />
+          <Slider />
+          <Slider />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  )
+}
 
-      {/* Background Video and Music Section */}
-      <View className="p-4">
-        <Text variant="h2" text="Background Settings" />
-        <Text variant="body" text="Change Background Video and Music (Functionality Coming Soon)" />
-      </View>
-    </ScrollView>
-  );
-};
-
-export default SettingsScreen; 
+export default SettingsScreen

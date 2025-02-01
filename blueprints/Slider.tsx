@@ -1,21 +1,17 @@
-import React from 'react';
-import { Slider as RNSlider } from '@react-native-community/slider';
-import { View } from 'react-native';
+import React from 'react'
+import { View } from 'react-native'
+
+import RNSlider from '@react-native-community/slider'
 
 interface SliderProps {
-  value: number;
-  onValueChange: (value: number) => void;
+  value: number
+  onValueChange: (value: number) => void
 }
 
-export const Slider: React.FC<SliderProps> = ({ value, onValueChange }) => {
+export const Slider: React.FC<SliderProps> = ({ onValueChange, value }) => {
   return (
     <View>
-      <RNSlider
-        minimumValue={0}
-        maximumValue={100}
-        value={value}
-        onValueChange={onValueChange}
-      />
+      <RNSlider minimumValue={0} maximumValue={100} value={value} onValueChange={onValueChange} />
     </View>
-  );
-};
+  )
+}

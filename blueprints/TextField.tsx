@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from 'react'
+import React, { forwardRef, useState } from 'react'
 import { TextInput, TextInputProps, View } from 'react-native'
 
 import { translate } from '@/i18n'
@@ -66,10 +66,6 @@ const TextField = forwardRef<TextInput, TextFieldProps<VectorIconLibraries, Vect
     const toggleSecureTextEntry = () => {
       setShowPassword(prevState => !prevState)
     }
-
-    useEffect(() => {
-      console.log(value)
-    }, [value])
 
     const isValuePresent = value?.length > 0
 

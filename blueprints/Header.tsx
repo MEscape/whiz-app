@@ -141,7 +141,7 @@ const HeaderAction = (props: HeaderActionProps<VectorIconLibraries>) => {
     }
 
     return (
-      <Pressable className={`${containerStyles} ${props.baseStyles} mt-4`}>
+      <Pressable className={`${containerStyles} ${props.baseStyles} mt-4`} onPress={props.onPress}>
         {order.map(key => renderItems[key])}
       </Pressable>
     )
@@ -149,7 +149,7 @@ const HeaderAction = (props: HeaderActionProps<VectorIconLibraries>) => {
 
   if (props.content) {
     return (
-      <Pressable className={`${containerStyles} ${props.baseStyles}`}>
+      <Pressable className={`${containerStyles} ${props.baseStyles}`} onPress={props.onPress}>
         <Text
           variant="h1"
           text={props.content}
@@ -161,7 +161,9 @@ const HeaderAction = (props: HeaderActionProps<VectorIconLibraries>) => {
   }
 
   if (props.icon) {
-    return <Icon name={props.icon} library={props.library} className="mt-4" />
+    return (
+      <Icon name={props.icon} library={props.library} className="mt-4" onPress={props.onPress} />
+    )
   }
 
   return <View className={`${containerStyles} flex-1 mt-4`} />

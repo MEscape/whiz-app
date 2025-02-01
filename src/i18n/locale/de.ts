@@ -3,6 +3,7 @@ const de = {
     collect: 'Einsammeln',
   },
   error: {
+    openLink: 'Fehler beim öffnen des Links',
     unexpected: 'Unbekannter Fehler',
     username: {
       less: 'Zu wenig Zeichen',
@@ -75,9 +76,13 @@ const de = {
     won5Games: '5 Spiele gewonnen',
     won20Games: '20 Spiele gewonnen',
   },
+  settings: {
+    shareApp: 'App teilen',
+  },
   tabs: {
     home: 'Start',
     profile: 'Profil',
+    settings: 'Einstellungen',
   },
   whiz: {
     sentences: [
@@ -86,6 +91,8 @@ const de = {
       'Hol dir dein Getränk und lass uns die Nacht unvergesslich machen!',
       'Die Nacht ist jung und die Möglichkeiten endlos – genieße jede Minute!',
     ],
+    share: 'Probier mal diese geile App aus! - WHIZ - Wir haben immer Zeit zum feiern!',
+    slogan: 'Wir haben immer Zeit zum feiern',
   },
 }
 

@@ -3,6 +3,7 @@ const en = {
     collect: 'Collect',
   },
   error: {
+    openLink: 'Error while opening the link',
     unexpected: 'Unexpected error',
     username: {
       less: 'Too few characters',
@@ -75,17 +76,23 @@ const en = {
     won5Games: 'Won 5 games',
     won20Games: 'Won 20 games',
   },
+  settings: {
+    shareApp: 'Share App',
+  },
   tabs: {
     home: 'Start',
     profile: 'Profile',
+    settings: 'Settings',
   },
   whiz: {
     sentences: [
       "Welcome, party people – it's going to be a legendary night!",
-      "Get ready for a night full of fun and surprises!",
+      'Get ready for a night full of fun and surprises!',
       "Grab your drink and let's make this night unforgettable!",
-      "The night is young and the possibilities are endless – enjoy every minute!",
+      'The night is young and the possibilities are endless – enjoy every minute!',
     ],
+    share: 'Check out this awesome app! - WHIZ - We have always time for partying!',
+    slogan: 'We always have time to celebrate',
   },
 }
 

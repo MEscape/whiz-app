@@ -66,7 +66,6 @@ export const useAudioPlayer = () => {
         await sound.playAsync()
         setIsPlaying(true)
       }
-      console.log(sound)
     } catch (e) {
       setError('Failed to play the audio')
     }

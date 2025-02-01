@@ -1,12 +1,14 @@
 import React, { memo } from 'react'
 import { View } from 'react-native'
-import { observer } from 'mobx-react-lite'
-import { FlashList } from '@shopify/flash-list'
-import { Icon, IconProps, Text, VectorIconLibraries } from 'blueprints'
-import { translate, TxKeyPath } from '@/i18n'
-import { useAppContext } from '@/context'
 
-interface StatItemProps<T extends VectorIconLibraries> {
+import { FlashList } from '@shopify/flash-list'
+import { Icon, IconProps, LibraryTypes, Text } from 'blueprints'
+import { observer } from 'mobx-react-lite'
+
+import { useAppContext } from '@/context'
+import { translate, TxKeyPath } from '@/i18n'
+
+interface StatItemProps<T extends LibraryTypes> {
   icon: IconProps<T>['name']
   label: TxKeyPath
   value: string | number
@@ -14,7 +16,7 @@ interface StatItemProps<T extends VectorIconLibraries> {
 }
 
 const StatItem = memo(
-  ({ color = 'text-accent', icon, label, value }: StatItemProps<VectorIconLibraries>) => (
+  ({ color = 'text-accent', icon, label, value }: StatItemProps<LibraryTypes>) => (
     <View className="items-center p-3 bg-secondary rounded-lg min-w-32">
       <Icon name={icon} library="Ionicons" color={color} size={24} />
       <Text variant="h3" className="mt-1" textColor={color}>
@@ -31,7 +33,7 @@ export const PartyStats = observer(() => {
   const { userStore } = useAppContext()
   const stats = userStore.stats
 
-  const statItems: StatItemProps<VectorIconLibraries>[] = [
+  const statItems: StatItemProps<LibraryTypes>[] = [
     {
       color: 'text-accent',
       icon: 'trophy',

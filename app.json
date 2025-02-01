@@ -12,7 +12,8 @@
       "assets/images/*",
       "assets/videos/*",
       "assets/audios/*",
-      "assets/animations/*"
+      "assets/animations/*",
+      "assets/icons/*"
     ],
     "ios": {
       "supportsTablet": true,

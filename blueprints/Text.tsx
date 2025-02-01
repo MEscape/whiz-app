@@ -3,6 +3,7 @@ import { Text as RNText, TextProps as RNTextProps } from 'react-native'
 
 import i18n from 'i18n-js'
 
+import { useAppContext } from '@/context'
 import { translate, TxKeyPath } from '@/i18n'
 
 export interface TextProps extends Omit<RNTextProps, 'className'> {
@@ -41,7 +42,7 @@ const fontWeightVariants = {
 export type TextVariants = keyof typeof variantStyles
 export type FontWeight = keyof typeof fontWeightVariants
 
-export const Text = ({
+const TextComponent = ({
   children,
   className = '',
   fontWeight = 'normal',
@@ -58,6 +59,7 @@ export const Text = ({
   const alignStyle = textAlignVariants[textAlign] || textAlignVariants.left
   const weightStyle = fontWeightVariants[fontWeight] || fontWeightVariants.normal
   const upperCaseStyle = uppercase ? 'uppercase' : ''
+  useAppContext()
 
   const i18nText = tx && translate(tx, txOptions)
   const content = i18nText || text || children
@@ -79,3 +81,8 @@ export const Text = ({
     </RNText>
   )
 }
+
+const MemorizedText = React.memo(TextComponent)
+MemorizedText.displayName = 'Text'
+
+export { MemorizedText as Text }

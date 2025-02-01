@@ -77,7 +77,13 @@ const de = {
     won20Games: '20 Spiele gewonnen',
   },
   settings: {
+    audio: 'Audio Einstellungen',
+    color: 'Farbschema wechseln',
+    graphical: 'Grafische Einstellungen',
+    language: 'Sprache wechseln',
+    music: 'Musik Lautstärke',
     shareApp: 'App teilen',
+    sound: 'Effekte Lautstärke',
   },
   tabs: {
     home: 'Start',

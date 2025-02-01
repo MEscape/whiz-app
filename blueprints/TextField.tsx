@@ -3,11 +3,10 @@ import { TextInput, TextInputProps, View } from 'react-native'
 
 import { translate } from '@/i18n'
 
-import { Icon, IconProps, VectorIconLibraries } from './Icon'
+import { Icon, IconProps, LibraryTypes } from './Icon'
 import { Text, TextProps } from './Text'
 
-interface TextFieldProps<L extends VectorIconLibraries, R extends VectorIconLibraries>
-  extends TextInputProps {
+interface TextFieldProps<L extends LibraryTypes, R extends LibraryTypes> extends TextInputProps {
   placeholder?: string
   error?: string
   variant?: 'standard' | 'underlined'
@@ -32,7 +31,7 @@ const variants = {
   },
 }
 
-const TextField = forwardRef<TextInput, TextFieldProps<VectorIconLibraries, VectorIconLibraries>>(
+const TextField = forwardRef<TextInput, TextFieldProps<LibraryTypes, LibraryTypes>>(
   (
     {
       className: overrideClassName,

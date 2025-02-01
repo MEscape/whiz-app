@@ -8,7 +8,7 @@ import Animated, { Extrapolation, interpolate, useAnimatedStyle } from 'react-na
 
 import { TxKeyPath } from '@/i18n'
 
-import { Icon, IconProps, VectorIconLibraries } from './Icon'
+import { Icon, IconProps, LibraryTypes } from './Icon'
 import { Text } from './Text'
 
 interface BottomSheetProps {
@@ -19,7 +19,7 @@ interface BottomSheetProps {
   children: React.ReactNode
 }
 
-interface BottomSheetOptionProps<T extends VectorIconLibraries> {
+interface BottomSheetOptionProps<T extends LibraryTypes> {
   label: TxKeyPath
   icon?: {
     name: IconProps<T>['name']
@@ -32,7 +32,7 @@ export const BottomSheetOption = ({
   icon,
   label,
   onPress,
-}: BottomSheetOptionProps<VectorIconLibraries>) => {
+}: BottomSheetOptionProps<LibraryTypes>) => {
   cssInterop(TouchableOpacity, { className: 'style' })
 
   return (

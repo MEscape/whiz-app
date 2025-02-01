@@ -3,16 +3,16 @@ import { Pressable, PressableProps, Vibration, View } from 'react-native'
 
 import i18n from 'i18n-js'
 
+import { useAppContext } from '@/context'
 import { useAudioPlayer } from '@/hooks'
 import { translate, TxKeyPath } from '@/i18n'
 
 import { Audios, AudioUris } from 'assets/audios'
 
-import { Icon, IconProps, VectorIconLibraries } from './Icon'
+import { Icon, IconProps, LibraryTypes } from './Icon'
 import { Text, TextProps } from './Text'
 
-interface ButtonProps<L extends VectorIconLibraries, R extends VectorIconLibraries>
-  extends PressableProps {
+interface ButtonProps<L extends LibraryTypes, R extends LibraryTypes> extends PressableProps {
   variant?: 'primary' | 'secondary' | 'tertiary'
   onPress?: () => void
   disabled?: boolean
@@ -35,7 +35,7 @@ const variantStyles = {
   tertiary: 'bg-secondary text-text',
 }
 
-const ButtonComponent: React.FC<ButtonProps<VectorIconLibraries, VectorIconLibraries>> = ({
+const ButtonComponent: React.FC<ButtonProps<LibraryTypes, LibraryTypes>> = ({
   children,
   className = '',
   disabled = false,
@@ -52,6 +52,7 @@ const ButtonComponent: React.FC<ButtonProps<VectorIconLibraries, VectorIconLibra
 }) => {
   const [isAnimating, setIsAnimating] = useState(false)
   const { isPlaying, loadAudio, playAudio, stopAudio } = useAudioPlayer()
+  useAppContext()
 
   const i18nText = tx && translate(tx, txOptions)
   const content = (i18nText || text || children) as string

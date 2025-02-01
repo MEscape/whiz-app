@@ -1,16 +1,17 @@
 import React, { ReactElement } from 'react'
 import { Pressable, PressableProps, View } from 'react-native'
 
+import { useAppContext } from '@/context'
 import { ExtendedEdge, useSafeAreaInsetsStyle } from '@/hooks'
 import { translate } from '@/i18n'
 
-import { Icon, IconProps, VectorIconLibraries } from './Icon'
+import { Icon, IconProps, LibraryTypes } from './Icon'
 import { Text, TextProps } from './Text'
 
 export interface HeaderProps<
-  L extends VectorIconLibraries,
-  T extends VectorIconLibraries,
-  R extends VectorIconLibraries,
+  L extends LibraryTypes,
+  T extends LibraryTypes,
+  R extends LibraryTypes,
 > {
   backgroundColor?: string
   color?: string
@@ -46,7 +47,7 @@ export interface HeaderProps<
   onRightPress?: PressableProps['onPress']
 }
 
-interface HeaderActionProps<T extends VectorIconLibraries> {
+interface HeaderActionProps<T extends LibraryTypes> {
   content?: string
   icon?: IconProps<T>['name']
   library?: T
@@ -57,9 +58,7 @@ interface HeaderActionProps<T extends VectorIconLibraries> {
   color?: string
 }
 
-const HeaderComponent = (
-  props: HeaderProps<VectorIconLibraries, VectorIconLibraries, VectorIconLibraries>,
-) => {
+const HeaderComponent = (props: HeaderProps<LibraryTypes, LibraryTypes, LibraryTypes>) => {
   const {
     backgroundColor = 'primary',
     className = '',
@@ -68,6 +67,7 @@ const HeaderComponent = (
   } = props
 
   const containerInsets = useSafeAreaInsetsStyle(safeAreaEdges as Array<ExtendedEdge>)
+  useAppContext()
 
   const i18nTitle = props.titleTx && translate(props.titleTx, props.titleTxOptions)
   const titleContent = (i18nTitle || props.title || props.children) as string
@@ -129,7 +129,7 @@ export { MemorizedHeader as Header }
 const textStyles = ''
 const containerStyles = 'flex flex-row h-full items-center gap-x-1.5'
 
-const HeaderAction = (props: HeaderActionProps<VectorIconLibraries>) => {
+const HeaderAction = (props: HeaderActionProps<LibraryTypes>) => {
   if (props.ActionComponent) return props.ActionComponent
 
   const order = props.renderOrder || ['icon', 'content']

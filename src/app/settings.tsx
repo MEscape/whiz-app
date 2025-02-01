@@ -1,7 +1,7 @@
 import React from 'react'
 import { SafeAreaView, ScrollView, View } from 'react-native'
 
-import { Button, Icon, Image, Slider, Switch, Text } from 'blueprints'
+import { Button, Icon, Image, Slider, Text, Toggle } from 'blueprints'
 
 import { AppConfig } from '@/constants'
 import { useAppContext } from '@/context'
@@ -9,6 +9,7 @@ import { useHeader } from '@/hooks'
 import { ContentLanguage } from '@/i18n'
 import { openLink, shareApp } from '@/util'
 
+import { Icons, IconUris } from 'assets/icons'
 import { Images, ImageUris } from 'assets/images'
 
 const SettingsScreen = () => {
@@ -59,15 +60,44 @@ const SettingsScreen = () => {
         </View>
 
         <View className="flex bg-secondary p-4 mx-4 rounded-md">
-          <Text variant="h2" text="Grafische Einstellungen" />
-          <Switch value={isDarkMode} onValueChange={toggleTheme} />
-          <Switch value={language === 'de'} onValueChange={handleLanguageChange} />
+          <Text variant="h2" tx="settings.graphical" className="mb-4" />
+          <View className="flex-row justify-between items-center mb-1">
+            <Text tx="settings.color" />
+            <Toggle
+              variant="switch"
+              value={isDarkMode}
+              offIconName="sunny"
+              onIconName="moon"
+              onValueChange={toggleTheme}
+              backgroundColor="bg-primary"
+            />
+          </View>
+
+          <View className="flex-row justify-between items-center">
+            <Text tx="settings.language" />
+            <Toggle
+              variant="switch"
+              onIconLibrary="custom"
+              onIconName={IconUris[Icons.ENGLISH]}
+              offIconName={IconUris[Icons.GERMANY]}
+              offIconLibrary="custom"
+              value={language === 'de'}
+              onValueChange={handleLanguageChange}
+              backgroundColor="bg-primary"
+            />
+          </View>
         </View>
 
         <View className="flex bg-secondary p-4 mx-4 my-2 rounded-md">
-          <Text variant="h2" text="Sound Einstellungen" />
-          <Slider />
-          <Slider />
+          <Text variant="h2" tx="settings.audio" className="mb-4" />
+          <View className="flex-row justify-between items-center mb-1">
+            <Text tx="settings.sound" />
+            <Slider />
+          </View>
+          <View className="flex-row justify-between items-center">
+            <Text tx="settings.music" />
+            <Slider />
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

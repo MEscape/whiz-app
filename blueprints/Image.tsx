@@ -6,7 +6,8 @@ import { cssInterop } from 'nativewind'
 
 import { useAppContext } from '@/context'
 
-import Placeholder from './Placeholder'
+import { Images, ImageUris } from 'assets/images'
+
 import { PulsatingLoader } from './PulsatingLoader'
 
 export interface ImageSrc {
@@ -21,7 +22,6 @@ interface ImageProps extends ExpoImageProps {
   className?: string
   loadingIndicatorColor?: string
   classNameContainer?: string
-  placeholderEnabled?: boolean
   loadingEnabled?: boolean
   cachePolicy?: 'none' | 'disk' | 'memory' | 'memory-disk' | /** @hidden */ null
 }
@@ -33,7 +33,6 @@ const ImageComponent: React.FC<ImageProps> = ({
   contentFit = 'cover' as ImageContentFit,
   loadingEnabled,
   loadingIndicatorColor = 'accent',
-  placeholderEnabled,
   src,
   ...props
 }) => {
@@ -73,6 +72,9 @@ const ImageComponent: React.FC<ImageProps> = ({
         cachePolicy={cachePolicy}
         onLoadStart={handleLoadStart}
         onLoad={handleLoad}
+        placeholder={ImageUris[Images.PLACEHOLDER]}
+        placeholderContentFit="cover"
+        contentPosition="center"
         onError={handleError}
         {...props}
       />
@@ -85,8 +87,7 @@ const ImageComponent: React.FC<ImageProps> = ({
       {isLoading && loadingEnabled && !hasError && (
         <PulsatingLoader className="rounded-md" pulseColor={loadingIndicatorColor} />
       )}
-      {hasError && placeholderEnabled && <Placeholder />}
-      {!hasError && ImageContent}
+      {ImageContent}
     </View>
   )
 }

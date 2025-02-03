@@ -39,7 +39,7 @@ export const Slider: React.FC<SliderProps> = ({
         thumbTintColor="#62a399"
       />
     ),
-    [updateTrigger],
+    [updateTrigger, secondary],
   )
 
   return <View className="flex-1 py-1">{sliderComponent}</View>

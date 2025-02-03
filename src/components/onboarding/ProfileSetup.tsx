@@ -15,7 +15,7 @@ export const ProfileSetup = observer(() => {
   const [error, setError] = useState<TxKeyPath | null>(null)
 
   const handleOnEndEditing = () => {
-    if (username.length < 4) {
+    if (username.trim().length < 4) {
       return setError('error.username.less')
     }
 
@@ -39,7 +39,6 @@ export const ProfileSetup = observer(() => {
       <TextField
         placeholderTx="placeholder.username"
         iconLeft="person"
-        value={username}
         className="w-full"
         variant="underlined"
         onChangeText={handleOnChangeText}

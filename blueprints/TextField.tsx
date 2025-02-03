@@ -1,12 +1,19 @@
-import React, { forwardRef, useState } from 'react'
-import { TextInput, TextInputProps, View } from 'react-native'
+import React, { forwardRef, useEffect, useState } from 'react'
+import {
+  NativeSyntheticEvent,
+  TextInput,
+  TextInputFocusEventData,
+  TextInputProps,
+  View,
+} from 'react-native'
 
 import { translate } from '@/i18n'
 
 import { Icon, IconProps, LibraryTypes } from './Icon'
 import { Text, TextProps } from './Text'
 
-interface TextFieldProps<L extends LibraryTypes, R extends LibraryTypes> extends TextInputProps {
+export interface TextFieldProps<L extends LibraryTypes, R extends LibraryTypes>
+  extends TextInputProps {
   placeholder?: string
   error?: string
   variant?: 'standard' | 'underlined'
@@ -42,6 +49,9 @@ const TextField = forwardRef<TextInput, TextFieldProps<LibraryTypes, LibraryType
       iconLeftLibrary = 'Ionicons',
       iconRight,
       iconRightLibrary = 'Ionicons',
+      onBlur,
+      onChangeText,
+      onFocus,
       placeholder,
       placeholderTx,
       placeholderTxOptions,
@@ -53,6 +63,7 @@ const TextField = forwardRef<TextInput, TextFieldProps<LibraryTypes, LibraryType
     ref,
   ) => {
     const [showPassword, setShowPassword] = useState(false)
+    const [text, setText] = useState(value)
     const [focused, setFocused] = useState(false)
     const variantStyles = variants[variant]
 
@@ -66,7 +77,22 @@ const TextField = forwardRef<TextInput, TextFieldProps<LibraryTypes, LibraryType
       setShowPassword(prevState => !prevState)
     }
 
-    const isValuePresent = value?.length > 0
+    const handleFocus = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+      setFocused(true)
+      if (onFocus) onFocus(event)
+    }
+
+    const handleBlur = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+      setFocused(false)
+      if (onBlur) onBlur(event)
+    }
+
+    const handleChangeText = (name: string) => {
+      setText(name)
+      if (onChangeText) onChangeText(name)
+    }
+
+    const isValuePresent = text?.length > 0
 
     return (
       <View className={`flex-1 py-2 ${overrideClassName}`}>
@@ -89,18 +115,19 @@ const TextField = forwardRef<TextInput, TextFieldProps<LibraryTypes, LibraryType
               textColor={variant === 'standard' && focused ? 'text-text' : 'text-secondary'}
               className={`absolute ${iconLeft && 'left-10'} px-1 pointer-events-none transition-transform duration-200 ease-in-out ${
                 variant === 'standard' && (focused || isValuePresent)
-                  ? '-translate-y-[23px] -translate-x-8 bg-primary text-sm'
+                  ? `-translate-y-[23px] ${iconLeft && '-translate-x-8'} bg-primary text-sm`
                   : 'translate-y-0 translate-x-0'
               }`}
             />
           )}
           <TextInput
             ref={ref}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onChangeText={handleChangeText}
             className="flex-grow text-md caret-accent text-text"
             secureTextEntry={secureTextEntry && !showPassword}
-            value={value}
+            value={text}
             {...props}
           />
           {(iconRight || secureTextEntry) && (

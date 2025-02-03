@@ -1,6 +1,16 @@
 const de = {
+  collection: {
+    classicChaos: 'Klassischer Chaos',
+    create: 'Sammlung erstellen',
+    disorderly: 'Betrunken & Unordnung',
+    own: 'Eigene Sammlungen',
+    served: 'Bereitgestellte Sammlungen',
+    survival: 'Überlebensmodus',
+  },
   common: {
     collect: 'Einsammeln',
+    create: 'Erstellen',
+    elements: 'Elemente',
   },
   error: {
     openLink: 'Fehler beim öffnen des Links',
@@ -34,6 +44,7 @@ const de = {
     chosePhoto: 'Berechtigung zum Zugriff auf die Galerie ist erforderlich!',
   },
   placeholder: {
+    collectionName: 'Name der Sammlung',
     username: 'Benutzername',
   },
   profile: {
@@ -89,6 +100,7 @@ const de = {
     sound: 'Effekte Lautstärke',
   },
   tabs: {
+    collections: 'Sammlungen',
     home: 'Start',
     profile: 'Profil',
     settings: 'Einstellungen',

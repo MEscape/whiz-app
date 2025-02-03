@@ -30,7 +30,7 @@ interface ButtonProps<L extends LibraryTypes, R extends LibraryTypes> extends Pr
 }
 
 const baseStyle =
-  'rounded-lg px-4 py-2 flex-row items-center justify-center transition-transform duration-150'
+  'rounded-lg px-4 py-2 flex-row items-center justify-center transition-transform duration-100'
 const variantStyles = {
   primary: 'bg-accent text-text',
   secondary: 'text-accent border-2 border-accent',
@@ -61,16 +61,9 @@ const ButtonComponent: React.FC<ButtonProps<LibraryTypes, LibraryTypes>> = obser
     const i18nText = tx && translate(tx, txOptions)
     const content = (i18nText || text || children) as string
 
-    const disabledStyle = disabled ? 'opacity-50' : ''
     const pressedStyle = isAnimating ? 'scale-95' : 'scale-100'
 
-    const combinedClassName = [
-      baseStyle,
-      variantStyles[variant],
-      pressedStyle,
-      disabledStyle,
-      className,
-    ]
+    const combinedClassName = [baseStyle, variantStyles[variant], pressedStyle, className]
       .filter(Boolean)
       .join(' ')
 
@@ -83,7 +76,7 @@ const ButtonComponent: React.FC<ButtonProps<LibraryTypes, LibraryTypes>> = obser
     }
 
     const handlePressOut = () => {
-      setTimeout(() => setIsAnimating(false), 150) // Reset after 150ms
+      setTimeout(() => setIsAnimating(false), 50)
     }
 
     useEffect(() => {
@@ -94,6 +87,7 @@ const ButtonComponent: React.FC<ButtonProps<LibraryTypes, LibraryTypes>> = obser
 
     return (
       <Pressable
+        style={{ opacity: disabled ? 0.5 : 1 }}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         onPress={onPress}

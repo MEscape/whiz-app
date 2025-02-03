@@ -8,6 +8,10 @@ export enum Images {
   PARTY = 'PARTY',
   DATA = 'DATA',
   START = 'START',
+  DISORDERLY = 'DISORDERLY',
+  SURVIVAL = 'SURVIVAL',
+  CLASSIC = 'CLASSIC',
+  PLACEHOLDER = 'PLACEHOLDER',
 }
 
 export const ImageUris = {
@@ -20,4 +24,8 @@ export const ImageUris = {
   [Images.PARTY]: require('./party.svg'),
   [Images.DATA]: require('./data.svg'),
   [Images.START]: require('./start.svg'),
+  [Images.DISORDERLY]: require('./disorderly.jpg'),
+  [Images.SURVIVAL]: require('./survival.jpg'),
+  [Images.CLASSIC]: require('./classic.jpg'),
+  [Images.PLACEHOLDER]: require('./placeholder.png'),
 }

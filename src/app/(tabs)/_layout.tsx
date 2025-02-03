@@ -49,6 +49,21 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="collection"
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              library="Ionicons"
+              name={focused ? 'library' : 'library-outline'}
+              color="text-white"
+            />
+          ),
+          tabBarLabel: () => (
+            <Text variant="caption" textColor="text-white" tx="tabs.collections"></Text>
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
           tabBarIcon: ({ focused }) => (

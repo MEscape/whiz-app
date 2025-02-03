@@ -1,6 +1,16 @@
 const en = {
+  collection: {
+    classicChaos: 'Classic Chaos',
+    create: 'Create Collection',
+    disorderly: 'Drunk & Disorderly',
+    own: 'Own Collections',
+    served: 'Served Collections',
+    survival: 'Survival Mode',
+  },
   common: {
     collect: 'Collect',
+    create: 'Create',
+    elements: 'Elements',
   },
   error: {
     openLink: 'Error while opening the link',
@@ -34,6 +44,7 @@ const en = {
     chosePhoto: 'Permission to access the gallery is required!',
   },
   placeholder: {
+    collectionName: 'Name of collection',
     username: 'Username',
   },
   profile: {
@@ -89,6 +100,7 @@ const en = {
     sound: 'Effects volume',
   },
   tabs: {
+    collections: 'Collections',
     home: 'Start',
     profile: 'Profile',
     settings: 'Settings',

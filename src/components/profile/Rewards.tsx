@@ -1,11 +1,15 @@
 import React, { useMemo } from 'react'
 import { View } from 'react-native'
+
 import { observer } from 'mobx-react-lite'
+import { FlatList } from 'react-native-gesture-handler'
+
 import { useAppContext } from '@/context'
+
 import { Button } from 'blueprints/Button'
 import { Text } from 'blueprints/Text'
+
 import { rewards } from '@/constants/rewards'
-import { FlatList } from 'react-native-gesture-handler'
 
 export const Rewards = observer(() => {
   const { userStore } = useAppContext()
@@ -22,7 +26,9 @@ export const Rewards = observer(() => {
     return { availableRewards: available, lockedRewards: locked }
   }, [userStore.gamesPlayed])
 
-  const combinedRewards = [...availableRewards, ...lockedRewards].filter(item => !userStore.claimedRewards.includes(item.id))
+  const combinedRewards = [...availableRewards, ...lockedRewards].filter(
+    item => !userStore.claimedRewards.includes(item.id),
+  )
 
   return (
     <View className="px-4 py-6">
@@ -46,7 +52,7 @@ export const Rewards = observer(() => {
             <Button
               variant={userStore.gamesPlayed < item.requirement ? 'secondary' : 'primary'}
               tx="common.collect"
-              className="mt-2"
+              outerClassName="mt-2 w-full"
               disabled={userStore.gamesPlayed < item.requirement}
               onPress={() => userStore.claimReward(item)}
             />

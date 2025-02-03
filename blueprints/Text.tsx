@@ -24,6 +24,7 @@ const variantStyles = {
   h1: 'text-2xl font-title',
   h2: 'text-xl font-heading',
   h3: 'text-lg font-subheading',
+  small: 'text-[10px] font-body',
 }
 
 const textAlignVariants = {

@@ -26,6 +26,7 @@ interface ButtonProps<L extends LibraryTypes, R extends LibraryTypes> extends Pr
   rightIcon?: IconProps<R>['name']
   leftIconLibrary?: L
   rightIconLibrary?: R
+  outerClassName?: string
 }
 
 const baseStyle =
@@ -44,6 +45,7 @@ const ButtonComponent: React.FC<ButtonProps<LibraryTypes, LibraryTypes>> = obser
     leftIcon,
     leftIconLibrary = 'Ionicons',
     onPress,
+    outerClassName,
     rightIcon,
     rightIconLibrary = 'Ionicons',
     text,
@@ -96,6 +98,7 @@ const ButtonComponent: React.FC<ButtonProps<LibraryTypes, LibraryTypes>> = obser
         onPressOut={handlePressOut}
         onPress={onPress}
         disabled={disabled}
+        className={outerClassName}
         {...props}>
         <View className={combinedClassName}>
           {leftIcon && (

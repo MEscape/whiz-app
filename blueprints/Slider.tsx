@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { View } from 'react-native'
 
 import RNSlider from '@react-native-community/slider'
@@ -11,12 +11,14 @@ interface SliderProps {
   onValueChange: (value: number) => void
   minimumValue?: number
   maximumValue?: number
+  updateTrigger: any
 }
 
 export const Slider: React.FC<SliderProps> = ({
   maximumValue = 1,
   minimumValue = 0,
   onValueChange,
+  updateTrigger,
   value,
 }) => {
   const { isDarkMode } = useAppContext()
@@ -24,8 +26,8 @@ export const Slider: React.FC<SliderProps> = ({
 
   cssInterop(RNSlider, { className: 'style' })
 
-  return (
-    <View className="flex-1 py-1">
+  const sliderComponent = useMemo(
+    () => (
       <RNSlider
         className="h-6"
         minimumValue={minimumValue}
@@ -36,6 +38,9 @@ export const Slider: React.FC<SliderProps> = ({
         maximumTrackTintColor={secondary}
         thumbTintColor="#62a399"
       />
-    </View>
+    ),
+    [updateTrigger],
   )
+
+  return <View className="flex-1 py-1">{sliderComponent}</View>
 }

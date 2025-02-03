@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView, ScrollView, View } from 'react-native'
 
 import { Button, Icon, Image, Slider, Text, Toggle } from 'blueprints'
+import { Audio } from 'expo-av'
+import * as Notifications from 'expo-notifications'
 import { observer } from 'mobx-react-lite'
 
 import { AppConfig } from '@/constants'
@@ -109,7 +111,11 @@ const SettingsScreen = observer(() => {
           <Text variant="h2" tx="settings.audio" className="mb-4" />
           <View className="flex-row justify-between items-center mb-1 w-full">
             <Text tx="settings.sound" />
-            <Slider value={settingStore.volumeSound} onValueChange={settingStore.setVolumeSound} />
+            <Slider
+              value={settingStore.volumeSound}
+              onValueChange={settingStore.setVolumeSound}
+              updateTrigger={isMuted.sound}
+            />
             <Icon
               name={isMuted.sound ? 'volume-mute' : 'volume-high'}
               library="Ionicons"
@@ -118,11 +124,36 @@ const SettingsScreen = observer(() => {
           </View>
           <View className="flex-row justify-between items-center w-full">
             <Text tx="settings.music" />
-            <Slider value={settingStore.volumeMusic} onValueChange={settingStore.setVolumeMusic} />
+            <Slider
+              value={settingStore.volumeMusic}
+              onValueChange={settingStore.setVolumeMusic}
+              updateTrigger={isMuted.music}
+            />
             <Icon
               name={isMuted.music ? 'volume-mute' : 'volume-high'}
               library="Ionicons"
               onPress={() => handleMute('music')}
+            />
+          </View>
+        </View>
+
+        <View className="flex bg-secondary p-4 mx-4 rounded-md">
+          <Text variant="h2" tx="settings.authorization" />
+          <Text
+            variant="small"
+            text="Die folgenden Knöpfe haben keinen Effekt, sollten die Berechtigungen schon erteilt worden sein."
+            className="mb-4"
+          />
+          <View className="flex-row flex-1 w-full gap-x-2">
+            <Button
+              outerClassName="flex-1"
+              tx="settings.notifications"
+              onPress={Notifications.requestPermissionsAsync}
+            />
+            <Button
+              outerClassName="flex-1"
+              tx="settings.audioPlayback"
+              onPress={Audio.requestPermissionsAsync}
             />
           </View>
         </View>

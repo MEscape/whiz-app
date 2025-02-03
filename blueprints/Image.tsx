@@ -6,8 +6,6 @@ import { cssInterop } from 'nativewind'
 
 import { useAppContext } from '@/context'
 
-import { Images, ImageUris } from 'assets/images'
-
 import Placeholder from './Placeholder'
 import { PulsatingLoader } from './PulsatingLoader'
 

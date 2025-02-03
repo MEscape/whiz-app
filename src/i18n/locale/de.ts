@@ -78,10 +78,13 @@ const de = {
   },
   settings: {
     audio: 'Audio Einstellungen',
+    audioPlayback: 'Audiowiedergabe',
+    authorization: 'Berechtigungen prüfen',
     color: 'Farbschema wechseln',
     graphical: 'Grafische Einstellungen',
     language: 'Sprache wechseln',
     music: 'Musik Lautstärke',
+    notifications: 'Benachrichtigungen',
     shareApp: 'App teilen',
     sound: 'Effekte Lautstärke',
   },

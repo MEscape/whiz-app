@@ -100,7 +100,6 @@ export const useAudioPlayer = (type: 'music' | 'sound', relativeMax = 1.0) => {
 
   const setAudioVolume = useCallback(
     async (newVolume: number) => {
-      console.log(sound)
       if (sound) {
         await sound.setVolumeAsync(newVolume)
       }

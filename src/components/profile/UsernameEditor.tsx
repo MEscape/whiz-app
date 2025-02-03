@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { TextInput, View } from 'react-native'
+import React, { useRef, useState } from 'react'
+import { Keyboard, TextInput, View } from 'react-native'
 
 import { useAppContext } from '@/context'
 import { TxKeyPath } from '@/i18n'
@@ -19,6 +19,10 @@ export const UsernameEditor = () => {
   const handleEditPress = () => {
     setIsEditing(true)
     setEditedUsername(userStore.username)
+    Keyboard.dismiss()
+    setTimeout(() => {
+      textFieldRef.current?.focus()
+    }, 200)
   }
 
   const handleSave = () => {
@@ -41,12 +45,6 @@ export const UsernameEditor = () => {
     setError(null)
     setEditedUsername(text)
   }
-
-  useEffect(() => {
-    if (isEditing && textFieldRef.current) {
-      textFieldRef.current.focus()
-    }
-  }, [isEditing])
 
   return (
     <View className="flex-1 ml-4">

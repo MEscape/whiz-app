@@ -1,5 +1,6 @@
-import { RewardItem } from '@/constants/rewards'
 import { Instance, SnapshotOut, types } from 'mobx-state-tree'
+
+import { RewardItem } from '@/constants/rewards'
 
 export const PartyStatsModel = types
   .model('PartyStats')

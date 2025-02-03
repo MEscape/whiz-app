@@ -3,6 +3,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { Asset } from 'expo-asset'
 import { Audio } from 'expo-av'
 
+import { useStores } from '@/models'
+
 interface AudioPlayerOptions {
   shouldPlay?: boolean
   rate?: number
@@ -10,7 +12,8 @@ interface AudioPlayerOptions {
   isLooping?: boolean
 }
 
-export const useAudioPlayer = () => {
+export const useAudioPlayer = (type: 'music' | 'sound', relativeMax = 1.0) => {
+  const useStore = useStores()
   const [sound, setSound] = useState<Audio.Sound | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -95,6 +98,16 @@ export const useAudioPlayer = () => {
     }
   }, [sound])
 
+  const setAudioVolume = useCallback(
+    async (newVolume: number) => {
+      console.log(sound)
+      if (sound) {
+        await sound.setVolumeAsync(newVolume)
+      }
+    },
+    [sound],
+  )
+
   // Clean up the sound on unmount
   useEffect(() => {
     return () => {
@@ -104,6 +117,14 @@ export const useAudioPlayer = () => {
     }
   }, [sound])
 
+  useEffect(() => {
+    if (sound) {
+      const volume =
+        relativeMax * useStore.settingStore[`volume${type.charAt(0).toUpperCase() + type.slice(1)}`]
+      sound.setVolumeAsync(volume)
+    }
+  }, [useStore.settingStore.volumeMusic, useStore.settingStore.volumeSound, sound])
+
   return {
     error,
     isLoading,
@@ -111,6 +132,7 @@ export const useAudioPlayer = () => {
     loadAudio,
     pauseAudio,
     playAudio,
+    setAudioVolume,
     stopAudio,
   }
 }

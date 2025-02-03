@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView, ScrollView, View } from 'react-native'
 
 import { Button, Icon, Image, Slider, Text, Toggle } from 'blueprints'
+import { observer } from 'mobx-react-lite'
 
 import { AppConfig } from '@/constants'
 import { useAppContext } from '@/context'
@@ -12,8 +13,11 @@ import { openLink, shareApp } from '@/util'
 import { Icons, IconUris } from 'assets/icons'
 import { Images, ImageUris } from 'assets/images'
 
-const SettingsScreen = () => {
-  const { isDarkMode, language, router, setAppLanguage, toggleTheme } = useAppContext()
+const SettingsScreen = observer(() => {
+  const { isDarkMode, language, router, setAppLanguage, settingStore, toggleTheme } =
+    useAppContext()
+
+  const [isMuted, setIsMuted] = useState({ music: false, sound: false })
 
   useHeader(
     {
@@ -28,6 +32,19 @@ const SettingsScreen = () => {
   const handleLanguageChange = () => {
     setAppLanguage(language === 'de' ? ('en' as ContentLanguage) : ('de' as ContentLanguage))
   }
+
+  const handleMute = (type: 'sound' | 'music') => {
+    const muted = !isMuted[type]
+    settingStore[`setVolume${type.charAt(0).toUpperCase() + type.slice(1)}`](+!muted)
+  }
+
+  useEffect(() => {
+    setIsMuted(prevState => ({
+      ...prevState,
+      music: settingStore.volumeMusic === 0,
+      sound: settingStore.volumeSound === 0,
+    }))
+  }, [settingStore.volumeSound, settingStore.volumeMusic])
 
   return (
     <SafeAreaView className="flex-1">
@@ -90,18 +107,28 @@ const SettingsScreen = () => {
 
         <View className="flex bg-secondary p-4 mx-4 my-2 rounded-md">
           <Text variant="h2" tx="settings.audio" className="mb-4" />
-          <View className="flex-row justify-between items-center mb-1">
+          <View className="flex-row justify-between items-center mb-1 w-full">
             <Text tx="settings.sound" />
-            <Slider />
+            <Slider value={settingStore.volumeSound} onValueChange={settingStore.setVolumeSound} />
+            <Icon
+              name={isMuted.sound ? 'volume-mute' : 'volume-high'}
+              library="Ionicons"
+              onPress={() => handleMute('sound')}
+            />
           </View>
-          <View className="flex-row justify-between items-center">
+          <View className="flex-row justify-between items-center w-full">
             <Text tx="settings.music" />
-            <Slider />
+            <Slider value={settingStore.volumeMusic} onValueChange={settingStore.setVolumeMusic} />
+            <Icon
+              name={isMuted.music ? 'volume-mute' : 'volume-high'}
+              library="Ionicons"
+              onPress={() => handleMute('music')}
+            />
           </View>
         </View>
       </ScrollView>
     </SafeAreaView>
   )
-}
+})
 
 export default SettingsScreen

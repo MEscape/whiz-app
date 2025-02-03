@@ -55,7 +55,7 @@ const EmojiItem = memo(
 export const Inventory = memo(
   observer(() => {
     const { userStore } = useAppContext()
-    const { isPlaying, loadAudio, playAudio, stopAudio } = useAudioPlayer()
+    const { isPlaying, loadAudio, playAudio, stopAudio } = useAudioPlayer('sound')
 
     useEffect(() => {
       loadAudio(AudioUris[Audios.EQUIP_SOUND])

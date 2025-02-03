@@ -87,7 +87,7 @@ const TextField = forwardRef<TextInput, TextFieldProps<LibraryTypes, LibraryType
               variant="h3"
               text={placeholderContent}
               textColor={variant === 'standard' && focused ? 'text-text' : 'text-secondary'}
-              className={`absolute left-10 px-1 pointer-events-none transition-transform duration-200 ease-in-out ${
+              className={`absolute ${iconLeft && 'left-10'} px-1 pointer-events-none transition-transform duration-200 ease-in-out ${
                 variant === 'standard' && (focused || isValuePresent)
                   ? '-translate-y-[23px] -translate-x-8 bg-primary text-sm'
                   : 'translate-y-0 translate-x-0'

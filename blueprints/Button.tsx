@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Pressable, PressableProps, Vibration, View } from 'react-native'
 
 import i18n from 'i18n-js'
+import { observer } from 'mobx-react-lite'
 
 import { useAppContext } from '@/context'
 import { useAudioPlayer } from '@/hooks'
@@ -35,92 +36,94 @@ const variantStyles = {
   tertiary: 'bg-secondary text-text',
 }
 
-const ButtonComponent: React.FC<ButtonProps<LibraryTypes, LibraryTypes>> = ({
-  children,
-  className = '',
-  disabled = false,
-  leftIcon,
-  leftIconLibrary = 'Ionicons',
-  onPress,
-  rightIcon,
-  rightIconLibrary = 'Ionicons',
-  text,
-  tx,
-  txOptions,
-  variant = 'primary',
-  ...props
-}) => {
-  const [isAnimating, setIsAnimating] = useState(false)
-  const { isPlaying, loadAudio, playAudio, stopAudio } = useAudioPlayer()
-  useAppContext()
+const ButtonComponent: React.FC<ButtonProps<LibraryTypes, LibraryTypes>> = observer(
+  ({
+    children,
+    className = '',
+    disabled = false,
+    leftIcon,
+    leftIconLibrary = 'Ionicons',
+    onPress,
+    rightIcon,
+    rightIconLibrary = 'Ionicons',
+    text,
+    tx,
+    txOptions,
+    variant = 'primary',
+    ...props
+  }) => {
+    const [isAnimating, setIsAnimating] = useState(false)
+    const { isPlaying, loadAudio, playAudio, stopAudio } = useAudioPlayer('sound')
+    useAppContext()
 
-  const i18nText = tx && translate(tx, txOptions)
-  const content = (i18nText || text || children) as string
+    const i18nText = tx && translate(tx, txOptions)
+    const content = (i18nText || text || children) as string
 
-  const disabledStyle = disabled ? 'opacity-50' : ''
-  const pressedStyle = isAnimating ? 'scale-95' : 'scale-100'
+    const disabledStyle = disabled ? 'opacity-50' : ''
+    const pressedStyle = isAnimating ? 'scale-95' : 'scale-100'
 
-  const combinedClassName = [
-    baseStyle,
-    variantStyles[variant],
-    pressedStyle,
-    disabledStyle,
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ')
+    const combinedClassName = [
+      baseStyle,
+      variantStyles[variant],
+      pressedStyle,
+      disabledStyle,
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ')
 
-  const handlePressIn = () => {
-    setIsAnimating(true)
-    Vibration.vibrate(10)
-    if (isPlaying) stopAudio()
+    const handlePressIn = () => {
+      setIsAnimating(true)
+      Vibration.vibrate(10)
+      if (isPlaying) stopAudio()
 
-    playAudio()
-  }
+      playAudio()
+    }
 
-  const handlePressOut = () => {
-    setTimeout(() => setIsAnimating(false), 150) // Reset after 150ms
-  }
+    const handlePressOut = () => {
+      setTimeout(() => setIsAnimating(false), 150) // Reset after 150ms
+    }
 
-  useEffect(() => {
-    loadAudio(AudioUris[Audios.BUTTON_SOUND])
-  }, [])
+    useEffect(() => {
+      loadAudio(AudioUris[Audios.BUTTON_SOUND])
+    }, [])
 
-  const textColor = variant === 'secondary' ? 'text-accent' : 'text-text'
+    const textColor = variant === 'secondary' ? 'text-accent' : 'text-text'
 
-  return (
-    <Pressable
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      onPress={onPress}
-      disabled={disabled}
-      {...props}>
-      <View className={combinedClassName}>
-        {leftIcon && (
-          <Icon
-            name={leftIcon}
-            library={leftIconLibrary}
-            className="mr-2"
-            size={20}
-            color={textColor}
-          />
-        )}
-        <Text variant="body" textColor={textColor} fontWeight="bold" {...props.textProps}>
-          {content}
-        </Text>
-        {rightIcon && (
-          <Icon
-            name={rightIcon}
-            library={rightIconLibrary}
-            className="ml-2"
-            size={20}
-            color={textColor}
-          />
-        )}
-      </View>
-    </Pressable>
-  )
-}
+    return (
+      <Pressable
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        onPress={onPress}
+        disabled={disabled}
+        {...props}>
+        <View className={combinedClassName}>
+          {leftIcon && (
+            <Icon
+              name={leftIcon}
+              library={leftIconLibrary}
+              className="mr-2"
+              size={20}
+              color={textColor}
+            />
+          )}
+          <Text variant="body" textColor={textColor} fontWeight="bold" {...props.textProps}>
+            {content}
+          </Text>
+          {rightIcon && (
+            <Icon
+              name={rightIcon}
+              library={rightIconLibrary}
+              className="ml-2"
+              size={20}
+              color={textColor}
+            />
+          )}
+        </View>
+      </Pressable>
+    )
+  },
+)
 
 const MemorizedButton = React.memo(ButtonComponent)
 MemorizedButton.displayName = 'Button'

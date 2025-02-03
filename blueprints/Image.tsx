@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { View } from 'react-native'
 
 import { Image as ExpoImage, ImageProps as ExpoImageProps, ImageContentFit } from 'expo-image'
 import { cssInterop } from 'nativewind'
 
 import { useAppContext } from '@/context'
+
+import { Images, ImageUris } from 'assets/images'
 
 import Placeholder from './Placeholder'
 import { PulsatingLoader } from './PulsatingLoader'
@@ -48,21 +50,37 @@ const ImageComponent: React.FC<ImageProps> = ({
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
 
-  const handleLoadStart = () => {
+  const handleLoadStart = useCallback(() => {
     setIsLoading(true)
     setHasError(false)
-  }
+  }, [])
 
-  const handleLoad = () => {
+  const handleLoad = useCallback(() => {
     setIsLoading(false)
-  }
+  }, [])
 
-  const handleError = () => {
+  const handleError = useCallback(() => {
     setIsLoading(false)
     setHasError(true)
-  }
+  }, [])
 
   cssInterop(ExpoImage, { className: 'style' })
+
+  const ImageContent = useMemo(
+    () => (
+      <ExpoImage
+        source={imageSource}
+        contentFit={contentFit}
+        className={`w-full h-full ${className}`}
+        cachePolicy={cachePolicy}
+        onLoadStart={handleLoadStart}
+        onLoad={handleLoad}
+        onError={handleError}
+        {...props}
+      />
+    ),
+    [imageSource, contentFit, cachePolicy, handleLoadStart, handleLoad, handleError],
+  )
 
   return (
     <View className={classNameContainer}>
@@ -70,18 +88,7 @@ const ImageComponent: React.FC<ImageProps> = ({
         <PulsatingLoader className="rounded-md" pulseColor={loadingIndicatorColor} />
       )}
       {hasError && placeholderEnabled && <Placeholder />}
-      {!hasError && (
-        <ExpoImage
-          source={imageSource}
-          contentFit={contentFit}
-          className={`w-full h-full ${className}`}
-          cachePolicy={cachePolicy}
-          onLoadStart={handleLoadStart}
-          onLoad={handleLoad}
-          onError={handleError}
-          {...props}
-        />
-      )}
+      {!hasError && ImageContent}
     </View>
   )
 }

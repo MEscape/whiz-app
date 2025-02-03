@@ -2,16 +2,40 @@ import React from 'react'
 import { View } from 'react-native'
 
 import RNSlider from '@react-native-community/slider'
+import { cssInterop } from 'nativewind'
+
+import { useAppContext } from '@/context'
 
 interface SliderProps {
   value: number
   onValueChange: (value: number) => void
+  minimumValue?: number
+  maximumValue?: number
 }
 
-export const Slider: React.FC<SliderProps> = ({ onValueChange, value }) => {
+export const Slider: React.FC<SliderProps> = ({
+  maximumValue = 1,
+  minimumValue = 0,
+  onValueChange,
+  value,
+}) => {
+  const { isDarkMode } = useAppContext()
+  const secondary = isDarkMode ? '#2d2c2c' : '#e7e3e3'
+
+  cssInterop(RNSlider, { className: 'style' })
+
   return (
-    <View>
-      <RNSlider minimumValue={0} maximumValue={100} value={value} onValueChange={onValueChange} />
+    <View className="flex-1 py-1">
+      <RNSlider
+        className="h-6"
+        minimumValue={minimumValue}
+        maximumValue={maximumValue}
+        value={value}
+        onValueChange={onValueChange}
+        minimumTrackTintColor="#62a399"
+        maximumTrackTintColor={secondary}
+        thumbTintColor="#62a399"
+      />
     </View>
   )
 }

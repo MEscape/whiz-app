@@ -3,6 +3,7 @@ import { SafeAreaView, View } from 'react-native'
 
 import { Button, Image } from 'blueprints'
 import { LinearGradient } from 'expo-linear-gradient'
+import { observer } from 'mobx-react-lite'
 
 import { BackgroundVideo, Typewriter } from '@/components'
 import { blackGradient } from '@/constants'
@@ -16,9 +17,9 @@ import { Videos, VideoUris } from 'assets/videos'
 
 import { useHeader } from '@/hooks/useHeader'
 
-export default function HomeScreen() {
+const HomeScreen = observer(() => {
   const { toggleTheme, userStore } = useAppContext()
-  const { loadAudio } = useAudioPlayer()
+  const { loadAudio } = useAudioPlayer('music', 0.2)
 
   useHeader(
     {
@@ -72,4 +73,6 @@ export default function HomeScreen() {
       </LinearGradient>
     </SafeAreaView>
   )
-}
+})
+
+export default HomeScreen

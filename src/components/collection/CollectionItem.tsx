@@ -7,7 +7,7 @@ import { Icon } from 'blueprints/Icon'
 import { Image } from 'blueprints/Image'
 import { Text } from 'blueprints/Text'
 
-interface CollectionItemProps {
+export interface CollectionItemProps {
   name?: string
   nameTx?: TxKeyPath
   created: string

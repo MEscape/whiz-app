@@ -7,18 +7,22 @@ import { TxKeyPath } from '@/i18n'
 import { pickImage } from '@/util'
 
 import { BottomSheet, BottomSheetInput } from 'blueprints/BottomSheet'
+import { useAppContext } from '@/context'
 
 interface CollectionCreatorProps {
   isBottomSheetVisible: boolean
   setIsBottomSheetVisible: (visible: boolean) => void
 }
 
+export interface FormData { img: null | string, name: string }
+
 export const CollectionCreator = ({
   isBottomSheetVisible,
   setIsBottomSheetVisible,
 }: CollectionCreatorProps) => {
-  const [formData, setFormData] = useState({ img: null, name: '' })
+  const [formData, setFormData] = useState<FormData>({ img: null, name: '' })
   const [error, setError] = useState<TxKeyPath | null>(null)
+  const {collectionStore} = useAppContext()
 
   const handleChoseImage = async () => {
     const img = await pickImage()
@@ -77,6 +81,7 @@ export const CollectionCreator = ({
           tx="common.create"
           disabled={formData.name.trim().length < 4}
           className="h-12 mb-4"
+          onPress={() => collectionStore.addCollection(formData)}
         />
       </View>
     </BottomSheet>

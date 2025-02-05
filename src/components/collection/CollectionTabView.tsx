@@ -6,29 +6,30 @@ import { SceneMap, TabBar, TabView } from 'react-native-tab-view'
 import { useAppContext } from '@/context'
 import { translate } from '@/i18n'
 
-import { CollectionItem } from './CollectionItem'
+import { CollectionItem, CollectionItemProps } from './CollectionItem'
 import collections from './collections'
+import { observer } from 'mobx-react-lite'
+import { EmptyState, Text } from 'blueprints'
 
 const CollectionList = ({ data }) => (
   <View className="flex-1">
-    <FlatList
-      contentContainerStyle={{ paddingBottom: 66 }}
-      data={data}
-      overScrollMode="never"
-      renderItem={({ item }) => <CollectionItem item={item} />}
-      keyExtractor={item => item.id}
-    />
+    {data && data.length > 0 ? (
+      <FlatList
+        contentContainerStyle={{ paddingBottom: 66 }}
+        data={data}
+        overScrollMode="never"
+        renderItem={({ item }) => <CollectionItem item={item} />}
+        keyExtractor={item => item.id}
+      />
+    ) : (
+      <EmptyState />
+    )}
   </View>
 )
 
-const renderScene = SceneMap({
-  own: () => <CollectionList data={collections} />,
-  served: () => <CollectionList data={collections.slice(2)} />,
-})
-
-export const CollectionTabView = () => {
+export const CollectionTabView = observer(() => {
   const [index, setIndex] = useState(0)
-  const { isDarkMode, language } = useAppContext()
+  const { isDarkMode, language, collectionStore } = useAppContext()
   const layout = useWindowDimensions()
 
   const routes = useMemo(
@@ -38,6 +39,11 @@ export const CollectionTabView = () => {
     ],
     [language],
   )
+
+  const renderScene = useMemo(() => SceneMap({
+    own: () => <CollectionList data={collectionStore.collections} />,
+    served: () => <CollectionList data={collections} />,
+  }), [collectionStore.collections])
 
   const renderTabBar = useCallback(
     props => (
@@ -64,13 +70,20 @@ export const CollectionTabView = () => {
   )
 
   return (
-    <TabView
-      overScrollMode="never"
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      initialLayout={{ width: layout.width }}
-      renderTabBar={renderTabBar}
-    />
+    <>
+      <TabView
+        overScrollMode="never"
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={{ width: layout.width }}
+        renderTabBar={renderTabBar}
+      />
+      {collectionStore.isCreating && (
+        {/*<CreateAnimation
+          onAnimationFinish={() => collectionStore.setIsCreating(false)}
+        />*/}
+      )}
+    </>
   )
-}
+})

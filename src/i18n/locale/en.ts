@@ -13,11 +13,9 @@ const en = {
     elements: 'Elements',
   },
   error: {
+    less: 'Too few characters',
     openLink: 'Error while opening the link',
     unexpected: 'Unexpected error',
-    username: {
-      less: 'Too few characters',
-    },
   },
   onboarding: {
     data: {

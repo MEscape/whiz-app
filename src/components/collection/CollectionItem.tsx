@@ -1,18 +1,22 @@
-import React, { memo, useState } from 'react'
-import { Pressable, View } from 'react-native'
+import React, { memo, useCallback, useState } from 'react'
+import { LogBox, Pressable, View } from 'react-native'
 
+import { useAppContext } from '@/context'
 import { translate, TxKeyPath } from '@/i18n'
 
 import { Icon } from 'blueprints/Icon'
 import { Image } from 'blueprints/Image'
 import { Text } from 'blueprints/Text'
 
+LogBox.ignoreAllLogs(true)
+
 export interface CollectionItemProps {
+  id: string
   name?: string
   nameTx?: TxKeyPath
   created: string
   elements: number
-  coverImage: any
+  image: any
 }
 
 const baseStyle =
@@ -21,6 +25,7 @@ const baseStyle =
 const CollectionItem = memo(({ item }: { item: CollectionItemProps }) => {
   const [isAnimating, setIsAnimating] = useState(false)
   const pressedStyle = isAnimating ? 'scale-95' : 'scale-100'
+  const { router } = useAppContext()
 
   const combinedClassName = [baseStyle, pressedStyle].filter(Boolean).join(' ')
 
@@ -32,8 +37,18 @@ const CollectionItem = memo(({ item }: { item: CollectionItemProps }) => {
     setTimeout(() => setIsAnimating(false), 50)
   }
 
+  const handleCollectionPress = useCallback(() => {
+    setTimeout(() => {
+      router.push({ params: item, pathname: `/library` })
+    }, 200)
+  }, [item])
+
   return (
-    <Pressable className={combinedClassName} onPressIn={handlePressIn} onPressOut={handlePressOut}>
+    <Pressable
+      className={combinedClassName}
+      onPress={handleCollectionPress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}>
       <View className="mx-4 my-2 flex justify-between items-start">
         <View>
           <Text variant="h2" className="max-w-48" tx={item?.nameTx} text={item.name} />
@@ -43,9 +58,10 @@ const CollectionItem = memo(({ item }: { item: CollectionItemProps }) => {
         </View>
         <View className="flex items-center mt-2 flex-row">
           <Icon
-            className="w-4 h-4 mr-2 text-gray-500"
+            className="w-4 h-4 mr-2"
             name="analytics"
             size={14}
+            color="text-gray-500"
             library="Ionicons"
           />
           <Text className="text-xs" textColor="text-gray-500">
@@ -53,7 +69,7 @@ const CollectionItem = memo(({ item }: { item: CollectionItemProps }) => {
           </Text>
         </View>
       </View>
-      <Image classNameContainer="w-36 h-36" src={item.coverImage} />
+      <Image classNameContainer="w-36 h-36" src={item.image} />
     </Pressable>
   )
 })

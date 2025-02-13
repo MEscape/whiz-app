@@ -6,8 +6,11 @@ import { Icon, Text, TextField } from 'blueprints'
 import { useHeader } from '@/hooks'
 
 import { CollectionCreator, CollectionTabView } from '@/components/collection'
+import { useAppContext } from '@/context'
 
 const CollectionScreen = () => {
+  const {collectionStore} = useAppContext()
+
   const [showSearch, setShowSearch] = useState(false)
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false)
   const inputRef = useRef<TextInput>(null)
@@ -61,7 +64,7 @@ const CollectionScreen = () => {
                 outputRange: ['0%', '90%'],
               }),
             }}>
-            <TextField ref={inputRef} variant="underlined" placeholder="Search collections" />
+            <TextField ref={inputRef} onChangeText={collectionStore.setSearchTerm} variant="underlined" placeholder="Search collections" />
           </Animated.View>
           <Icon name="search" library="Ionicons" className="mt-4 ml-4" onPress={toggleSearch} />
         </View>

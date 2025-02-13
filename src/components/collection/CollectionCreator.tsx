@@ -1,20 +1,23 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 
 import { Button, Icon, Image } from 'blueprints'
 
+import { useAppContext } from '@/context'
 import { TxKeyPath } from '@/i18n'
 import { pickImage } from '@/util'
 
 import { BottomSheet, BottomSheetInput } from 'blueprints/BottomSheet'
-import { useAppContext } from '@/context'
 
 interface CollectionCreatorProps {
   isBottomSheetVisible: boolean
   setIsBottomSheetVisible: (visible: boolean) => void
 }
 
-export interface FormData { img: null | string, name: string }
+export interface FormData {
+  img: null | string
+  name: string
+}
 
 export const CollectionCreator = ({
   isBottomSheetVisible,
@@ -22,7 +25,7 @@ export const CollectionCreator = ({
 }: CollectionCreatorProps) => {
   const [formData, setFormData] = useState<FormData>({ img: null, name: '' })
   const [error, setError] = useState<TxKeyPath | null>(null)
-  const {collectionStore} = useAppContext()
+  const { collectionStore } = useAppContext()
 
   const handleChoseImage = async () => {
     const img = await pickImage()
@@ -46,8 +49,13 @@ export const CollectionCreator = ({
 
   const handleOnEndEditing = () => {
     if (formData.name.trim().length < 4) {
-      return setError('error.username.less')
+      return setError('error.less')
     }
+  }
+
+  const handleSubmitCollection = () => {
+    setIsBottomSheetVisible(false)
+    collectionStore.addCollection(formData)
   }
 
   return (
@@ -81,7 +89,7 @@ export const CollectionCreator = ({
           tx="common.create"
           disabled={formData.name.trim().length < 4}
           className="h-12 mb-4"
-          onPress={() => collectionStore.addCollection(formData)}
+          onPress={handleSubmitCollection}
         />
       </View>
     </BottomSheet>

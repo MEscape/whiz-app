@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { View } from 'react-native'
 
+import { Asset } from 'expo-asset'
 import { Image as ExpoImage, ImageProps as ExpoImageProps, ImageContentFit } from 'expo-image'
 import { cssInterop } from 'nativewind'
 
@@ -66,7 +67,7 @@ const ImageComponent: React.FC<ImageProps> = ({
   const ImageContent = useMemo(
     () => (
       <ExpoImage
-        source={imageSource}
+        source={(imageSource && Asset.fromModule(imageSource).localUri) || imageSource}
         contentFit={contentFit}
         className={`w-full h-full ${className}`}
         cachePolicy={cachePolicy}

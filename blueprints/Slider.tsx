@@ -11,14 +11,12 @@ interface SliderProps {
   onValueChange: (value: number) => void
   minimumValue?: number
   maximumValue?: number
-  updateTrigger: any
 }
 
 export const Slider: React.FC<SliderProps> = ({
   maximumValue = 1,
   minimumValue = 0,
   onValueChange,
-  updateTrigger,
   value,
 }) => {
   const { isDarkMode } = useAppContext()
@@ -39,7 +37,7 @@ export const Slider: React.FC<SliderProps> = ({
         thumbTintColor="#62a399"
       />
     ),
-    [updateTrigger, secondary],
+    [secondary],
   )
 
   return <View className="flex-1 py-1">{sliderComponent}</View>

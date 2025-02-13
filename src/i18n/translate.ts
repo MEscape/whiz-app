@@ -24,6 +24,11 @@ import { i18n, TxKeyPath } from './i18n'
  * // => "Hello world!"
  * ```
  */
-export function translate(key: TxKeyPath, options?: TranslateOptions): string {
-  return i18n.t(key, options)
+export function translate(key: TxKeyPath, options?: TranslateOptions): string | boolean {
+  try {
+    return i18n.t(key, {missingBehavior: 'error', ...options})
+  } catch (error) {
+    console.error(error)
+    return false
+  }
 }

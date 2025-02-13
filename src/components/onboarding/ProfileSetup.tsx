@@ -16,7 +16,7 @@ export const ProfileSetup = observer(() => {
 
   const handleOnEndEditing = () => {
     if (username.trim().length < 4) {
-      return setError('error.username.less')
+      return setError('error.less')
     }
 
     userStore.setUsername(username)

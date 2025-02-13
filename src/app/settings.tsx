@@ -114,7 +114,6 @@ const SettingsScreen = observer(() => {
             <Slider
               value={settingStore.volumeSound}
               onValueChange={settingStore.setVolumeSound}
-              updateTrigger={isMuted.sound}
             />
             <Icon
               name={isMuted.sound ? 'volume-mute' : 'volume-high'}
@@ -127,7 +126,6 @@ const SettingsScreen = observer(() => {
             <Slider
               value={settingStore.volumeMusic}
               onValueChange={settingStore.setVolumeMusic}
-              updateTrigger={isMuted.music}
             />
             <Icon
               name={isMuted.music ? 'volume-mute' : 'volume-high'}

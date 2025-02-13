@@ -13,11 +13,9 @@ const de = {
     elements: 'Elemente',
   },
   error: {
+    less: 'Zu wenig Zeichen',
     openLink: 'Fehler beim öffnen des Links',
     unexpected: 'Unbekannter Fehler',
-    username: {
-      less: 'Zu wenig Zeichen',
-    },
   },
   onboarding: {
     data: {

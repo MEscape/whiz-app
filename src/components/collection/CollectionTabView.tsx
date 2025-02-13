@@ -1,35 +1,48 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { FlatList, useWindowDimensions, View } from 'react-native'
 
+import { Animation, EmptyState } from 'blueprints'
+import { observer } from 'mobx-react-lite'
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view'
 
 import { useAppContext } from '@/context'
 import { translate } from '@/i18n'
 
-import { CollectionItem, CollectionItemProps } from './CollectionItem'
-import collections from './collections'
-import { observer } from 'mobx-react-lite'
-import { EmptyState, Text } from 'blueprints'
+import { Animations, AnimationUris } from 'assets/animations'
 
-const CollectionList = ({ data }) => (
-  <View className="flex-1">
-    {data && data.length > 0 ? (
-      <FlatList
-        contentContainerStyle={{ paddingBottom: 66 }}
-        data={data}
-        overScrollMode="never"
-        renderItem={({ item }) => <CollectionItem item={item} />}
-        keyExtractor={item => item.id}
-      />
-    ) : (
-      <EmptyState />
-    )}
-  </View>
-)
+import { CollectionItem } from './CollectionItem'
+import collections from './collections'
+
+const CollectionList = observer(({ data }) => {
+const { collectionStore } = useAppContext()
+
+  const filteredData = useMemo(() => {
+    return data.filter(collection => {
+      const collectionName = collection.name || translate(collection.nameTx)
+      return collectionName.toLowerCase().includes(collectionStore.searchTerm)
+    });
+  }, [collectionStore.searchTerm, data]);
+
+  return (
+    <View className="flex-1">
+      {filteredData && filteredData.length > 0 ? (
+        <FlatList
+          contentContainerStyle={{ paddingBottom: 66 }}
+          data={filteredData}
+          overScrollMode="never"
+          renderItem={({ item }) => <CollectionItem item={item} />}
+          keyExtractor={item => item.id}
+        />
+      ) : (
+        <EmptyState className="mb-20" />
+      )}
+    </View>
+  )
+})
 
 export const CollectionTabView = observer(() => {
   const [index, setIndex] = useState(0)
-  const { isDarkMode, language, collectionStore } = useAppContext()
+  const { collectionStore, isDarkMode, language } = useAppContext()
   const layout = useWindowDimensions()
 
   const routes = useMemo(
@@ -40,10 +53,14 @@ export const CollectionTabView = observer(() => {
     [language],
   )
 
-  const renderScene = useMemo(() => SceneMap({
-    own: () => <CollectionList data={collectionStore.collections} />,
-    served: () => <CollectionList data={collections} />,
-  }), [collectionStore.collections])
+  const renderScene = useMemo(
+    () =>
+      SceneMap({
+        own: () => <CollectionList data={collectionStore.collections} />,
+        served: () => <CollectionList data={collections} />,
+      }),
+    [],
+  )
 
   const renderTabBar = useCallback(
     props => (
@@ -80,9 +97,11 @@ export const CollectionTabView = observer(() => {
         renderTabBar={renderTabBar}
       />
       {collectionStore.isCreating && (
-        {/*<CreateAnimation
+        <Animation
+          source={AnimationUris[Animations.CREATED]}
+          className='h-56 w-56'
           onAnimationFinish={() => collectionStore.setIsCreating(false)}
-        />*/}
+        />
       )}
     </>
   )

@@ -3,6 +3,7 @@ import { SafeAreaView, ScrollView, View } from 'react-native'
 
 import { observer } from 'mobx-react-lite'
 
+import { Editor } from '@/components'
 import { useAppContext } from '@/context'
 import { useHeader } from '@/hooks'
 
@@ -13,7 +14,6 @@ import {
   PartyStats,
   ProfileSkeleton,
   Rewards,
-  UsernameEditor,
 } from '@/components/profile'
 import ProfileImage from '@/components/ProfileImage'
 
@@ -45,7 +45,13 @@ const ProfileScreen = observer(() => {
             equippedEmojiId={userStore.equippedEmoji}
           />
 
-          <UsernameEditor />
+          <Editor
+            className='ml-4'
+            placeholderTx="placeholder.username" 
+            maxLength={15} 
+            name={userStore.username} 
+            onSave={name => userStore.setUsername(name)} 
+          />
         </View>
 
         <LevelProgress />

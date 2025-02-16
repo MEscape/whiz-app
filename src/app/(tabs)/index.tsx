@@ -10,6 +10,7 @@ import { blackGradient } from '@/constants'
 import { useAppContext } from '@/context'
 import { useAudioPlayer } from '@/hooks'
 import { translate } from '@/i18n'
+import { handleCreateLobby } from '@/services'
 
 import { Audios, AudioUris } from 'assets/audios'
 import { Images, ImageUris } from 'assets/images'
@@ -18,7 +19,7 @@ import { Videos, VideoUris } from 'assets/videos'
 import { useHeader } from '@/hooks/useHeader'
 
 const HomeScreen = observer(() => {
-  const { collectionStore, toggleTheme } = useAppContext()
+  const { tcpStore, toggleTheme } = useAppContext()
   const { loadAudio } = useAudioPlayer('music', 0.2)
 
   useHeader(
@@ -60,13 +61,13 @@ const HomeScreen = observer(() => {
               className="h-12"
               text="Lobby erstellen"
               variant="primary"
-              onPress={collectionStore.clearCollections}
+              onPress={tcpStore.create}
             />
             <Button
               className="h-12"
               text="Lobby beitreten"
               variant="primary"
-              onPress={toggleTheme}
+              onPress={tcpStore.disconnect}
             />
           </View>
         </View>

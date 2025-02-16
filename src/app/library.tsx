@@ -1,120 +1,166 @@
-import React from 'react'
-import { SafeAreaView, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { Animated, FlatList, SafeAreaView, TextInput, TouchableOpacity, View } from 'react-native'
 
 import { FlashList } from '@shopify/flash-list'
+import { EmptyState, Icon } from 'blueprints'
 import { useLocalSearchParams } from 'expo-router'
+import { toJS } from 'mobx'
+import { observer } from 'mobx-react-lite'
 import { cssInterop } from 'nativewind'
 
-import { Editor } from '@/components'
+import { Search } from '@/components'
+import { PlayTypes } from '@/constants'
 import { useAppContext } from '@/context'
 import { useHeader } from '@/hooks'
-import { translate } from '@/i18n'
-import { pickImage } from '@/util'
+import { CustomAlert, showSuccessToast } from '@/util'
 
-import { Icon } from 'blueprints/Icon'
-import { Image } from 'blueprints/Image'
-import { Text } from 'blueprints/Text'
+import { Data, DataUris } from 'assets/data'
 
-import { FormData } from '@/components/collection'
+import { CollectionItemProps } from '@/components/collection'
+import { BottomInfo, TaskCreator, TaskHeader, TaskItem } from '@/components/task'
 
-interface CollectionItemProps {
+export interface Task {
   id: string
-  name?: string
-  created: string
-  elements: number
-  image: any
-  editable?: boolean
+  name: string
+  answers: Array<string>
+  solution: number
+  type: PlayTypes
 }
 
-const LibraryItem = ({ item }) => {
+const LibraryList = ({ editable, filteredData, refId }) => {
+  const [openItemId, setOpenItemId] = useState(null)
+
+  const handleToggle = (id: string) => {
+    setOpenItemId(prevId => (prevId === id ? null : id))
+  }
+
   return (
-    <View className="flex-row px-1 py-5 justify-between items-center">
-      <Text text={item.name} />
-      <Icon name="chevron-up" library="Ionicons" color="text-secondary" />
+    <View className="flex-1">
+      {filteredData && filteredData.length > 0 ? (
+        <FlatList
+          contentContainerStyle={{ paddingVertical: 20 }}
+          data={filteredData}
+          extraData={openItemId}
+          renderItem={({ item }: { item: Task }) => (
+            <TaskItem
+              item={item}
+              isOpen={openItemId === item.id}
+              onToggle={() => handleToggle(item.id)}
+              refId={refId}
+              editable={editable !== false}
+            />
+          )}
+          keyExtractor={item => item.id}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <EmptyState className="mb-20" />
+      )}
     </View>
   )
 }
 
-const LibraryScreen = () => {
+const LibraryScreen = observer(() => {
   const params = useLocalSearchParams()
-  const {collectionStore, router} = useAppContext()
+  const { collectionStore, language, router } = useAppContext()
 
-  const [formData, setFormData] = React.useState<FormData>({img: params.image, name: translate(params.nameTx) || params.name})
+  const inputRef = useRef<TextInput>(null)
+  const [showSearch, setShowSearch] = useState(false)
+  const [animation] = useState(new Animated.Value(0))
 
-  const data: CollectionItemProps[] = [
-    { created: '2024-02-12', elements: 5, id: '1', image: params.image, name: 'Example 1' },
-    { created: '2024-02-11', elements: 3, id: '2', image: params.image, name: 'Example 2' },
-  ]
+  const mapIdToDataKey = (id: string) => {
+    const currLanguage = language.toUpperCase()
 
-  cssInterop(FlashList, { className: 'style' })
+    switch (id) {
+      case 'CLASSIC_CHAOS':
+        return Data[`${currLanguage}_CLASSIC_CHAOS`]
+      case 'SURVIVAL':
+        return Data[`${currLanguage}_SURVIVAL`]
+      case 'DISORDERLY':
+        return Data[`${currLanguage}_DISORDERLY`]
+      default:
+        return undefined
+    }
+  }
+
+  const item = (params.item ? JSON.parse(params.item) : null) as CollectionItemProps
+  const dataKey = mapIdToDataKey(item.id)
+  const data = useMemo(() => {
+    return dataKey ? DataUris[dataKey] : collectionStore.getTasks(item.id)
+  }, [dataKey, toJS(collectionStore.tasksByRefId), item.id])
+
+  const filteredData = useMemo(() => {
+    return data.filter(item => {
+      return item.name.toLowerCase().includes(collectionStore.searchTerm)
+    })
+  }, [collectionStore.searchTerm, data])
+
+  useEffect(() => {
+    collectionStore.setSearchTerm('')
+
+    return () => collectionStore.setSearchTerm('')
+  }, [])
+
+  const toggleSearch = () => {
+    setShowSearch(prev => !prev)
+    inputRef.current.focus()
+    Animated.timing(animation, {
+      duration: 300,
+      toValue: showSearch ? 0 : 1,
+      useNativeDriver: false,
+    }).start()
+  }
+
+  const handleDelete = () => {
+    CustomAlert.alert({
+      background: 'bg-secondary',
+      messageTx: 'alert.deleteReminder',
+      messageTxOptions: { itemName: item.name },
+      onConfirm: () => {
+        console.log(collectionStore.deleteCollection(item.id))
+        router.back()
+        showSuccessToast('success.delete', undefined, { itemName: item.name })
+      },
+      titleTx: 'alert.delete',
+    })
+  }
 
   useHeader(
     {
       leftIcon: 'arrow-back',
       leftIconLibrary: 'Ionicons',
       onLeftPress: router.back,
+      RightActionComponent: (
+        <Search
+          toggleSearch={toggleSearch}
+          animation={animation}
+          ref={inputRef}
+          onChangeText={collectionStore.setSearchTerm}
+        />
+      ),
     },
-    [router],
+    [router, animation, showSearch],
   )
 
-  const handleSaveCollectionName = (name: string) => {
-    collectionStore.updateCollection(params.id, {...formData, name})
-    setFormData(prev => ({...prev, name}))
-  }
-
-  const handlePickImage = async () => {
-    const img = await pickImage()
-    collectionStore.updateCollection(params.id, {...formData, img})
-    setFormData(prev => ({...prev, img}))
-  }
-
-  console.log('LibraryScreen', params, formData)
+  cssInterop(FlashList, { className: 'style' })
 
   return (
     <SafeAreaView className="flex-1 bg-primary px-4 py-2">
-      <View className="h-32 w-full flex-row gap-x-3">
-        <TouchableOpacity onPress={handlePickImage} disabled={params.editable === false}>
-          <Image
-            src={formData.img}
-            classNameContainer="w-32 h-32 rounded-md overflow-hidden"
-          />
-          {!params.image && (
-            <View className="absolute inset-0 bg-secondary opacity-50 justify-center items-center">
-              <Icon name="camera" library="Ionicons" color="text-black" size={30} />
-            </View>
-          )}
-        </TouchableOpacity>
-        <View>
-          <View className='h-8'>
-            <Editor 
-              placeholderTx="placeholder.collectionName" 
-              maxLength={15} 
-              name={formData.name} 
-              editable={params.editable === false}
-              onSave={handleSaveCollectionName} 
-            />
-          </View>
-          <View className="flex-row">
-            <Icon
-              className="w-4 h-4 mr-2"
-              name="analytics"
-              size={14}
-              color="text-gray-500"
-              library="Ionicons"
-            />
-            <Text className="text-xs" textColor="text-gray-500">
-              {params.elements} {translate('common.elements')}
-            </Text>
-          </View>
-        </View>
-      </View>
-      <FlashList
-        contentContainerStyle={{ paddingVertical: 20 }}
-        data={data}
-        renderItem={LibraryItem}
-      />
+      <TaskHeader item={item} />
+      <LibraryList filteredData={filteredData} refId={item.id} editable={item.editable} />
+      {item.editable !== false && (
+        <>
+          <TaskCreator refId={item.id} />
+          <TouchableOpacity
+            className="absolute right-5 bottom-10 z-20 w-16 h-16 rounded-full bg-secondary flex justify-center items-center"
+            onPress={handleDelete}>
+            <Icon name="trash" library="Ionicons" size={26} />
+          </TouchableOpacity>
+        </>
+      )}
+      {filteredData.length > 0 && <BottomInfo />}
     </SafeAreaView>
   )
-}
+})
 
 export default LibraryScreen

@@ -1,15 +1,16 @@
 import React, { useRef, useState } from 'react'
-import { Animated, SafeAreaView, TextInput, TouchableOpacity, View } from 'react-native'
+import { Animated, SafeAreaView, TextInput, TouchableOpacity } from 'react-native'
 
-import { Icon, Text, TextField } from 'blueprints'
+import { Icon, Text } from 'blueprints'
 
+import { Search } from '@/components'
+import { useAppContext } from '@/context'
 import { useHeader } from '@/hooks'
 
 import { CollectionCreator, CollectionTabView } from '@/components/collection'
-import { useAppContext } from '@/context'
 
 const CollectionScreen = () => {
-  const {collectionStore} = useAppContext()
+  const { collectionStore } = useAppContext()
 
   const [showSearch, setShowSearch] = useState(false)
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false)
@@ -55,19 +56,12 @@ const CollectionScreen = () => {
         </Animated.View>
       ),
       RightActionComponent: (
-        <View className="flex-row w-2/3 h-14 items-center justify-end">
-          <Animated.View
-            style={{
-              opacity: animation,
-              width: animation.interpolate({
-                inputRange: [0, 1],
-                outputRange: ['0%', '90%'],
-              }),
-            }}>
-            <TextField ref={inputRef} onChangeText={collectionStore.setSearchTerm} variant="underlined" placeholder="Search collections" />
-          </Animated.View>
-          <Icon name="search" library="Ionicons" className="mt-4 ml-4" onPress={toggleSearch} />
-        </View>
+        <Search
+          toggleSearch={toggleSearch}
+          onChangeText={collectionStore.setSearchTerm}
+          animation={animation}
+          ref={inputRef}
+        />
       ),
     },
     [showSearch, animation, leftTextAnimation],

@@ -1,0 +1,25 @@
+[
+  {
+    "type": 1,
+    "name": "What is the traditional German toast before drinking?",
+    "answers": ["Prost", "Zum Wohl", "Cheers", "Skål"],
+    "solution": 0,
+    "id": "0"
+  },
+  {
+    "type": 2,
+    "name": "How many beers does the average German drink per year?",
+    "solution": 100,
+    "id": "1"
+  },
+  {
+    "type": 3,
+    "name": "Name the best cure for a hangover.",
+    "id": "2"
+  },
+  {
+    "type": 4,
+    "name": "Spin around five times and try to walk in a straight line!",
+    "id": "3"
+  }
+]

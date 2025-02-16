@@ -1,0 +1,25 @@
+[
+  {
+    "type": 1,
+    "name": "What is the chemical symbol for gold in the periodic table?",
+    "answers": ["Au", "Ag", "Hg", "Br"],
+    "solution": 0,
+    "id": "0"
+  },
+  {
+    "type": 2,
+    "name": "How many liters of alcohol do Germans drink per year?",
+    "solution": 120,
+    "id": "1"
+  },
+  {
+    "type": 3,
+    "name": "Name a completely useless invention.",
+    "id": "2"
+  },
+  {
+    "type": 4,
+    "name": "Host a dance-off and show your best move!",
+    "id": "3"
+  }
+]

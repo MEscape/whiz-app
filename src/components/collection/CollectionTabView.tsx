@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { FlatList, useWindowDimensions, View } from 'react-native'
 
 import { Animation, EmptyState } from 'blueprints'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view'
 
@@ -10,18 +11,18 @@ import { translate } from '@/i18n'
 
 import { Animations, AnimationUris } from 'assets/animations'
 
-import { CollectionItem } from './CollectionItem'
+import { CollectionItem, CollectionItemProps } from './CollectionItem'
 import collections from './collections'
 
-const CollectionList = observer(({ data }) => {
-const { collectionStore } = useAppContext()
+const CollectionList = observer(({ data }: { data: CollectionItemProps[] }) => {
+  const { collectionStore } = useAppContext()
 
   const filteredData = useMemo(() => {
     return data.filter(collection => {
-      const collectionName = collection.name || translate(collection.nameTx)
+      const collectionName = (collection.name || translate(collection.nameTx)) as string
       return collectionName.toLowerCase().includes(collectionStore.searchTerm)
-    });
-  }, [collectionStore.searchTerm, data]);
+    })
+  }, [collectionStore.searchTerm, data, toJS(collectionStore.collections)])
 
   return (
     <View className="flex-1">
@@ -83,7 +84,7 @@ export const CollectionTabView = observer(() => {
         inactiveColor={isDarkMode ? '#e7e3e3' : '#2d2c2c'}
       />
     ),
-    [],
+    [isDarkMode],
   )
 
   return (
@@ -99,7 +100,7 @@ export const CollectionTabView = observer(() => {
       {collectionStore.isCreating && (
         <Animation
           source={AnimationUris[Animations.CREATED]}
-          className='h-56 w-56'
+          className="h-56 w-56"
           onAnimationFinish={() => collectionStore.setIsCreating(false)}
         />
       )}

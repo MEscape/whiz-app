@@ -29,6 +29,7 @@ interface BottomSheetProps {
   snapPoints?: Array<string>
   children: React.ReactNode
   className?: string
+  enableDynamicSizing?: boolean
 }
 
 interface BottomSheetOptionProps<T extends LibraryTypes> {
@@ -37,7 +38,7 @@ interface BottomSheetOptionProps<T extends LibraryTypes> {
     name: IconProps<T>['name']
     library: T
   }
-  onPress: () => void
+  onPress?: () => void
 }
 
 export const BottomSheetOption = ({
@@ -129,6 +130,7 @@ export const BottomSheet = ({
   onClose,
   snapPoints,
   title,
+  ...props
 }: BottomSheetProps) => {
   const bottomSheetRef = React.useRef<BottomSheetModal>(null)
 
@@ -152,7 +154,8 @@ export const BottomSheet = ({
       keyboardBlurBehavior="restore"
       android_keyboardInputMode="adjustResize"
       backgroundStyle={{ backgroundColor: 'var(--primary)' }}
-      handleIndicatorStyle={{ backgroundColor: 'var(--secondary)' }}>
+      handleIndicatorStyle={{ backgroundColor: 'var(--secondary)' }}
+      {...props}>
       <BottomSheetView className={`flex-1 bg-primary ${className}`}>
         {title && (
           <View className="px-4 py-3 border-b border-secondary">

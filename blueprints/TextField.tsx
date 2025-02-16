@@ -25,6 +25,9 @@ export interface TextFieldProps<L extends LibraryTypes, R extends LibraryTypes>
   placeholderTxOptions?: TextProps['txOptions']
   errorTx?: TextProps['tx']
   errorTxOptions?: TextProps['txOptions']
+  innerClassName?: string
+  iconLeftPress?: IconProps<L>['onPress']
+  iconRightPress?: IconProps<R>['onPress']
 }
 
 const variants = {
@@ -47,8 +50,11 @@ const TextField = forwardRef<TextInput, TextFieldProps<LibraryTypes, LibraryType
       errorTxOptions,
       iconLeft,
       iconLeftLibrary = 'Ionicons',
+      iconLeftPress,
       iconRight,
       iconRightLibrary = 'Ionicons',
+      iconRightPress,
+      innerClassName,
       onBlur,
       onChangeText,
       onFocus,
@@ -99,13 +105,14 @@ const TextField = forwardRef<TextInput, TextFieldProps<LibraryTypes, LibraryType
         <View
           className={`${variantStyles.theme} flex-row items-center mb-1 h-12 transition-all duration-300 ease-in-out ${
             focused && variantStyles.focus
-          }`}>
+          } ${innerClassName}`}>
           {iconLeft && (
             <Icon
               name={iconLeft}
               color="text-secondary"
               library={iconLeftLibrary}
               className="pl-2 pr-1"
+              onPress={iconLeftPress}
             />
           )}
           {(variant === 'standard' || !isValuePresent) && (
@@ -135,7 +142,7 @@ const TextField = forwardRef<TextInput, TextFieldProps<LibraryTypes, LibraryType
               color="text-secondary"
               name={showPassword ? 'eye' : 'eye-off'}
               library={iconRightLibrary}
-              onPress={toggleSecureTextEntry}
+              onPress={secureTextEntry ? toggleSecureTextEntry : iconRightPress}
               className="pl-1 pr-2"
             />
           )}

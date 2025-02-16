@@ -11,9 +11,10 @@ import 'react-native-reanimated'
 
 import '../../global.css'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import Toast from 'react-native-toast-message'
 
 import { customFontsToLoad } from '@/constants'
-import { LocalizationProvider, ThemeProvider } from '@/context'
+import { CustomAlertProvider, LocalizationProvider, ThemeProvider } from '@/context'
 import { usePreloadAssets, useWeeklyNotification } from '@/hooks'
 import { useInitialRootStore } from '@/models'
 
@@ -43,12 +44,15 @@ export default function RootLayout() {
       <LocalizationProvider>
         <GestureHandlerRootView>
           <BottomSheetModalProvider>
-            <Stack screenOptions={stackScreenOptions}>
-              <Stack.Screen name="onboarding" />
-              <Stack.Screen name="(tabs)" />
-              <Stack.Screen name="+not-found" />
-            </Stack>
-            <StatusBar style="inverted" />
+            <CustomAlertProvider>
+              <Stack screenOptions={stackScreenOptions}>
+                <Stack.Screen name="onboarding" />
+                <Stack.Screen name="(tabs)" />
+                <Stack.Screen name="+not-found" />
+              </Stack>
+              <StatusBar style="inverted" />
+              <Toast />
+            </CustomAlertProvider>
           </BottomSheetModalProvider>
         </GestureHandlerRootView>
       </LocalizationProvider>

@@ -1,0 +1,30 @@
+[
+  {
+    "type": 1,
+    "name": "What is the most important rule if you get lost in the wilderness?",
+    "answers": [
+      "Keep moving",
+      "Find a water source",
+      "Wait for rescue",
+      "Look for food"
+    ],
+    "solution": 1,
+    "id": "0"
+  },
+  {
+    "type": 2,
+    "name": "How many days can a person survive without water on average?",
+    "solution": 3,
+    "id": "1"
+  },
+  {
+    "type": 3,
+    "name": "Name an edible plant that can be found in nature.",
+    "id": "2"
+  },
+  {
+    "type": 4,
+    "name": "Look around and find an item that could help you survive!",
+    "id": "3"
+  }
+]

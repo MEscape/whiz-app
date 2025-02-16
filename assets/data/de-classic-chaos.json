@@ -1,0 +1,25 @@
+[
+  {
+    "type": 1,
+    "name": "Was ist das chemische Zeichen für Gold im Perioden System?",
+    "answers": ["Au", "Ag", "Hg", "Br"],
+    "solution": 0,
+    "id": "0"
+  },
+  {
+    "type": 2,
+    "name": "Wie viele Liter Alkohol trinken Deutsche im Jahr?",
+    "solution": 120,
+    "id": "1"
+  },
+  {
+    "type": 3,
+    "name": "Nenne eine völlig nutzlose Erfindung.",
+    "id": "2"
+  },
+  {
+    "type": 4,
+    "name": "Veranstalte einen Dance-Off und zeige deinen besten Move!",
+    "id": "3"
+  }
+]

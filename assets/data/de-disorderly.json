@@ -1,0 +1,25 @@
+[
+  {
+    "type": 1,
+    "name": "Was ist der traditionelle deutsche Trinkspruch?",
+    "answers": ["Prost", "Zum Wohl", "Cheers", "Skål"],
+    "solution": 0,
+    "id": "0"
+  },
+  {
+    "type": 2,
+    "name": "Wie viele Biere trinkt ein Deutscher durchschnittlich pro Jahr?",
+    "solution": 100,
+    "id": "1"
+  },
+  {
+    "type": 3,
+    "name": "Nenne das beste Mittel gegen einen Kater.",
+    "id": "2"
+  },
+  {
+    "type": 4,
+    "name": "Drehe dich fünfmal im Kreis und versuche, geradeaus zu laufen!",
+    "id": "3"
+  }
+]

@@ -1,6 +1,6 @@
 import { exec } from 'child_process'
 
-import en from '../src/i18n/locale/en'
+import de from '../src/i18n/locale/de'
 
 // Use this array for keys that for whatever reason aren't greppable so they
 // don't hold your test suite hostage by always failing.
@@ -49,7 +49,7 @@ describe('i18n', () => {
     // grep "[T\|t]x=[{]\?\"\S*\"[}]\?\|translate(\"\S*\"" -ohr './app' | grep -o "\".*\""
     const command = `grep "[T\\|t]x=[{]\\?\\"\\S*\\"[}]\\?\\|translate(\\"\\S*\\"" -ohr './app' | grep -o "\\".*\\""`
     exec(command, (_, stdout) => {
-      const allTranslationsDefined = iterate(en, '', [])
+      const allTranslationsDefined = iterate(de, '', [])
       const allTranslationsUsed = stdout.replace(/"/g, '').split('\n')
       allTranslationsUsed.splice(-1, 1)
 

@@ -1,4 +1,8 @@
 const de = {
+  alert: {
+    delete: 'Bestätigen Sie den Löschvorgang',
+    deleteReminder: 'Bist du sicher, dass du {{itemName}} löschen willst?',
+  },
   collection: {
     classicChaos: 'Klassischer Chaos',
     create: 'Sammlung erstellen',
@@ -8,6 +12,7 @@ const de = {
     survival: 'Überlebensmodus',
   },
   common: {
+    cancel: 'Abbrechen',
     collect: 'Einsammeln',
     create: 'Erstellen',
     elements: 'Elemente',
@@ -16,6 +21,15 @@ const de = {
     less: 'Zu wenig Zeichen',
     openLink: 'Fehler beim öffnen des Links',
     unexpected: 'Unbekannter Fehler',
+  },
+  info: {
+    symbol: {
+      album: 'Normale Fragen',
+      analytic: 'Schätz Fragen',
+      chatbubble: 'Abstimmung über die beste Antwort',
+      clipboard: 'Aufgaben',
+    },
+    symbols: 'Was bedeuten die Symbole?',
   },
   onboarding: {
     data: {
@@ -42,7 +56,10 @@ const de = {
     chosePhoto: 'Berechtigung zum Zugriff auf die Galerie ist erforderlich!',
   },
   placeholder: {
+    answer: 'Antwortmöglichkeit',
     collectionName: 'Name der Sammlung',
+    solution: 'Lösung eingeben',
+    taskName: 'Name des Elements',
     username: 'Benutzername',
   },
   profile: {
@@ -97,11 +114,17 @@ const de = {
     shareApp: 'App teilen',
     sound: 'Effekte Lautstärke',
   },
+  success: {
+    delete: '{{itemName}} Erfolgreich gelöscht',
+  },
   tabs: {
     collections: 'Sammlungen',
     home: 'Start',
     profile: 'Profil',
     settings: 'Einstellungen',
+  },
+  task: {
+    creator: 'Neues Element erstellen',
   },
   whiz: {
     sentences: [

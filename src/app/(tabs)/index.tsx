@@ -18,7 +18,7 @@ import { Videos, VideoUris } from 'assets/videos'
 import { useHeader } from '@/hooks/useHeader'
 
 const HomeScreen = observer(() => {
-  const { toggleTheme, userStore } = useAppContext()
+  const { collectionStore, toggleTheme } = useAppContext()
   const { loadAudio } = useAudioPlayer('music', 0.2)
 
   useHeader(
@@ -60,7 +60,7 @@ const HomeScreen = observer(() => {
               className="h-12"
               text="Lobby erstellen"
               variant="primary"
-              onPress={userStore.clearProfile}
+              onPress={collectionStore.clearCollections}
             />
             <Button
               className="h-12"

@@ -3,6 +3,7 @@ export enum Audios {
   BUTTON_SOUND = 'BUTTON_SOUND',
   NOTIFICATION_SOUND = 'NOTIFICATION_SOUND',
   EQUIP_SOUND = 'EQUIP_SOUND',
+  DELETE_SOUND = 'DELETE_SOUND',
 }
 
 export const AudioUris = {
@@ -10,4 +11,5 @@ export const AudioUris = {
   [Audios.BUTTON_SOUND]: require('./button.mp3'),
   [Audios.NOTIFICATION_SOUND]: require('./notification.mp3'),
   [Audios.EQUIP_SOUND]: require('./equip.mp3'),
+  [Audios.DELETE_SOUND]: require('./delete.mp3'),
 }

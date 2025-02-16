@@ -1,6 +1,8 @@
 import React, { memo, useCallback, useState } from 'react'
 import { LogBox, Pressable, View } from 'react-native'
 
+import { observer } from 'mobx-react-lite'
+
 import { useAppContext } from '@/context'
 import { translate, TxKeyPath } from '@/i18n'
 
@@ -17,12 +19,13 @@ export interface CollectionItemProps {
   created: string
   elements: number
   image: any
+  editable?: boolean
 }
 
 const baseStyle =
   'bg-secondary mx-7 my-3 flex-row justify-between rounded-md overflow-hidden shadow-md transition-transform duration-100'
 
-const CollectionItem = memo(({ item }: { item: CollectionItemProps }) => {
+export const CollectionItem = ({ item }: { item: CollectionItemProps }) => {
   const [isAnimating, setIsAnimating] = useState(false)
   const pressedStyle = isAnimating ? 'scale-95' : 'scale-100'
   const { router } = useAppContext()
@@ -38,8 +41,11 @@ const CollectionItem = memo(({ item }: { item: CollectionItemProps }) => {
   }
 
   const handleCollectionPress = useCallback(() => {
+    const itemStr = JSON.stringify(item)
+    const safeItemStr = encodeURIComponent(itemStr)
+
     setTimeout(() => {
-      router.push({ params: item, pathname: `/library` })
+      router.push({ params: { item: safeItemStr }, pathname: `/library` })
     }, 200)
   }, [item])
 
@@ -72,7 +78,4 @@ const CollectionItem = memo(({ item }: { item: CollectionItemProps }) => {
       <Image classNameContainer="w-36 h-36" src={item.image} />
     </Pressable>
   )
-})
-
-CollectionItem.displayName = 'CollectionItem'
-export { CollectionItem }
+}

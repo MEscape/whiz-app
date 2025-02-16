@@ -1,4 +1,8 @@
 const en = {
+  alert: {
+    delete: 'Confirm Deletion',
+    deleteReminder: 'Are you sure you want to delete {{itemName}}?',
+  },
   collection: {
     classicChaos: 'Classic Chaos',
     create: 'Create Collection',
@@ -8,6 +12,7 @@ const en = {
     survival: 'Survival Mode',
   },
   common: {
+    cancel: 'Cancel',
     collect: 'Collect',
     create: 'Create',
     elements: 'Elements',
@@ -16,6 +21,15 @@ const en = {
     less: 'Too few characters',
     openLink: 'Error while opening the link',
     unexpected: 'Unexpected error',
+  },
+  info: {
+    symbol: {
+      album: 'Normal Questions',
+      analytic: 'Guess questions',
+      chatbubble: 'Vote for the best answer',
+      clipboard: 'Tasks',
+    },
+    symbols: 'What do the symbols mean?',
   },
   onboarding: {
     data: {
@@ -42,7 +56,10 @@ const en = {
     chosePhoto: 'Permission to access the gallery is required!',
   },
   placeholder: {
+    answer: 'Answer option',
     collectionName: 'Name of collection',
+    solution: 'Type in solution',
+    taskName: 'Name of the element',
     username: 'Username',
   },
   profile: {
@@ -97,11 +114,18 @@ const en = {
     shareApp: 'Share App',
     sound: 'Effects volume',
   },
+  success: {
+    delete: 'Successfully deleted {{itemName}}',
+  },
+
   tabs: {
     collections: 'Collections',
     home: 'Start',
     profile: 'Profile',
     settings: 'Settings',
+  },
+  task: {
+    creator: 'Create new element',
   },
   whiz: {
     sentences: [

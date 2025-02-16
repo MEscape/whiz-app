@@ -1,0 +1,30 @@
+[
+  {
+    "type": 1,
+    "name": "Was ist die wichtigste Regel, wenn du dich in der Wildnis verirrst?",
+    "answers": [
+      "In Bewegung bleiben",
+      "Wasserquelle suchen",
+      "Auf Rettung warten",
+      "Essen suchen"
+    ],
+    "solution": 1,
+    "id": "0"
+  },
+  {
+    "type": 2,
+    "name": "Wie viele Tage kann ein Mensch durchschnittlich ohne Wasser überleben?",
+    "solution": 3,
+    "id": "1"
+  },
+  {
+    "type": 3,
+    "name": "Nenne eine essbare Pflanzen, die man in der Natur finden kann.",
+    "id": "2"
+  },
+  {
+    "type": 4,
+    "name": "Suche in deiner Umgebung nach einem Gegenständen, die dir beim Überleben helfen könnten!",
+    "id": "3"
+  }
+]

@@ -3,7 +3,6 @@ import { Instance, SnapshotOut, types } from 'mobx-state-tree'
 import { CollectionStoreModel } from './stores/CollectionStore'
 
 import { SettingStoreModel, UserStoreModel } from '@/models/stores'
-import { TcpStoreModel } from '@/models/stores/TCPStore'
 
 /**
  * A RootStore model.
@@ -11,7 +10,6 @@ import { TcpStoreModel } from '@/models/stores/TCPStore'
 export const RootStoreModel = types.model('RootStore').props({
   collectionStore: types.optional(CollectionStoreModel, {}),
   settingStore: types.optional(SettingStoreModel, {}),
-  tcpStore: types.optional(TcpStoreModel, {}),
   userStore: types.optional(UserStoreModel, {}),
 })
 

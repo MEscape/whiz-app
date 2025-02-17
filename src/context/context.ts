@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router'
 
 import { useStores } from '@/models'
+import * as service from '@/services'
 
 import { useLanguage } from './LocalizationContext'
 import { useTheme } from './ThemeContext'
@@ -15,6 +16,7 @@ export const useAppContext = () => {
     ...stores,
     ...theme,
     ...language,
+    ...service,
     router,
   }
 }

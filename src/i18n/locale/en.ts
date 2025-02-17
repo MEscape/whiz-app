@@ -16,6 +16,7 @@ const en = {
     collect: 'Collect',
     create: 'Create',
     elements: 'Elements',
+    join: 'Join'
   },
   error: {
     less: 'Too few characters',
@@ -58,6 +59,7 @@ const en = {
   placeholder: {
     answer: 'Answer option',
     collectionName: 'Name of collection',
+    lobbyId: 'Type in Lobby-ID',
     solution: 'Type in solution',
     taskName: 'Name of the element',
     username: 'Username',

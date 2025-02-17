@@ -16,6 +16,7 @@ const de = {
     collect: 'Einsammeln',
     create: 'Erstellen',
     elements: 'Elemente',
+    join: 'Beitreten'
   },
   error: {
     less: 'Zu wenig Zeichen',
@@ -58,6 +59,7 @@ const de = {
   placeholder: {
     answer: 'Antwortmöglichkeit',
     collectionName: 'Name der Sammlung',
+    lobbyId: 'Lobby-ID eingeben',
     solution: 'Lösung eingeben',
     taskName: 'Name des Elements',
     username: 'Benutzername',

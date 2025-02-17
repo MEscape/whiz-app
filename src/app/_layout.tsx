@@ -49,6 +49,9 @@ export default function RootLayout() {
                 <Stack.Screen name="onboarding" />
                 <Stack.Screen name="(tabs)" />
                 <Stack.Screen name="+not-found" />
+                <Stack.Screen name="library" />
+                <Stack.Screen name="settings" />
+                <Stack.Screen name="(game)" />
               </Stack>
               <StatusBar style="inverted" />
               <Toast />

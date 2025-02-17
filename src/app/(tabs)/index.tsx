@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView, View } from 'react-native'
 
-import { Button, Image } from 'blueprints'
+import { BottomSheet, BottomSheetInput, Button, Image } from 'blueprints'
 import { LinearGradient } from 'expo-linear-gradient'
 import { observer } from 'mobx-react-lite'
 
@@ -10,7 +10,7 @@ import { blackGradient } from '@/constants'
 import { useAppContext } from '@/context'
 import { useAudioPlayer } from '@/hooks'
 import { translate } from '@/i18n'
-import { handleCreateLobby } from '@/services'
+import { decodeIp } from '@/util'
 
 import { Audios, AudioUris } from 'assets/audios'
 import { Images, ImageUris } from 'assets/images'
@@ -19,8 +19,11 @@ import { Videos, VideoUris } from 'assets/videos'
 import { useHeader } from '@/hooks/useHeader'
 
 const HomeScreen = observer(() => {
-  const { tcpStore, toggleTheme } = useAppContext()
+  const { handleCreateLobby, handleJoinLobby } = useAppContext()
   const { loadAudio } = useAudioPlayer('music', 0.2)
+
+  const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false)
+  const [lobbyId, setLobbyId] = useState('')
 
   useHeader(
     {
@@ -41,38 +44,44 @@ const HomeScreen = observer(() => {
   }, [loadAudio])
 
   return (
-    <SafeAreaView className="flex h-full bg-black">
-      <BackgroundVideo videoSource={VideoUris[Videos.PARTY_VIDEO]} />
-      <LinearGradient
-        colors={blackGradient}
-        start={[1, 1]}
-        end={[1, 0]}
-        className="h-full w-full absolute">
-        <View className="flex flex-1 mx-[30px] my-[80px]">
-          <View className="flex flex-1">
-            <Typewriter
-              sentences={translate('whiz.sentences') as unknown as string[]}
-              typingSpeed={100}
-              pauseDuration={1500}
-            />
+    <>
+      <SafeAreaView className="flex h-full bg-black">
+        <BackgroundVideo videoSource={VideoUris[Videos.PARTY_VIDEO]} />
+        <LinearGradient
+          colors={blackGradient}
+          start={[1, 1]}
+          end={[1, 0]}
+          className="h-full w-full absolute">
+          <View className="flex flex-1 mx-[30px] my-[80px]">
+            <View className="flex flex-1">
+              <Typewriter
+                sentences={translate('whiz.sentences') as unknown as string[]}
+                typingSpeed={100}
+                pauseDuration={1500}
+              />
+            </View>
+            <View className="flex flex-1 gap-y-2">
+              <Button
+                className="h-12"
+                text="Lobby erstellen"
+                variant="primary"
+                onPress={handleCreateLobby}
+              />
+              <Button
+                className="h-12"
+                text="Lobby beitreten"
+                variant="primary"
+                onPress={() => setIsBottomSheetVisible(true)}
+              />
+            </View>
           </View>
-          <View className="flex flex-1 gap-y-2">
-            <Button
-              className="h-12"
-              text="Lobby erstellen"
-              variant="primary"
-              onPress={tcpStore.create}
-            />
-            <Button
-              className="h-12"
-              text="Lobby beitreten"
-              variant="primary"
-              onPress={tcpStore.disconnect}
-            />
-          </View>
-        </View>
-      </LinearGradient>
-    </SafeAreaView>
+        </LinearGradient>
+      </SafeAreaView>
+      <BottomSheet isVisible={isBottomSheetVisible} onClose={() => setIsBottomSheetVisible(false)} snapPoints={['50%']}>
+        <BottomSheetInput placeholderTx="placeholder.lobbyId" maxLength={8} value={lobbyId} onChangeText={setLobbyId} />
+        <Button tx="common.join" outerClassName="flex-1" onPress={() => handleJoinLobby(decodeIp(lobbyId))} />
+      </BottomSheet>
+    </>
   )
 })
 

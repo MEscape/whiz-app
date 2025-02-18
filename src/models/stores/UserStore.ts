@@ -58,13 +58,14 @@ export const UserStoreModel = types
     get transferUser() {
       return {
         equippedEmoji: self.equippedEmoji,
+        isHost: false,
         profileImage: self.profileImage,
         username: self.username,
       }
     },
     get userExists() {
       return self.username.trim().length > 0
-    }
+    },
   }))
   .actions(self => ({
     addExperience(amount: number) {

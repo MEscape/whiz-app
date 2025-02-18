@@ -26,6 +26,11 @@ export class LobbyRoutes {
     body: any = null,
   ): Promise<ResponseObject> {
     try {
+      // Handle the image route
+      if (path === '/image' && method === 'POST') {
+        return await LobbyController.handleImage(body)
+      }
+
       // If the path is exactly '/lobby' and the method is POST, create a new lobby.
       if (path === '/lobby' && method === 'POST') {
         return await LobbyController.joinLobby(socket, body)
@@ -34,11 +39,10 @@ export class LobbyRoutes {
       // For paths like '/lobby/:lobbyId', deconstruct the path to obtain the lobbyId.
       const pathParts = path.split('/').filter(Boolean) // removes any empty strings
       if (pathParts[0] === 'lobby' && pathParts[1]) {
-        const lobbyId = pathParts[1]
         if (method === 'GET') {
-          return await LobbyController.getLobby(socket, lobbyId)
+          return await LobbyController.getLobby()
         } else if (method === 'DELETE') {
-          return await LobbyController.deleteLobby(socket, lobbyId)
+          return await LobbyController.deleteLobby()
         }
       }
 

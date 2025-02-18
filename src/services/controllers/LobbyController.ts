@@ -33,13 +33,13 @@ class LobbyController {
         const ip = await getIpV4()
         this.currentLobby = {
           id: encodeIp(ip),
-          users: {}
+          users: {},
         }
       }
 
       // Add or update user
       this.currentLobby.users[remoteAddress] = body?.user || null
-      
+
       console.log('Current lobby users:', this.currentLobby.users)
       return { data: this.currentLobby, status: 201 }
     } catch (error: any) {
@@ -58,6 +58,22 @@ class LobbyController {
   static async deleteLobby(): Promise<ResponseObject> {
     this.currentLobby = null
     return { message: 'Lobby deleted', status: 200 }
+  }
+
+  static async handleImage(body: { image: string }): Promise<ResponseObject> {
+    try {
+      // For example, you could log or store the image
+      console.log('Received image (base64) of length:', body.image.length)
+
+      /*return {
+        data: { image: body.image },
+        message: 'New image received',
+        status: 200,
+      }*/
+    } catch (error: any) {
+      console.error('Error handling image:', error)
+      return { error: error.message, status: 400 }
+    }
   }
 }
 

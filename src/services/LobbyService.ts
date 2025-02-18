@@ -1,6 +1,8 @@
+import RNFS from 'react-native-fs'
 import TcpSocket from 'react-native-tcp-socket'
 
-import { getIpV4 } from '../util'
+import { getIpV4 } from '@/util'
+
 import { PeerService } from './PeerService'
 import TcpEventManager from './TcpEventManager'
 
@@ -10,6 +12,7 @@ export interface TransferUser {
   username: string
   profileImage: string
   equippedEmoji: string
+  isHost: boolean
 }
 
 export const handleCreateLobby = async (transferUser: TransferUser) => {
@@ -31,24 +34,33 @@ export const handleCreateLobby = async (transferUser: TransferUser) => {
 
 export const handleJoinLobby = async (ip: string, transferUser: TransferUser) => {
   try {
-    tcpClient = TcpSocket.createConnection({ host: ip, port: 8080 }, () => {
+    tcpClient = TcpSocket.createConnection({ host: ip, port: 8080 }, async () => {
       console.log(`Connected to TCP server at ${ip}:8080`)
-      TcpEventManager.emit('connected')
+      TcpEventManager.emit('connected', transferUser.isHost)
 
       sendData({
         body: { user: transferUser },
         method: 'POST',
-        path: '/lobby'
+        path: '/lobby',
       })
+
+      if (transferUser.profileImage) {
+        const base64Image = await RNFS.readFile(transferUser.profileImage, 'base64')
+        sendData({
+          body: { image: base64Image },
+          method: 'POST',
+          path: '/image',
+        })
+      }
     })
 
-    tcpClient.on('data', (data) => {
+    tcpClient.on('data', data => {
       const dataString = data.toString()
       console.log('Received from server:', dataString)
       TcpEventManager.emit('data', JSON.parse(dataString))
     })
 
-    tcpClient.on('error', (error) => {
+    tcpClient.on('error', error => {
       console.error('Client TCP error:', error)
       TcpEventManager.emit('error', error)
     })

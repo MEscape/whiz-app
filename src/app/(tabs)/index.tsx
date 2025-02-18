@@ -45,8 +45,8 @@ const HomeScreen = observer(() => {
   }, [loadAudio])
 
   useEffect(() => {
-    TcpEventManager.on('connected', () => {
-      router.push('/(game)/lobby')
+    TcpEventManager.on('connected', (isHost: boolean) => {
+      return router.push({ params: { item: isHost }, pathname: '/(game)/lobby' })
     })
 
     return () => {
@@ -76,7 +76,7 @@ const HomeScreen = observer(() => {
                 className="h-12"
                 text="Lobby erstellen"
                 variant="primary"
-                onPress={() => handleCreateLobby(userStore.transferUser)}
+                onPress={() => handleCreateLobby({ ...userStore.transferUser, isHost: true })}
               />
               <Button
                 className="h-12"
@@ -88,15 +88,25 @@ const HomeScreen = observer(() => {
           </View>
         </LinearGradient>
       </SafeAreaView>
-      <BottomSheet 
-        title='lobby.join' 
-        isVisible={isBottomSheetVisible} 
-        onClose={() => setIsBottomSheetVisible(false)} 
-        snapPoints={['30%']}
-      >
+      <BottomSheet
+        title="lobby.join"
+        isVisible={isBottomSheetVisible}
+        onClose={() => setIsBottomSheetVisible(false)}
+        snapPoints={['30%']}>
         <View className="flex-1 p-4">
-          <BottomSheetInput variant="underlined" placeholderTx="placeholder.lobbyId" maxLength={8} value={lobbyId} onChangeText={setLobbyId} />
-          <Button tx="common.join" outerClassName="flex-1" onPress={() => handleJoinLobby(decodeIp(lobbyId), userStore.transferUser)} className="h-12" />
+          <BottomSheetInput
+            variant="underlined"
+            placeholderTx="placeholder.lobbyId"
+            maxLength={8}
+            value={lobbyId}
+            onChangeText={setLobbyId}
+          />
+          <Button
+            tx="common.join"
+            outerClassName="flex-1"
+            onPress={() => handleJoinLobby(decodeIp(lobbyId), userStore.transferUser)}
+            className="h-12"
+          />
         </View>
       </BottomSheet>
     </>

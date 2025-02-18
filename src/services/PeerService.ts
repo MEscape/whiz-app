@@ -22,6 +22,7 @@ export class PeerService {
     }
 
     this.server = TcpServer.createServer(socket => {
+      socket.setEncoding('utf-8')
       console.log('User connected')
       this.connections.set(socket.remoteAddress || '', socket)
 
@@ -64,7 +65,7 @@ export class PeerService {
 
   public sendData(data: any, clientId?: string) {
     const message = JSON.stringify(data)
-    
+
     if (clientId) {
       // Send to specific client
       const socket = this.connections.get(clientId)

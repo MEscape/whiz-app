@@ -17,9 +17,10 @@ import { Images, ImageUris } from 'assets/images'
 import { Videos, VideoUris } from 'assets/videos'
 
 import { useHeader } from '@/hooks/useHeader'
+import TcpEventManager from '@/services/TcpEventManager'
 
 const HomeScreen = observer(() => {
-  const { handleCreateLobby, handleJoinLobby } = useAppContext()
+  const { handleCreateLobby, handleJoinLobby, router, userStore } = useAppContext()
   const { loadAudio } = useAudioPlayer('music', 0.2)
 
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false)
@@ -43,6 +44,16 @@ const HomeScreen = observer(() => {
     })
   }, [loadAudio])
 
+  useEffect(() => {
+    TcpEventManager.on('connected', () => {
+      router.push('/(game)/lobby')
+    })
+
+    return () => {
+      TcpEventManager.removeAllListeners()
+    }
+  }, [])
+
   return (
     <>
       <SafeAreaView className="flex h-full bg-black">
@@ -65,7 +76,7 @@ const HomeScreen = observer(() => {
                 className="h-12"
                 text="Lobby erstellen"
                 variant="primary"
-                onPress={handleCreateLobby}
+                onPress={() => handleCreateLobby(userStore.transferUser)}
               />
               <Button
                 className="h-12"
@@ -77,9 +88,16 @@ const HomeScreen = observer(() => {
           </View>
         </LinearGradient>
       </SafeAreaView>
-      <BottomSheet isVisible={isBottomSheetVisible} onClose={() => setIsBottomSheetVisible(false)} snapPoints={['50%']}>
-        <BottomSheetInput placeholderTx="placeholder.lobbyId" maxLength={8} value={lobbyId} onChangeText={setLobbyId} />
-        <Button tx="common.join" outerClassName="flex-1" onPress={() => handleJoinLobby(decodeIp(lobbyId))} />
+      <BottomSheet 
+        title='lobby.join' 
+        isVisible={isBottomSheetVisible} 
+        onClose={() => setIsBottomSheetVisible(false)} 
+        snapPoints={['30%']}
+      >
+        <View className="flex-1 p-4">
+          <BottomSheetInput variant="underlined" placeholderTx="placeholder.lobbyId" maxLength={8} value={lobbyId} onChangeText={setLobbyId} />
+          <Button tx="common.join" outerClassName="flex-1" onPress={() => handleJoinLobby(decodeIp(lobbyId), userStore.transferUser)} className="h-12" />
+        </View>
       </BottomSheet>
     </>
   )

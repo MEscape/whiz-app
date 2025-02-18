@@ -1,7 +1,12 @@
 import { NetworkInfo } from 'react-native-network-info'
 
 export const getIpV4 = async () => {
-  return await NetworkInfo.getIPAddress()
+  try {
+    return await NetworkInfo.getIPV4Address()
+  } catch (error) {
+    console.error('Error getting IPv4 address:', error)
+    return null
+  }
 }
 
 /**

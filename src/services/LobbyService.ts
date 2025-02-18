@@ -1,11 +1,18 @@
 import TcpSocket from 'react-native-tcp-socket'
+
 import { getIpV4 } from '../util'
 import { PeerService } from './PeerService'
 import TcpEventManager from './TcpEventManager'
 
 let tcpClient: TcpSocket.Socket | null = null
 
-export const handleCreateLobby = async () => {
+export interface TransferUser {
+  username: string
+  profileImage: string
+  equippedEmoji: string
+}
+
+export const handleCreateLobby = async (transferUser: TransferUser) => {
   try {
     const peerService = PeerService.getInstance()
 
@@ -15,32 +22,30 @@ export const handleCreateLobby = async () => {
     }
 
     const ip = await getIpV4()
-    handleJoinLobby(ip)
+    handleJoinLobby(ip, transferUser)
   } catch (error) {
     console.error('Error creating lobby:', error)
     TcpEventManager.emit('error', error)
   }
 }
 
-export const handleJoinLobby = async (ip: string) => {
+export const handleJoinLobby = async (ip: string, transferUser: TransferUser) => {
   try {
     tcpClient = TcpSocket.createConnection({ host: ip, port: 8080 }, () => {
       console.log(`Connected to TCP server at ${ip}:8080`)
       TcpEventManager.emit('connected')
 
-      tcpClient!.write(
-        JSON.stringify({
-          body: { name: 'MyLobby' },
-          method: 'POST',
-          path: '/lobby',
-        })
-      )
+      sendData({
+        body: { user: transferUser },
+        method: 'POST',
+        path: '/lobby'
+      })
     })
 
     tcpClient.on('data', (data) => {
       const dataString = data.toString()
       console.log('Received from server:', dataString)
-      TcpEventManager.emit('data', dataString)
+      TcpEventManager.emit('data', JSON.parse(dataString))
     })
 
     tcpClient.on('error', (error) => {
@@ -56,6 +61,28 @@ export const handleJoinLobby = async (ip: string) => {
   } catch (error) {
     console.error('Error joining lobby:', error)
     TcpEventManager.emit('error', error)
+  }
+}
+
+export interface RequestObject {
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE'
+  path: string
+  body?: any
+}
+
+export const sendData = (data: RequestObject) => {
+  if (!tcpClient) {
+    console.warn('Cannot send data: TCP client is not connected')
+    return false
+  }
+
+  try {
+    tcpClient.write(JSON.stringify(data))
+    return true
+  } catch (error) {
+    console.error('Error sending data:', error)
+    TcpEventManager.emit('error', error)
+    return false
   }
 }
 

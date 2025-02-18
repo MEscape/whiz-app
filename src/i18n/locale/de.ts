@@ -16,7 +16,8 @@ const de = {
     collect: 'Einsammeln',
     create: 'Erstellen',
     elements: 'Elemente',
-    join: 'Beitreten'
+    join: 'Beitreten',
+    start: 'Lobby starten'
   },
   error: {
     less: 'Zu wenig Zeichen',
@@ -31,6 +32,9 @@ const de = {
       clipboard: 'Aufgaben',
     },
     symbols: 'Was bedeuten die Symbole?',
+  },
+  lobby: {
+    join: 'Lobby beitreten',
   },
   onboarding: {
     data: {
@@ -122,6 +126,7 @@ const de = {
   tabs: {
     collections: 'Sammlungen',
     home: 'Start',
+    lobby: 'Lobby',
     profile: 'Profil',
     settings: 'Einstellungen',
   },

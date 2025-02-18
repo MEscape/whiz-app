@@ -16,7 +16,8 @@ const en = {
     collect: 'Collect',
     create: 'Create',
     elements: 'Elements',
-    join: 'Join'
+    join: 'Join',
+    start: 'Start lobby'
   },
   error: {
     less: 'Too few characters',
@@ -31,6 +32,9 @@ const en = {
       clipboard: 'Tasks',
     },
     symbols: 'What do the symbols mean?',
+  },
+  lobby: {
+    join: 'Join Lobby',
   },
   onboarding: {
     data: {
@@ -123,6 +127,7 @@ const en = {
   tabs: {
     collections: 'Collections',
     home: 'Start',
+    lobby: 'Lobby',
     profile: 'Profile',
     settings: 'Settings',
   },

@@ -1,95 +1,64 @@
 // src/controllers/LobbyController.ts
 
-import { encodeIp, getIpV4 } from '@/util';
+import TcpServer from 'react-native-tcp-socket'
+
+import { encodeIp, getIpV4 } from '@/util'
+
+// Import TransferUser type
+import { TransferUser } from '../LobbyService'
 
 export interface Lobby {
-  id: string;
-  name: string;
-  users: string[];
+  id: string
+  users: Record<string, TransferUser>
 }
 
 export interface ResponseObject {
-  data?: any;
-  message?: string;
-  error?: string;
-  status: number;
-}
-
-export interface CreateLobbyBody {
-  name: string;
+  data?: any
+  message?: string
+  error?: string
+  status: number
 }
 
 class LobbyController {
-  /**
-   * Creates a new lobby with the provided name.
-   * @param socket - The client socket.
-   * @param body - Request body containing lobby details.
-   * @returns Response with lobby data.
-   */
-  static async createLobby(
-    socket: any, // Replace `any` with your specific socket type if available.
-    body: CreateLobbyBody
+  private static currentLobby: Lobby | null = null
+
+  static async joinLobby(
+    socket: TcpServer.Socket,
+    body: { user: TransferUser } | null,
   ): Promise<ResponseObject> {
     try {
-      if (!body || !body.name) {
-        throw new Error('Lobby name is required');
+      const remoteAddress = socket.remoteAddress || ''
+
+      if (!this.currentLobby) {
+        const ip = await getIpV4()
+        this.currentLobby = {
+          id: encodeIp(ip),
+          users: {}
+        }
       }
 
-      const ip = await getIpV4();
-      const lobbyId = encodeIp(ip);
-
-      const lobby: Lobby = {
-        id: lobbyId,
-        name: body.name,
-        users: [socket.remoteAddress]
-      };
-
-      console.log(`Lobby created: ${lobbyId}`);
-      return { data: lobby, status: 201 };
+      // Add or update user
+      this.currentLobby.users[remoteAddress] = body?.user || null
+      
+      console.log('Current lobby users:', this.currentLobby.users)
+      return { data: this.currentLobby, status: 201 }
     } catch (error: any) {
-      console.error('Error creating lobby:', error);
-      return { error: error.message, status: 400 };
+      console.error('Error joining lobby:', error)
+      return { error: error.message, status: 400 }
     }
   }
 
-  /**
-   * Retrieves the lobby information by its ID.
-   * @param socket - The client socket.
-   * @param lobbyId - ID of the lobby.
-   * @returns Lobby data.
-   */
-  static async getLobby(socket: any, lobbyId: string): Promise<ResponseObject> {
-    try {
-      if (!lobbyId) {
-        throw new Error('Lobby ID is required');
-      }
-      // Example: Return dummy lobby info; integrate with your data store if needed.
-      console.log(`Lobby fetched: ${lobbyId}`);
-      return { data: { id: lobbyId, users: [] }, status: 200 };
-    } catch (error: any) {
-      console.error('Error fetching lobby:', error);
-      return { error: error.message, status: 404 };
+  static async getLobby(): Promise<ResponseObject> {
+    if (!this.currentLobby) {
+      return { error: 'No active lobby', status: 404 }
     }
+    return { data: this.currentLobby, status: 200 }
   }
 
-  /**
-   * Deletes the specified lobby.
-   * @param socket - The client socket.
-   * @param lobbyId - ID of the lobby to delete.
-   * @returns Response message.
-   */
-  static async deleteLobby(socket: any, lobbyId: string): Promise<ResponseObject> {
-    try {
-      if (!lobbyId) {
-        throw new Error('Lobby ID is required');
-      }
-      console.log(`Lobby deleted: ${lobbyId}`);
-      return { message: 'Lobby deleted', status: 200 };
-    } catch (error: any) {
-      console.error('Error deleting lobby:', error);
-      return { error: error.message, status: 400 };
-    }
+  static async deleteLobby(): Promise<ResponseObject> {
+    this.currentLobby = null
+    return { message: 'Lobby deleted', status: 200 }
   }
 }
 
-export default LobbyController;
+export default LobbyController

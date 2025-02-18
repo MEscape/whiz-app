@@ -55,9 +55,16 @@ export const UserStoreModel = types
     get experienceToNextLevel() {
       return self.level * 100 // Simple progression: each level needs level * 100 XP
     },
+    get transferUser() {
+      return {
+        equippedEmoji: self.equippedEmoji,
+        profileImage: self.profileImage,
+        username: self.username,
+      }
+    },
     get userExists() {
       return self.username.trim().length > 0
-    },
+    }
   }))
   .actions(self => ({
     addExperience(amount: number) {

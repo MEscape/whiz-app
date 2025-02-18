@@ -11,6 +11,7 @@ interface ProfileImageProps {
   onPress?: (imageUri: string | null) => void
   showHint?: boolean
   equippedEmojiId?: string | null
+  disabled: boolean
 }
 
 const ProfileImageComponent: React.FC<ProfileImageProps> = ({
@@ -18,6 +19,7 @@ const ProfileImageComponent: React.FC<ProfileImageProps> = ({
   imageUrl,
   onPress,
   showHint,
+  disabled
 }) => {
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false)
   const equippedEmoji = EMOJI_INVENTORY.find(e => e.id === equippedEmojiId)
@@ -48,6 +50,7 @@ const ProfileImageComponent: React.FC<ProfileImageProps> = ({
   const ImageContent = useMemo(
     () => (
       <TouchableOpacity
+        disabled={disabled}
         className="h-20 w-20 bg-secondary rounded-full overflow-hidden items-center justify-center"
         onPress={handleImagePress}>
         {imageUrl ? (

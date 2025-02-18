@@ -62,9 +62,28 @@ export class PeerService {
     }
   }
 
+  public sendData(data: any, clientId?: string) {
+    const message = JSON.stringify(data)
+    
+    if (clientId) {
+      // Send to specific client
+      const socket = this.connections.get(clientId)
+      if (socket) {
+        socket.write(message)
+      } else {
+        console.warn(`Client ${clientId} not found`)
+      }
+    } else {
+      // Broadcast to all clients
+      this.connections.forEach(socket => {
+        socket.write(message)
+      })
+    }
+  }
+
   private async routeRequest(socket: TcpServer.Socket, data: any) {
-    const { body, headers, method, path } = data
-    const response = await LobbyRoutes.handleRequest(socket, method, path, headers, body)
-    socket.write(JSON.stringify(response))
+    const { body, clientId, method, path } = data
+    const response = await LobbyRoutes.handleRequest(socket, method, path, body)
+    this.sendData(response, clientId)
   }
 }

@@ -1,5 +1,7 @@
 // src/routes/LobbyRoutes.ts
 
+import TcpServer from 'react-native-tcp-socket'
+
 import LobbyController from '../controllers/LobbyController'
 
 interface ResponseObject {
@@ -18,7 +20,7 @@ export class LobbyRoutes {
    * @returns A response object with either data or an error message.
    */
   static async handleRequest(
-    socket: any, // Ideally, you can replace `any` with the specific type for your socket (e.g. TcpSocket.Socket)
+    socket: TcpServer.Socket,
     method: string,
     path: string,
     body: any = null,
@@ -26,7 +28,7 @@ export class LobbyRoutes {
     try {
       // If the path is exactly '/lobby' and the method is POST, create a new lobby.
       if (path === '/lobby' && method === 'POST') {
-        return await LobbyController.createLobby(socket, body)
+        return await LobbyController.joinLobby(socket, body)
       }
 
       // For paths like '/lobby/:lobbyId', deconstruct the path to obtain the lobbyId.

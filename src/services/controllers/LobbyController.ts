@@ -48,30 +48,31 @@ class LobbyController {
     }
   }
 
-  static async getLobby(): Promise<ResponseObject> {
-    if (!this.currentLobby) {
-      return { error: 'No active lobby', status: 404 }
-    }
-    return { data: this.currentLobby, status: 200 }
-  }
-
-  static async deleteLobby(): Promise<ResponseObject> {
-    this.currentLobby = null
-    return { message: 'Lobby deleted', status: 200 }
-  }
-
-  static async handleImage(body: { image: string }): Promise<ResponseObject> {
+  static async processImage(
+    socket: TcpServer.Socket,
+    body: { image: string } | null,
+  ): Promise<ResponseObject> {
     try {
-      // For example, you could log or store the image
-      console.log('Received image (base64) of length:', body.image.length)
+      const remoteAddress = socket.remoteAddress || ''
 
-      /*return {
-        data: { image: body.image },
-        message: 'New image received',
-        status: 200,
-      }*/
+      if (!this.currentLobby) {
+        return { error: 'No lobby found', status: 400 }
+      }
+
+      if (!this.currentLobby.users[remoteAddress]) {
+        return { error: 'User not found in lobby', status: 404 }
+      }
+
+      if (!body?.image) {
+        return { error: 'No image found in request body', status: 400 }
+      }
+
+      this.currentLobby.users[remoteAddress].profileImage = body.image
+
+      console.log('Processed image:', this.currentLobby.users[remoteAddress].profileImage)
+      return { data: { image: {remoteAddress: body.image} }, status: 201 }
     } catch (error: any) {
-      console.error('Error handling image:', error)
+      console.error('Error processing image:', error)
       return { error: error.message, status: 400 }
     }
   }

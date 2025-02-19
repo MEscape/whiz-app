@@ -30,6 +30,10 @@ export const Editor = ({ editable = true, name, onSave, ...props }: EditorProps)
       return setError('error.less')
     }
 
+    if (!/^[a-zA-Z0-9_]+$/.test(editedName)) {
+      return setError('error.invalid_characters')
+    }
+
     setIsEditing(false)
     setError(null)
     onSave && onSave(editedName)

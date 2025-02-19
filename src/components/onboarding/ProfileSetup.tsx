@@ -19,6 +19,10 @@ export const ProfileSetup = observer(() => {
       return setError('error.less')
     }
 
+    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+      return setError('error.invalid_characters')
+    }
+
     userStore.setUsername(username)
   }
 

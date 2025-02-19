@@ -20,6 +20,7 @@ const de = {
     start: 'Lobby starten'
   },
   error: {
+    invalid_characters: 'Ungültige Zeichen',
     less: 'Zu wenig Zeichen',
     openLink: 'Fehler beim öffnen des Links',
     unexpected: 'Unbekannter Fehler',

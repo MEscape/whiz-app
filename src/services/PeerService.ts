@@ -8,6 +8,9 @@ export class PeerService {
   private connections = new Map<string, TcpServer.Socket>()
   public isServerRunning = false
 
+  private messageBuffers = new Map<string, string>()
+  private readonly MESSAGE_DELIMITER = '<<<EOF>>>'
+
   public static getInstance(): PeerService {
     if (!PeerService.instance) {
       PeerService.instance = new PeerService()
@@ -23,18 +26,33 @@ export class PeerService {
 
     this.server = TcpServer.createServer(socket => {
       socket.setEncoding('utf-8')
-      console.log('User connected')
-      this.connections.set(socket.remoteAddress || '', socket)
+      const remoteAddress = socket.remoteAddress || ''
+      this.connections.set(remoteAddress, socket)
+      this.messageBuffers.set(remoteAddress, '')
 
-      socket.on('data', async data => {
-        try {
-          const parsedData = JSON.parse(data.toString())
-          if (!parsedData.path || !parsedData.method) {
-            throw new Error('Invalid request: path and method are required')
+      console.log('User connected:', remoteAddress)
+
+      socket.on('data', async (data) => {
+        const buffer = this.messageBuffers.get(remoteAddress) || ''
+        const newBuffer = buffer + data.toString('utf-8')
+        this.messageBuffers.set(remoteAddress, newBuffer)
+
+        if (data.toString('utf-8').endsWith(this.MESSAGE_DELIMITER)) {
+          try {
+            const cleanMessage = newBuffer.slice(0, -this.MESSAGE_DELIMITER.length)
+            const parsedData = JSON.parse(cleanMessage)
+            if (!parsedData.path || !parsedData.method) {
+              throw new Error('Invalid request: path and method are required')
+            }
+
+            console.log('Received message <server>:', parsedData)
+            await this.routeRequest(socket, parsedData)
+          } catch (error) {
+            console.error('Error processing message:', error)
+            socket.write(JSON.stringify({ error: 'Invalid request format', status: 400 }))
           }
-          await this.routeRequest(socket, parsedData)
-        } catch (error) {
-          socket.write(JSON.stringify({ error: error.message, status: 400 }))
+
+          this.messageBuffers.set(remoteAddress, '')
         }
       })
 
@@ -64,7 +82,7 @@ export class PeerService {
   }
 
   public sendData(data: any, clientId?: string) {
-    const message = JSON.stringify(data)
+    const message = JSON.stringify(data) + this.MESSAGE_DELIMITER
 
     if (clientId) {
       // Send to specific client

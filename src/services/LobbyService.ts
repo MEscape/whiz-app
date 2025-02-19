@@ -32,6 +32,9 @@ export const handleCreateLobby = async (transferUser: TransferUser) => {
   }
 }
 
+  let messageBuffer: string = ''
+  const MESSAGE_DELIMITER = '<<<EOF>>>'
+
 export const handleJoinLobby = async (ip: string, transferUser: TransferUser) => {
   try {
     tcpClient = TcpSocket.createConnection({ host: ip, port: 8080 }, async () => {
@@ -39,13 +42,14 @@ export const handleJoinLobby = async (ip: string, transferUser: TransferUser) =>
       TcpEventManager.emit('connected', transferUser.isHost)
 
       sendData({
-        body: { user: transferUser },
+        body: { user: {...transferUser, profileImage: null} },
         method: 'POST',
         path: '/lobby',
       })
 
       if (transferUser.profileImage) {
         const base64Image = await RNFS.readFile(transferUser.profileImage, 'base64')
+
         sendData({
           body: { image: base64Image },
           method: 'POST',
@@ -55,9 +59,25 @@ export const handleJoinLobby = async (ip: string, transferUser: TransferUser) =>
     })
 
     tcpClient.on('data', data => {
-      const dataString = data.toString()
-      console.log('Received from server:', dataString)
-      TcpEventManager.emit('data', JSON.parse(dataString))
+
+        messageBuffer += data.toString('utf-8')
+        if (data.toString('utf-8').endsWith(MESSAGE_DELIMITER)) {
+          try {
+            const cleanMessage = messageBuffer.slice(0, -MESSAGE_DELIMITER.length)
+            const parsedData = JSON.parse(cleanMessage)            
+            console.log('Received from server:', parsedData)
+
+            if (parsedData.image) {
+              return TcpEventManager.emit('image', parsedData.image)
+            }
+            
+            TcpEventManager.emit('data', parsedData)
+          } catch (error) {
+            console.error('Error processing message:', error)
+          }
+
+          messageBuffer = ''
+        }
     })
 
     tcpClient.on('error', error => {
@@ -89,7 +109,7 @@ export const sendData = (data: RequestObject) => {
   }
 
   try {
-    tcpClient.write(JSON.stringify(data))
+    tcpClient.write(JSON.stringify(data) + MESSAGE_DELIMITER)
     return true
   } catch (error) {
     console.error('Error sending data:', error)

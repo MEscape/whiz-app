@@ -11,7 +11,7 @@ interface ProfileImageProps {
   onPress?: (imageUri: string | null) => void
   showHint?: boolean
   equippedEmojiId?: string | null
-  disabled: boolean
+  disabled?: boolean
 }
 
 const ProfileImageComponent: React.FC<ProfileImageProps> = ({

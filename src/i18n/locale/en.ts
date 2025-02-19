@@ -20,6 +20,7 @@ const en = {
     start: 'Start lobby'
   },
   error: {
+    invalid_characters: 'Invalid characters',
     less: 'Too few characters',
     openLink: 'Error while opening the link',
     unexpected: 'Unexpected error',

@@ -1,4 +1,5 @@
 import * as ImagePicker from 'expo-image-picker'
+import RNFS from 'react-native-fs';
 
 import { showErrorToast } from './toast'
 
@@ -30,3 +31,21 @@ export const pickImage = async (): Promise<string | null> => {
   // Return the selected image URI
   return result.assets[0].uri
 }
+
+export const base64ToImage = async (base64Data: string): Promise<string> => {
+  try {
+    // Create a unique filename using timestamp
+    const filename = `${Date.now()}.jpg`;
+    
+    // Get the cache directory path
+    const filepath = `${RNFS.CachesDirectoryPath}/${filename}`;
+    
+    // Write the base64 data to a file
+    await RNFS.writeFile(filepath, base64Data, 'base64');
+    
+    return filepath;
+  } catch (error) {
+    console.error('Error converting base64 to image:', error);
+    throw error;
+  }
+};

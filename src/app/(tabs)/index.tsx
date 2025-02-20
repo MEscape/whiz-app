@@ -52,7 +52,7 @@ const HomeScreen = observer(() => {
     return () => {
       TcpEventManager.removeAllListeners()
     }
-  }, [])
+  }, [router])
 
   return (
     <>

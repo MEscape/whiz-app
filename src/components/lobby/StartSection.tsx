@@ -8,8 +8,9 @@ import { blackGradient } from "@/constants"
 import { useAppContext } from "@/context"
 
 import { ImageUris } from "assets/images"
+import { observer } from "mobx-react-lite"
 
-export const StartSection = () => {
+export const StartSection = observer(() => {
     const { gameStore, router } = useAppContext()
 
     const handleChangeCollection = () => {
@@ -37,4 +38,4 @@ export const StartSection = () => {
             />
         </View>
     )
-}
+})

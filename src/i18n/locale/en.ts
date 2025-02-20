@@ -65,6 +65,7 @@ const en = {
     answer: 'Answer option',
     collectionName: 'Name of collection',
     lobbyId: 'Type in Lobby-ID',
+    search: 'Search for elements',
     solution: 'Type in solution',
     taskName: 'Name of the element',
     username: 'Username',

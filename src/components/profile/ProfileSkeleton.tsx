@@ -1,5 +1,6 @@
 import React from 'react'
 import { ScrollView, View } from 'react-native'
+
 import { Skeleton } from '../Skeleton'
 
 export function ProfileSkeleton() {

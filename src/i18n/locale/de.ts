@@ -65,6 +65,7 @@ const de = {
     answer: 'Antwortmöglichkeit',
     collectionName: 'Name der Sammlung',
     lobbyId: 'Lobby-ID eingeben',
+    search: 'Suche nach Elementen',
     solution: 'Lösung eingeben',
     taskName: 'Name des Elements',
     username: 'Benutzername',

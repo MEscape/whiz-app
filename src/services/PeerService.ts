@@ -1,5 +1,7 @@
 import TcpServer from 'react-native-tcp-socket'
 
+import { shortenString } from '@/util'
+
 import { LobbyRoutes } from './routes/LobbyRoutes'
 
 export class PeerService {
@@ -45,7 +47,7 @@ export class PeerService {
               throw new Error('Invalid request: path and method are required')
             }
 
-            console.log('Received message <server>:', parsedData)
+            console.log('Received message <server>:', shortenString(cleanMessage))
             await this.routeRequest(socket, parsedData)
           } catch (error) {
             console.error('Error processing message:', error)

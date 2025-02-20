@@ -1,7 +1,7 @@
 import RNFS from 'react-native-fs'
 import TcpSocket from 'react-native-tcp-socket'
 
-import { getIpV4 } from '@/util'
+import { getIpV4, shortenString } from '@/util'
 
 import { PeerService } from './PeerService'
 import TcpEventManager from './TcpEventManager'
@@ -65,10 +65,10 @@ export const handleJoinLobby = async (ip: string, transferUser: TransferUser) =>
           try {
             const cleanMessage = messageBuffer.slice(0, -MESSAGE_DELIMITER.length)
             const parsedData = JSON.parse(cleanMessage)            
-            console.log('Received from server:', parsedData)
+            console.log('Received from server:', shortenString(cleanMessage))
 
-            if (parsedData.image) {
-              return TcpEventManager.emit('image', parsedData.image)
+            if (parsedData.data.image) {
+              return TcpEventManager.emit('image', parsedData.data.image)
             }
             
             TcpEventManager.emit('data', parsedData)

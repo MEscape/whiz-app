@@ -1,10 +1,10 @@
 import React, { memo, useCallback, useState } from 'react'
 import { LogBox, Pressable, View } from 'react-native'
 
-import { observer } from 'mobx-react-lite'
-
 import { useAppContext } from '@/context'
 import { translate, TxKeyPath } from '@/i18n'
+
+import { ImageUris } from 'assets/images'
 
 import { Icon } from 'blueprints/Icon'
 import { Image } from 'blueprints/Image'
@@ -25,10 +25,10 @@ export interface CollectionItemProps {
 const baseStyle =
   'bg-secondary mx-7 my-3 flex-row justify-between rounded-md overflow-hidden shadow-md transition-transform duration-100'
 
-export const CollectionItem = ({ item }: { item: CollectionItemProps }) => {
+const CollectionItem = memo(({ item }: { item: CollectionItemProps }) => {
   const [isAnimating, setIsAnimating] = useState(false)
   const pressedStyle = isAnimating ? 'scale-95' : 'scale-100'
-  const { router } = useAppContext()
+  const { gameStore, router } = useAppContext()
 
   const combinedClassName = [baseStyle, pressedStyle].filter(Boolean).join(' ')
 
@@ -45,9 +45,17 @@ export const CollectionItem = ({ item }: { item: CollectionItemProps }) => {
     const safeItemStr = encodeURIComponent(itemStr)
 
     setTimeout(() => {
+      if (gameStore.collection.currentlySelecting) {
+        gameStore.setCollection({
+          image: item.image, 
+          name: translate(item.nameTx) as string || item.name
+        })
+        gameStore.setCurrentlySelecting(false)
+        return router.back()
+      }
       router.push({ params: { item: safeItemStr }, pathname: `/library` })
     }, 200)
-  }, [item])
+  }, [item, router, gameStore])
 
   return (
     <Pressable
@@ -75,7 +83,10 @@ export const CollectionItem = ({ item }: { item: CollectionItemProps }) => {
           </Text>
         </View>
       </View>
-      <Image classNameContainer="w-36 h-36" src={item.image} />
+      <Image classNameContainer="w-36 h-36" src={ImageUris[item.image] || item.image} />
     </Pressable>
   )
-}
+})
+
+CollectionItem.displayName = 'CollectionItem'
+export { CollectionItem }

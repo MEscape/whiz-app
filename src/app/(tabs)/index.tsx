@@ -46,7 +46,7 @@ const HomeScreen = observer(() => {
 
   useEffect(() => {
     TcpEventManager.on('connected', (isHost: boolean) => {
-      return router.push({ params: { item: isHost }, pathname: '/(game)/lobby' })
+      return router.push({ params: { isHost }, pathname: '/(game)/lobby' })
     })
 
     return () => {

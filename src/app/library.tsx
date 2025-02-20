@@ -103,12 +103,17 @@ const LibraryScreen = observer(() => {
 
   const toggleSearch = () => {
     setShowSearch(prev => !prev)
-    inputRef.current.focus()
     Animated.timing(animation, {
       duration: 300,
       toValue: showSearch ? 0 : 1,
       useNativeDriver: false,
-    }).start()
+    }).start(() => {
+      if (!showSearch && inputRef.current) {
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 100);
+      }
+    })
   }
 
   const handleDelete = () => {

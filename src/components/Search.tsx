@@ -25,7 +25,7 @@ const Search = forwardRef<TextInput, SearchProps>(
             ref={inputRef}
             onChangeText={onChangeText}
             variant="underlined"
-            placeholder="Search collections"
+            placeholderTx="placeholder.search"
           />
         </Animated.View>
         <Icon name="search" library="Ionicons" className="mt-4 ml-4" onPress={toggleSearch} />

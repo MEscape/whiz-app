@@ -6,7 +6,7 @@ export default [
     editable: false,
     elements: 42,
     id: 'CLASSIC_CHAOS',
-    image: ImageUris[Images.CLASSIC],
+    image: Images.CLASSIC,
     nameTx: 'collection.classicChaos',
   },
   {
@@ -14,7 +14,7 @@ export default [
     editable: false,
     elements: 67,
     id: 'SURVIVAL',
-    image: ImageUris[Images.SURVIVAL],
+    image: Images.SURVIVAL,
     nameTx: 'collection.survival',
   },
   {
@@ -22,7 +22,7 @@ export default [
     editable: false,
     elements: 89,
     id: 'DISORDERLY',
-    image: ImageUris[Images.DISORDERLY],
+    image: Images.DISORDERLY,
     nameTx: 'collection.disorderly',
   },
 ]

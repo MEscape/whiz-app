@@ -43,7 +43,7 @@ export const base64ToImage = async (base64Data: string): Promise<string> => {
     // Write the base64 data to a file
     await RNFS.writeFile(filepath, base64Data, 'base64');
     
-    return filepath;
+    return `file://${filepath}`;
   } catch (error) {
     console.error('Error converting base64 to image:', error);
     throw error;

@@ -4,13 +4,14 @@ import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs'
 import { Icon, Text } from 'blueprints'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Tabs, useRootNavigationState } from 'expo-router'
+import { observer } from 'mobx-react-lite'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { blackGradient } from '@/constants'
 import { useAppContext } from '@/context'
 
-export default function TabLayout() {
-  const { router, userStore } = useAppContext()
+const TabLayout = observer(() => {
+  const { gameStore, router, userStore } = useAppContext()
   const { bottom } = useSafeAreaInsets()
   const rootNavigationState = useRootNavigationState()
   const tabHeight = bottom + 50
@@ -24,6 +25,7 @@ export default function TabLayout() {
     tabBarStyle: {
       backgroundColor: 'transparent',
       borderTopWidth: 0,
+      display: gameStore.collection.currentlySelecting ? 'none' : 'flex',
       elevation: 0,
       height: tabHeight,
       marginBottom: 12,
@@ -80,4 +82,6 @@ export default function TabLayout() {
       />
     </Tabs>
   )
-}
+})
+
+export default TabLayout

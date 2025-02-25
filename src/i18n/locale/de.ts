@@ -17,12 +17,13 @@ const de = {
     create: 'Erstellen',
     elements: 'Elemente',
     join: 'Beitreten',
-    start: 'Lobby starten'
+    start: 'Lobby starten',
   },
   error: {
     invalid_characters: 'Ungültige Zeichen',
     less: 'Zu wenig Zeichen',
     openLink: 'Fehler beim öffnen des Links',
+    unableConnect: 'Der Lobby kann nicht beigetreten werden',
     unexpected: 'Unbekannter Fehler',
   },
   info: {

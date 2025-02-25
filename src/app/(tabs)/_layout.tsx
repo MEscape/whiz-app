@@ -40,7 +40,7 @@ const TabLayout = observer(() => {
   }, [rootNavigationState, userStore.userExists])
 
   return (
-    <Tabs screenOptions={screenOptions}>
+    <Tabs screenOptions={screenOptions} backBehavior="history">
       <Tabs.Screen
         name="index"
         options={{

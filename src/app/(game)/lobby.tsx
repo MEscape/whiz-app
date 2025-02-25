@@ -17,12 +17,13 @@ import TcpEventManager from '@/services/TcpEventManager'
 
 const LobbyScreen = observer(() => {
   const { isHost } = useLocalSearchParams()
-  const { gameStore } = useAppContext()
+  const { gameStore, router } = useAppContext()
 
   useHeader(
     {
+      /*onRightPress: () => router.push('/(game)/settings'),
       rightIcon: 'settings',
-      rightIconLibrary: 'Ionicons',
+      rightIconLibrary: 'Ionicons',*/
       TitleActionComponent: (
         <View className="flex-1 justify-center items-center">
           <Text variant="h1" className="text-4xl" tx="tabs.lobby" />
@@ -30,9 +31,9 @@ const LobbyScreen = observer(() => {
             {gameStore.lobbyId}
           </Text>
         </View>
-      )
+      ),
     },
-    [gameStore.lobbyId],
+    [gameStore.lobbyId, router],
   )
 
   useEffect(() => {
@@ -46,7 +47,7 @@ const LobbyScreen = observer(() => {
         console.log('Setting collection:', data.data.collection)
         gameStore.setRemoteCollection(data.data.collection)
       }
-      
+
       if (data.data?.users) {
         console.log('Setting users:', data.data.users)
         gameStore.setUsers(data.data.users)
@@ -74,14 +75,14 @@ const LobbyScreen = observer(() => {
   }, [isHost])
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       for (const [id, user] of gameStore.users.entries()) {
         if (user.profileImage && !gameStore.processedImages.get(id)) {
           const imageUrl = await base64ToImage(user.profileImage)
           gameStore.setProcessedImages(id, imageUrl)
         }
       }
-    })();
+    })()
   }, [toJS(gameStore.users)])
 
   return (
@@ -104,7 +105,9 @@ const LobbyScreen = observer(() => {
             ))}
           </ScrollView>
         </View>
-      ) : <LobbySkeleton />}
+      ) : (
+        <LobbySkeleton />
+      )}
       <StartSection disabled={!gameStore.isHost} />
     </>
   )

@@ -1,11 +1,11 @@
 import RNFS from 'react-native-fs'
 import TcpSocket from 'react-native-tcp-socket'
 
-import { getIpV4, shortenString } from '@/util'
+import { version } from '@/constants'
+import { getIpV4, shortenString, showErrorToast } from '@/util'
 
 import { PeerService } from './PeerService'
 import TcpEventManager from './TcpEventManager'
-import { version } from '@/constants'
 
 let tcpClient: TcpSocket.Socket | null = null
 
@@ -33,17 +33,27 @@ export const handleCreateLobby = async (transferUser: TransferUser) => {
   }
 }
 
-  let messageBuffer: string = ''
-  const MESSAGE_DELIMITER = '<<<EOF>>>'
+let messageBuffer: string = ''
+const MESSAGE_DELIMITER = '<<<EOF>>>'
 
 export const handleJoinLobby = async (ip: string, transferUser: TransferUser) => {
   try {
+    const timeout = setTimeout(() => {
+      console.error('Connection timeout: Unable to join lobby')
+      showErrorToast('error.unableConnect')
+      if (tcpClient) {
+        tcpClient.destroy()
+        tcpClient = null
+      }
+    }, 5000)
+
     tcpClient = TcpSocket.createConnection({ host: ip, port: 8080 }, async () => {
+      clearTimeout(timeout)
       console.log(`Connected to TCP server at ${ip}:8080`)
       TcpEventManager.emit('connected', transferUser.isHost)
 
       sendData({
-        body: { user: {...transferUser, profileImage: null} },
+        body: { user: { ...transferUser, profileImage: null } },
         method: 'POST',
         path: '/lobby',
       })
@@ -65,10 +75,12 @@ export const handleJoinLobby = async (ip: string, transferUser: TransferUser) =>
         try {
           const cleanMessage = messageBuffer.slice(0, -MESSAGE_DELIMITER.length)
           console.log('Received from server:', shortenString(cleanMessage))
-          const parsedData = JSON.parse(cleanMessage)            
+          const parsedData = JSON.parse(cleanMessage)
 
           if (parsedData.data.image) {
             TcpEventManager.emit('image', parsedData.data.image)
+          } else if (parsedData.data.error) {
+            TcpEventManager.emit('error', parsedData.data)
           } else {
             TcpEventManager.emit('data', parsedData)
           }
@@ -104,7 +116,7 @@ export interface RequestObject {
 }
 
 export const sendData = (data: RequestObject) => {
-  data = {...data, version}
+  data = { ...data, version }
 
   if (!tcpClient) {
     console.warn('Cannot send data: TCP client is not connected')

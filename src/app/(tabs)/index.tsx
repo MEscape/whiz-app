@@ -20,7 +20,7 @@ import { useHeader } from '@/hooks/useHeader'
 import TcpEventManager from '@/services/TcpEventManager'
 
 const HomeScreen = observer(() => {
-  const { handleCreateLobby, handleJoinLobby, router, userStore, gameStore } = useAppContext()
+  const { gameStore, handleCreateLobby, handleJoinLobby, router, userStore } = useAppContext()
   const { loadAudio } = useAudioPlayer('music', 0.2)
 
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false)
@@ -106,6 +106,7 @@ const HomeScreen = observer(() => {
           <Button
             tx="common.join"
             outerClassName="flex-1"
+            disabled={lobbyId.trim().length !== 8}
             onPress={() => handleJoinLobby(decodeIp(lobbyId), userStore.transferUser)}
             className="h-12"
           />

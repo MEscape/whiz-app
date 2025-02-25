@@ -38,7 +38,10 @@ class LobbyController {
         }
       }
 
-      // Add or update user
+      if (Object.keys(this.currentLobby.users).length === 16) {
+        return { error: 'Too many Users in the Lobby', status: 400 }
+      }
+
       this.currentLobby.users[remoteAddress] = body?.user || null
 
       console.log('Current lobby users:', this.currentLobby.users)
@@ -70,8 +73,11 @@ class LobbyController {
 
       this.currentLobby.users[remoteAddress].profileImage = body.image
 
-      console.log('Processed image:', shortenString(this.currentLobby.users[remoteAddress].profileImage))
-      return { data: { image: {[remoteAddress]: body.image} }, status: 201 }
+      console.log(
+        'Processed image:',
+        shortenString(this.currentLobby.users[remoteAddress].profileImage),
+      )
+      return { data: { image: { [remoteAddress]: body.image } }, status: 201 }
     } catch (error: any) {
       console.error('Error processing image:', error)
       return { error: error.message, status: 400 }
@@ -86,7 +92,7 @@ class LobbyController {
 
       this.currentLobby.collection = body
       console.log('Set collection:', `{image: ${shortenString(body.image)}, name: ${body.name}}`)
-      return { data: {collection: body}, status: 201 }
+      return { data: { collection: body }, status: 201 }
     } catch (error: any) {
       console.error('Error setting collection:', error)
       return { error: error.message, status: 400 }

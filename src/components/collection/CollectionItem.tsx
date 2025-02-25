@@ -47,11 +47,11 @@ const CollectionItem = memo(({ item }: { item: CollectionItemProps }) => {
     setTimeout(() => {
       if (gameStore.collection.currentlySelecting) {
         gameStore.setCollection({
-          image: item.image, 
-          name: translate(item.nameTx) as string || item.name
+          image: item.image,
+          name: (translate(item.nameTx) as string) || item.name,
         })
         gameStore.setCurrentlySelecting(false)
-        return router.replace('/(game)/lobby')
+        return router.back()
       }
       router.push({ params: { item: safeItemStr }, pathname: `/library` })
     }, 200)

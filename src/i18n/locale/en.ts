@@ -17,12 +17,13 @@ const en = {
     create: 'Create',
     elements: 'Elements',
     join: 'Join',
-    start: 'Start lobby'
+    start: 'Start lobby',
   },
   error: {
     invalid_characters: 'Invalid characters',
     less: 'Too few characters',
     openLink: 'Error while opening the link',
+    unableConnect: 'Unable to join lobby',
     unexpected: 'Unexpected error',
   },
   info: {

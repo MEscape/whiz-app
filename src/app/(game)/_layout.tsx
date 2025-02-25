@@ -23,8 +23,8 @@ export default function GameLayout() {
         console.log('Back pressed:', pathname)
         if (pathname === '/lobby') {
           handleDisconnect()
+          router.back()
         }
-        router.back()
         return true
       }
 
@@ -33,12 +33,14 @@ export default function GameLayout() {
       return () => {
         BackHandler.removeEventListener('hardwareBackPress', onBackPress)
       }
-    }, [pathname])
+    }, [pathname]),
   )
 
   return (
     <Stack screenOptions={stackScreenOptions}>
       <Stack.Screen name="lobby" />
+      <Stack.Screen name="settings" />
+      <Stack.Screen name="game" />
     </Stack>
   )
 }

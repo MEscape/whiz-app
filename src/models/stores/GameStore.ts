@@ -1,10 +1,11 @@
 import { Instance, SnapshotOut, types } from 'mobx-state-tree'
+import RNFS from 'react-native-fs'
 
-import { translate, TxKeyPath } from '@/i18n'
-import { TransferUser } from '@/services'
-import { shortenString } from '@/util'
+import { translate } from '@/i18n'
+import { sendData, TransferUser } from '@/services'
+import { base64ToImage, shortenString } from '@/util'
 
-import { Images, ImageUris } from 'assets/images'
+import { Images } from 'assets/images'
 
 export const TransferUserModel = types
   .model('TransferUser')
@@ -38,18 +39,25 @@ export const GameStoreModel = types
   })
   .actions(self => ({
     clearCollection: () => {
-      self.collection.image = ImageUris[Images.CLASSIC]
+      self.collection.image = Images.CLASSIC
       self.collection.name = translate('collection.classicChaos') as string
     },
     clearStore() {
       self.users.clear()
       self.lobbyId = ''
       self.isHost = false
+      self.processedImages.clear()
+      self.clearCollection()
       self.setCurrentlySelecting(false)
     },
-    setCollection: (collection: { image: string; name: string }) => {
+    setCollection: async (collection: { image: string; name: string }) => {
       self.collection.image = collection.image
       self.collection.name = collection.name
+
+      const image = Object.values(Images).includes(collection.image as Images)
+        ? collection.image : await RNFS.readFile(collection.image, 'base64')
+
+      sendData({body: {...collection, image}, method: 'POST', path: '/collection'})
     },
     setCurrentlySelecting: (isSelecting: boolean) => {
       self.collection.currentlySelecting = isSelecting
@@ -70,6 +78,14 @@ export const GameStoreModel = types
       if (user) {
         user.profileImage = imageUrl
       }
+    },
+    setRemoteCollection: async (collection: { image: string; name: string }) => {
+      if (self.isHost) return
+      
+      const image = Object.values(Images).includes(collection.image as Images)
+        ? collection.image : await base64ToImage(collection.image)
+      self.collection.image = image
+      self.collection.name = collection.name
     },
     setUsers: (users: Record<string, TransferUser>) => {
       self.users.replace(users)

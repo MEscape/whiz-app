@@ -34,6 +34,10 @@ export class LobbyRoutes {
         return await LobbyController.joinLobby(socket, body)
       }
 
+      if (path === '/collection' && method === 'POST') {
+        return await LobbyController.setCollection(body)
+      }
+
       return { error: 'Route not found', status: 404 }
     } catch (error: any) {
       console.error('Error handling LobbyRoutes:', error)

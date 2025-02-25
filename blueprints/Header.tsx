@@ -117,6 +117,7 @@ const HeaderComponent = (props: HeaderProps<LibraryTypes, LibraryTypes, LibraryT
         renderOrder={props.rightOrder}
         ActionComponent={props.RightActionComponent}
         color={color}
+        baseStyles='text-right'
       />
     </View>
   )
@@ -162,7 +163,7 @@ const HeaderAction = (props: HeaderActionProps<LibraryTypes>) => {
 
   if (props.icon) {
     return (
-      <Icon name={props.icon} library={props.library} className="mt-4" onPress={props.onPress} />
+      <Icon name={props.icon} library={props.library} className={`mt-4 flex-1 ${props.baseStyles}`} onPress={props.onPress} />
     )
   }
 

@@ -10,6 +10,7 @@ import { TransferUser } from '../LobbyService'
 export interface Lobby {
   id: string
   users: Record<string, TransferUser>
+  collection?: { image: string; name: string }
 }
 
 export interface ResponseObject {
@@ -73,6 +74,21 @@ class LobbyController {
       return { data: { image: {[remoteAddress]: body.image} }, status: 201 }
     } catch (error: any) {
       console.error('Error processing image:', error)
+      return { error: error.message, status: 400 }
+    }
+  }
+
+  static async setCollection(body: { image: string; name: string }): Promise<ResponseObject> {
+    try {
+      if (!this.currentLobby) {
+        return { error: 'No lobby found', status: 400 }
+      }
+
+      this.currentLobby.collection = body
+      console.log('Set collection:', `{image: ${shortenString(body.image)}, name: ${body.name}}`)
+      return { data: {collection: body}, status: 201 }
+    } catch (error: any) {
+      console.error('Error setting collection:', error)
       return { error: error.message, status: 400 }
     }
   }

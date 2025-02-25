@@ -20,7 +20,7 @@ import { useHeader } from '@/hooks/useHeader'
 import TcpEventManager from '@/services/TcpEventManager'
 
 const HomeScreen = observer(() => {
-  const { handleCreateLobby, handleJoinLobby, router, userStore } = useAppContext()
+  const { handleCreateLobby, handleJoinLobby, router, userStore, gameStore } = useAppContext()
   const { loadAudio } = useAudioPlayer('music', 0.2)
 
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false)
@@ -45,6 +45,8 @@ const HomeScreen = observer(() => {
   }, [loadAudio])
 
   useEffect(() => {
+    gameStore.clearStore()
+
     TcpEventManager.on('connected', (isHost: boolean) => {
       return router.push({ params: { isHost }, pathname: '/(game)/lobby' })
     })

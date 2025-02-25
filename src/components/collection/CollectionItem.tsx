@@ -51,7 +51,7 @@ const CollectionItem = memo(({ item }: { item: CollectionItemProps }) => {
           name: translate(item.nameTx) as string || item.name
         })
         gameStore.setCurrentlySelecting(false)
-        return router.back()
+        return router.replace('/(game)/lobby')
       }
       router.push({ params: { item: safeItemStr }, pathname: `/library` })
     }, 200)

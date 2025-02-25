@@ -5,6 +5,7 @@ import { getIpV4, shortenString } from '@/util'
 
 import { PeerService } from './PeerService'
 import TcpEventManager from './TcpEventManager'
+import { version } from '@/constants'
 
 let tcpClient: TcpSocket.Socket | null = null
 
@@ -59,25 +60,24 @@ export const handleJoinLobby = async (ip: string, transferUser: TransferUser) =>
     })
 
     tcpClient.on('data', data => {
+      messageBuffer += data.toString('utf-8')
+      if (data.toString('utf-8').endsWith(MESSAGE_DELIMITER)) {
+        try {
+          const cleanMessage = messageBuffer.slice(0, -MESSAGE_DELIMITER.length)
+          console.log('Received from server:', shortenString(cleanMessage))
+          const parsedData = JSON.parse(cleanMessage)            
 
-        messageBuffer += data.toString('utf-8')
-        if (data.toString('utf-8').endsWith(MESSAGE_DELIMITER)) {
-          try {
-            const cleanMessage = messageBuffer.slice(0, -MESSAGE_DELIMITER.length)
-            const parsedData = JSON.parse(cleanMessage)            
-            console.log('Received from server:', shortenString(cleanMessage))
-
-            if (parsedData.data.image) {
-              return TcpEventManager.emit('image', parsedData.data.image)
-            }
-            
+          if (parsedData.data.image) {
+            TcpEventManager.emit('image', parsedData.data.image)
+          } else {
             TcpEventManager.emit('data', parsedData)
-          } catch (error) {
-            console.error('Error processing message:', error)
           }
-
-          messageBuffer = ''
+        } catch (error) {
+          console.error('Error processing message:', error)
         }
+
+        messageBuffer = ''
+      }
     })
 
     tcpClient.on('error', error => {
@@ -100,9 +100,12 @@ export interface RequestObject {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE'
   path: string
   body?: any
+  version?: string
 }
 
 export const sendData = (data: RequestObject) => {
+  data = {...data, version}
+
   if (!tcpClient) {
     console.warn('Cannot send data: TCP client is not connected')
     return false

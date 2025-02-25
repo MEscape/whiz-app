@@ -21,14 +21,16 @@ const LobbyScreen = observer(() => {
 
   useHeader(
     {
+      rightIcon: 'settings',
+      rightIconLibrary: 'Ionicons',
       TitleActionComponent: (
-        <View className="flex justify-center items-center">
+        <View className="flex-1 justify-center items-center">
           <Text variant="h1" className="text-4xl" tx="tabs.lobby" />
           <Text variant="h1" textColor="text-accent" uppercase>
             {gameStore.lobbyId}
           </Text>
         </View>
-      ),
+      )
     },
     [gameStore.lobbyId],
   )
@@ -38,6 +40,11 @@ const LobbyScreen = observer(() => {
       if (data.data?.id) {
         console.log('Setting lobby ID:', data.data.id)
         gameStore.setLobbyId(data.data.id)
+      }
+
+      if (data.data?.collection) {
+        console.log('Setting collection:', data.data.collection)
+        gameStore.setRemoteCollection(data.data.collection)
       }
       
       if (data.data?.users) {
@@ -61,8 +68,9 @@ const LobbyScreen = observer(() => {
   }, [gameStore])
 
   useEffect(() => {
-    console.log("isHost", isHost)
-    gameStore.setIsHost(isHost === 'true')
+    if (isHost) {
+      gameStore.setIsHost(isHost === 'true')
+    }
   }, [isHost])
 
   useEffect(() => {
@@ -97,7 +105,7 @@ const LobbyScreen = observer(() => {
           </ScrollView>
         </View>
       ) : <LobbySkeleton />}
-      <StartSection />
+      <StartSection disabled={!gameStore.isHost} />
     </>
   )
 })

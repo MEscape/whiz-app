@@ -4,10 +4,13 @@ import TcpServer from 'react-native-tcp-socket'
 
 import LobbyController from '../controllers/LobbyController'
 
+import { Codes } from '@/services/Codes'
+
 interface ResponseObject {
   data?: any
   error?: string
   status: number
+  code: string
 }
 
 export class LobbyRoutes {
@@ -38,10 +41,18 @@ export class LobbyRoutes {
         return await LobbyController.setCollection(body)
       }
 
-      return { error: 'Route not found', status: 404 }
+      if (path === '/stage' && method === 'POST') {
+        return await LobbyController.setStage(body)
+      }
+
+      return { code: Codes.ROUTE_NOT_FOUND, error: 'Route not found', status: 404 }
     } catch (error: any) {
       console.error('Error handling LobbyRoutes:', error)
-      return { error: error.message || 'Internal server error', status: 500 }
+      return {
+        code: error.code || Codes.UNEXPECTED_ERROR,
+        error: error.message || 'Internal server error',
+        status: 500,
+      }
     }
   }
 }

@@ -1,3 +1,5 @@
+import { Codes } from '@/services/Codes'
+
 const en = {
   alert: {
     delete: 'Confirm Deletion',
@@ -13,11 +15,17 @@ const en = {
   },
   common: {
     cancel: 'Cancel',
+    category: 'Category',
     collect: 'Collect',
     create: 'Create',
     elements: 'Elements',
+    guess: 'Guess',
     join: 'Join',
+    left: 'left',
+    me: 'Me',
+    points: 'Points',
     start: 'Start lobby',
+    submit: 'Submit',
   },
   error: {
     invalid_characters: 'Invalid characters',
@@ -25,6 +33,15 @@ const en = {
     openLink: 'Error while opening the link',
     unableConnect: 'Unable to join lobby',
     unexpected: 'Unexpected error',
+    [Codes.USER_NOT_FOUND]: 'User could not be found',
+    [Codes.LOBBY_NOT_FOUND]: 'Lobby could not be found',
+    [Codes.UNEXPECTED_ERROR]: 'Unexpected error',
+    [Codes.IMAGE_NOT_FOUND]: 'Image could not be found',
+    [Codes.TOO_MANY_USERS]: 'Too many users in the lobby (16/16)',
+    [Codes.ROUTE_NOT_FOUND]: 'Unknown Route',
+  },
+  game: {
+    yourRank: 'Your Rank',
   },
   info: {
     symbol: {
@@ -64,7 +81,9 @@ const en = {
   },
   placeholder: {
     answer: 'Answer option',
+    bestAnswer: 'Type in your best idea',
     collectionName: 'Name of collection',
+    guess: 'Give your guess',
     lobbyId: 'Type in Lobby-ID',
     search: 'Search for elements',
     solution: 'Type in solution',

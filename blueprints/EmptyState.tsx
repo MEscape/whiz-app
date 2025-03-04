@@ -21,7 +21,7 @@ export const EmptyState = ({ className }: EmptyStateProps) => (
       <Text
         variant="body"
         text="Hier gibt es momentan nichts zu sehen."
-        className="text-gray-500 text-center"
+        className="text-gray text-center"
       />
     </View>
   </View>

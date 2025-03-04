@@ -7,6 +7,8 @@ import { getIpV4, shortenString, showErrorToast } from '@/util'
 import { PeerService } from './PeerService'
 import TcpEventManager from './TcpEventManager'
 
+import { Codes } from '@/services/Codes'
+
 let tcpClient: TcpSocket.Socket | null = null
 
 export interface TransferUser {
@@ -14,9 +16,12 @@ export interface TransferUser {
   profileImage: string
   equippedEmoji: string
   isHost: boolean
+  points: number
+  rank: number
+  prevRank: number
 }
 
-export const handleCreateLobby = async (transferUser: TransferUser) => {
+export const createLobby = async (transferUser: TransferUser) => {
   try {
     const peerService = PeerService.getInstance()
 
@@ -26,7 +31,7 @@ export const handleCreateLobby = async (transferUser: TransferUser) => {
     }
 
     const ip = await getIpV4()
-    handleJoinLobby(ip, transferUser)
+    joinLobby(ip, transferUser)
   } catch (error) {
     console.error('Error creating lobby:', error)
     TcpEventManager.emit('error', error)
@@ -35,8 +40,9 @@ export const handleCreateLobby = async (transferUser: TransferUser) => {
 
 let messageBuffer: string = ''
 const MESSAGE_DELIMITER = '<<<EOF>>>'
+let initialize = false
 
-export const handleJoinLobby = async (ip: string, transferUser: TransferUser) => {
+export const joinLobby = async (ip: string, transferUser: TransferUser) => {
   try {
     const timeout = setTimeout(() => {
       console.error('Connection timeout: Unable to join lobby')
@@ -48,28 +54,19 @@ export const handleJoinLobby = async (ip: string, transferUser: TransferUser) =>
     }, 5000)
 
     tcpClient = TcpSocket.createConnection({ host: ip, port: 8080 }, async () => {
+      initialize = true
+
       clearTimeout(timeout)
       console.log(`Connected to TCP server at ${ip}:8080`)
-      TcpEventManager.emit('connected', transferUser.isHost)
 
       sendData({
         body: { user: { ...transferUser, profileImage: null } },
         method: 'POST',
         path: '/lobby',
       })
-
-      if (transferUser.profileImage) {
-        const base64Image = await RNFS.readFile(transferUser.profileImage, 'base64')
-
-        sendData({
-          body: { image: base64Image },
-          method: 'POST',
-          path: '/image',
-        })
-      }
     })
 
-    tcpClient.on('data', data => {
+    tcpClient.on('data', async data => {
       messageBuffer += data.toString('utf-8')
       if (data.toString('utf-8').endsWith(MESSAGE_DELIMITER)) {
         try {
@@ -77,11 +74,37 @@ export const handleJoinLobby = async (ip: string, transferUser: TransferUser) =>
           console.log('Received from server:', shortenString(cleanMessage))
           const parsedData = JSON.parse(cleanMessage)
 
-          if (parsedData.data.image) {
+          if (parsedData?.code === Codes.IMAGE) {
             TcpEventManager.emit('image', parsedData.data.image)
-          } else if (parsedData.data.error) {
-            TcpEventManager.emit('error', parsedData.data)
+          } else if (parsedData?.error) {
+            TcpEventManager.emit('error', parsedData)
+
+            if (parsedData?.code === Codes.TOO_MANY_USERS) {
+              initialize = false
+              if (tcpClient) {
+                tcpClient.destroy()
+                tcpClient = null
+              }
+            }
           } else {
+            if (initialize) {
+              TcpEventManager.emit('connected', {
+                id: tcpClient.remoteAddress,
+                isHost: transferUser.isHost,
+              })
+              initialize = false
+
+              if (transferUser.profileImage) {
+                const base64Image = await RNFS.readFile(transferUser.profileImage, 'base64')
+
+                sendData({
+                  body: { image: base64Image },
+                  method: 'POST',
+                  path: '/image',
+                })
+              }
+            }
+
             TcpEventManager.emit('data', parsedData)
           }
         } catch (error) {
@@ -144,8 +167,6 @@ export const handleDisconnect = () => {
       peerService.stopServer()
       console.log('Server stopped on this device')
     }
-
-    TcpEventManager.emit('close')
   } else {
     console.warn('No TCP client to disconnect.')
   }

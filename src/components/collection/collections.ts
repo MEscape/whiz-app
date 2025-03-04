@@ -1,4 +1,4 @@
-import { Images, ImageUris } from 'assets/images'
+import { Images } from 'assets/images'
 
 export default [
   {

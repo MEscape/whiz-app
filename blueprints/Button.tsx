@@ -27,6 +27,7 @@ interface ButtonProps<L extends LibraryTypes, R extends LibraryTypes> extends Pr
   leftIconLibrary?: L
   rightIconLibrary?: R
   outerClassName?: string
+  isLoading?: boolean
 }
 
 const baseStyle =
@@ -42,6 +43,7 @@ const ButtonComponent: React.FC<ButtonProps<LibraryTypes, LibraryTypes>> = obser
     children,
     className = '',
     disabled = false,
+    isLoading,
     leftIcon,
     leftIconLibrary = 'Ionicons',
     onPress,
@@ -68,6 +70,7 @@ const ButtonComponent: React.FC<ButtonProps<LibraryTypes, LibraryTypes>> = obser
       .join(' ')
 
     const handlePressIn = () => {
+      if (isLoading) return
       setIsAnimating(true)
       Vibration.vibrate(10)
       if (isPlaying) stopAudio()
@@ -85,16 +88,21 @@ const ButtonComponent: React.FC<ButtonProps<LibraryTypes, LibraryTypes>> = obser
 
     const textColor = variant === 'secondary' ? 'text-accent' : 'text-text'
 
+    // Pulsating animation for isLoading
+    const loadingAnimation = isLoading
+      ? 'animate-pulse' // pulsating effect for the button
+      : ''
+
     return (
       <Pressable
-        style={{ opacity: disabled ? 0.5 : 1 }}
+        style={{ opacity: disabled || isLoading ? 0.5 : 1 }}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         onPress={onPress}
-        disabled={disabled}
+        disabled={disabled || isLoading}
         className={outerClassName}
         {...props}>
-        <View className={combinedClassName}>
+        <View className={`${combinedClassName} ${loadingAnimation}`}>
           {leftIcon && (
             <Icon
               name={leftIcon}

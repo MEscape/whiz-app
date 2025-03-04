@@ -4,17 +4,14 @@ import { Animated, FlatList, SafeAreaView, TextInput, TouchableOpacity, View } f
 import { FlashList } from '@shopify/flash-list'
 import { EmptyState, Icon } from 'blueprints'
 import { useLocalSearchParams } from 'expo-router'
-import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { cssInterop } from 'nativewind'
 
 import { Search } from '@/components'
 import { PlayTypes } from '@/constants'
 import { useAppContext } from '@/context'
-import { useHeader } from '@/hooks'
+import { useDataForItem, useHeader } from '@/hooks'
 import { CustomAlert, showSuccessToast } from '@/util'
-
-import { Data, DataUris } from 'assets/data'
 
 import { CollectionItemProps } from '@/components/collection'
 import { BottomInfo, TaskCreator, TaskHeader, TaskItem } from '@/components/task'
@@ -62,32 +59,14 @@ const LibraryList = ({ editable, filteredData, refId }) => {
 
 const LibraryScreen = observer(() => {
   const params = useLocalSearchParams()
-  const { collectionStore, language, router } = useAppContext()
+  const { collectionStore, router } = useAppContext()
 
   const inputRef = useRef<TextInput>(null)
   const [showSearch, setShowSearch] = useState(false)
   const [animation] = useState(new Animated.Value(0))
 
-  const mapIdToDataKey = (id: string) => {
-    const currLanguage = language.toUpperCase()
-
-    switch (id) {
-      case 'CLASSIC_CHAOS':
-        return Data[`${currLanguage}_CLASSIC_CHAOS`]
-      case 'SURVIVAL':
-        return Data[`${currLanguage}_SURVIVAL`]
-      case 'DISORDERLY':
-        return Data[`${currLanguage}_DISORDERLY`]
-      default:
-        return undefined
-    }
-  }
-
   const item = (params.item ? JSON.parse(params.item) : null) as CollectionItemProps
-  const dataKey = mapIdToDataKey(item.id)
-  const data = useMemo(() => {
-    return dataKey ? DataUris[dataKey] : collectionStore.getTasks(item.id)
-  }, [dataKey, toJS(collectionStore.tasksByRefId), item.id])
+  const data = useDataForItem(item.id)
 
   const filteredData = useMemo(() => {
     return data.filter(item => {
@@ -110,8 +89,8 @@ const LibraryScreen = observer(() => {
     }).start(() => {
       if (!showSearch && inputRef.current) {
         setTimeout(() => {
-          inputRef.current?.focus();
-        }, 100);
+          inputRef.current?.focus()
+        }, 100)
       }
     })
   }
@@ -163,7 +142,7 @@ const LibraryScreen = observer(() => {
           </TouchableOpacity>
         </>
       )}
-      {filteredData.length > 0 && <BottomInfo />}
+      <BottomInfo />
     </SafeAreaView>
   )
 })

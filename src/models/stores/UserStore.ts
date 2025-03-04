@@ -59,7 +59,10 @@ export const UserStoreModel = types
       return {
         equippedEmoji: self.equippedEmoji,
         isHost: false,
+        points: 0,
+        prevRank: 1,
         profileImage: self.profileImage,
+        rank: 1,
         username: self.username,
       }
     },

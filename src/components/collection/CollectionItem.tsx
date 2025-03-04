@@ -47,6 +47,7 @@ const CollectionItem = memo(({ item }: { item: CollectionItemProps }) => {
     setTimeout(() => {
       if (gameStore.collection.currentlySelecting) {
         gameStore.setCollection({
+          id: item.id,
           image: item.image,
           name: (translate(item.nameTx) as string) || item.name,
         })
@@ -66,7 +67,7 @@ const CollectionItem = memo(({ item }: { item: CollectionItemProps }) => {
       <View className="mx-4 my-2 flex justify-between items-start">
         <View>
           <Text variant="h2" className="max-w-48" tx={item?.nameTx} text={item.name} />
-          <Text variant="caption" className="text-gray-500">
+          <Text variant="caption" className="text-gray">
             {item.created}
           </Text>
         </View>
@@ -75,10 +76,10 @@ const CollectionItem = memo(({ item }: { item: CollectionItemProps }) => {
             className="w-4 h-4 mr-2"
             name="analytics"
             size={14}
-            color="text-gray-500"
+            color="text-gray"
             library="Ionicons"
           />
-          <Text className="text-xs" textColor="text-gray-500">
+          <Text className="text-xs" textColor="text-gray">
             {item.elements} {translate('common.elements')}
           </Text>
         </View>

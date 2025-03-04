@@ -55,10 +55,10 @@ export const TaskHeader = observer(({ item }: { item: CollectionItemProps }) => 
             className="w-4 h-4 mr-2"
             name="analytics"
             size={14}
-            color="text-gray-500"
+            color="text-gray"
             library="Ionicons"
           />
-          <Text className="text-xs" textColor="text-gray-500">
+          <Text className="text-xs" textColor="text-gray">
             {collectionStore.getCollection(item.id)?.elements || item.elements}{' '}
             {translate('common.elements')} • {item.created}
           </Text>

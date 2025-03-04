@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { ScrollView, View } from 'react-native'
 
-import { useLocalSearchParams } from 'expo-router'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
@@ -13,10 +12,10 @@ import { Text } from 'blueprints/Text'
 
 import { LobbySkeleton, StartSection } from '@/components/lobby'
 import ProfileImage from '@/components/ProfileImage'
+import { Codes } from '@/services/Codes'
 import TcpEventManager from '@/services/TcpEventManager'
 
 const LobbyScreen = observer(() => {
-  const { isHost } = useLocalSearchParams()
   const { gameStore, router } = useAppContext()
 
   useHeader(
@@ -38,19 +37,13 @@ const LobbyScreen = observer(() => {
 
   useEffect(() => {
     const handleData = (data: any) => {
-      if (data.data?.id) {
-        console.log('Setting lobby ID:', data.data.id)
-        gameStore.setLobbyId(data.data.id)
-      }
-
-      if (data.data?.collection) {
-        console.log('Setting collection:', data.data.collection)
+      if (data.code === Codes.COLLECTION) {
         gameStore.setRemoteCollection(data.data.collection)
       }
 
-      if (data.data?.users) {
-        console.log('Setting users:', data.data.users)
-        gameStore.setUsers(data.data.users)
+      if (data.code === Codes.LOBBY) {
+        gameStore.setLobbyId(data.data?.id)
+        gameStore.setUsers(data.data?.users)
       }
     }
 
@@ -67,12 +60,6 @@ const LobbyScreen = observer(() => {
       gameStore.clearStore()
     }
   }, [gameStore])
-
-  useEffect(() => {
-    if (isHost) {
-      gameStore.setIsHost(isHost === 'true')
-    }
-  }, [isHost])
 
   useEffect(() => {
     ;(async () => {

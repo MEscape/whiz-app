@@ -1,3 +1,5 @@
+import { Codes } from '@/services/Codes'
+
 const de = {
   alert: {
     delete: 'Bestätigen Sie den Löschvorgang',
@@ -13,11 +15,17 @@ const de = {
   },
   common: {
     cancel: 'Abbrechen',
+    category: 'Kategorie',
     collect: 'Einsammeln',
     create: 'Erstellen',
     elements: 'Elemente',
+    guess: 'Schätze',
     join: 'Beitreten',
+    left: 'übrig',
+    me: 'Ich',
+    points: 'Punkte',
     start: 'Lobby starten',
+    submit: 'Abschicken',
   },
   error: {
     invalid_characters: 'Ungültige Zeichen',
@@ -25,6 +33,15 @@ const de = {
     openLink: 'Fehler beim öffnen des Links',
     unableConnect: 'Der Lobby kann nicht beigetreten werden',
     unexpected: 'Unbekannter Fehler',
+    [Codes.USER_NOT_FOUND]: 'Benutzer konnte nicht gefunden werden',
+    [Codes.LOBBY_NOT_FOUND]: 'Lobby konnte nicht gefunden werden',
+    [Codes.UNEXPECTED_ERROR]: 'Unerwarteter Fehler',
+    [Codes.IMAGE_NOT_FOUND]: 'Bild konnte nicht gefunden werden',
+    [Codes.TOO_MANY_USERS]: 'Zu viele Benutzer in der Lobby (16/16)',
+    [Codes.ROUTE_NOT_FOUND]: 'Unbekannte Route',
+  },
+  game: {
+    yourRank: 'Dein Rang',
   },
   info: {
     symbol: {
@@ -64,7 +81,9 @@ const de = {
   },
   placeholder: {
     answer: 'Antwortmöglichkeit',
+    bestAnswer: 'Gebe deine beste Idee ein',
     collectionName: 'Name der Sammlung',
+    guess: 'Gebe deine Schätzung ab',
     lobbyId: 'Lobby-ID eingeben',
     search: 'Suche nach Elementen',
     solution: 'Lösung eingeben',

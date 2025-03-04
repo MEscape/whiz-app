@@ -1,16 +1,17 @@
-// src/controllers/LobbyController.ts
-
 import TcpServer from 'react-native-tcp-socket'
 
 import { encodeIp, getIpV4, shortenString } from '@/util'
 
-// Import TransferUser type
-import { TransferUser } from '../LobbyService'
+import type { TransferUser } from '../LobbyService'
+
+import { Task } from '@/app/library'
+import { Codes } from '@/services/Codes'
 
 export interface Lobby {
   id: string
   users: Record<string, TransferUser>
   collection?: { image: string; name: string }
+  stage?: Task
 }
 
 export interface ResponseObject {
@@ -18,6 +19,7 @@ export interface ResponseObject {
   message?: string
   error?: string
   status: number
+  code: string
 }
 
 class LobbyController {
@@ -38,17 +40,17 @@ class LobbyController {
         }
       }
 
-      if (Object.keys(this.currentLobby.users).length === 16) {
-        return { error: 'Too many Users in the Lobby', status: 400 }
+      if (Object.keys(this.currentLobby.users).length >= 16) {
+        return { code: Codes.TOO_MANY_USERS, error: 'Too many Users in the Lobby', status: 400 }
       }
 
       this.currentLobby.users[remoteAddress] = body?.user || null
 
       console.log('Current lobby users:', this.currentLobby.users)
-      return { data: this.currentLobby, status: 201 }
+      return { code: Codes.LOBBY, data: this.currentLobby, status: 201 }
     } catch (error: any) {
       console.error('Error joining lobby:', error)
-      return { error: error.message, status: 400 }
+      return { code: error.code || Codes.UNEXPECTED_ERROR, error: error.message, status: 400 }
     }
   }
 
@@ -60,15 +62,15 @@ class LobbyController {
       const remoteAddress = socket.remoteAddress || ''
 
       if (!this.currentLobby) {
-        return { error: 'No lobby found', status: 400 }
+        return { code: Codes.LOBBY_NOT_FOUND, error: 'No lobby found', status: 400 }
       }
 
       if (!this.currentLobby.users[remoteAddress]) {
-        return { error: 'User not found in lobby', status: 404 }
+        return { code: Codes.USER_NOT_FOUND, error: 'User not found in lobby', status: 404 }
       }
 
       if (!body?.image) {
-        return { error: 'No image found in request body', status: 400 }
+        return { code: Codes.IMAGE_NOT_FOUND, error: 'No image found in request body', status: 400 }
       }
 
       this.currentLobby.users[remoteAddress].profileImage = body.image
@@ -77,25 +79,40 @@ class LobbyController {
         'Processed image:',
         shortenString(this.currentLobby.users[remoteAddress].profileImage),
       )
-      return { data: { image: { [remoteAddress]: body.image } }, status: 201 }
+      return { code: Codes.IMAGE, data: { image: { [remoteAddress]: body.image } }, status: 201 }
     } catch (error: any) {
       console.error('Error processing image:', error)
-      return { error: error.message, status: 400 }
+      return { code: error.code || Codes.UNEXPECTED_ERROR, error: error.message, status: 400 }
     }
   }
 
   static async setCollection(body: { image: string; name: string }): Promise<ResponseObject> {
     try {
       if (!this.currentLobby) {
-        return { error: 'No lobby found', status: 400 }
+        return { code: Codes.LOBBY_NOT_FOUND, error: 'No lobby found', status: 400 }
       }
 
       this.currentLobby.collection = body
       console.log('Set collection:', `{image: ${shortenString(body.image)}, name: ${body.name}}`)
-      return { data: { collection: body }, status: 201 }
+      return { code: Codes.COLLECTION, data: { collection: body }, status: 201 }
     } catch (error: any) {
       console.error('Error setting collection:', error)
-      return { error: error.message, status: 400 }
+      return { code: error.code || Codes.UNEXPECTED_ERROR, error: error.message, status: 400 }
+    }
+  }
+
+  static async setStage(body: Task): Promise<ResponseObject> {
+    try {
+      if (!this.currentLobby) {
+        return { code: Codes.LOBBY_NOT_FOUND, error: 'No lobby found', status: 400 }
+      }
+
+      this.currentLobby.stage = body
+
+      return { code: Codes.STAGE, data: body, status: 201 }
+    } catch (error: any) {
+      console.error('Error setting collection:', error)
+      return { code: error.code || Codes.UNEXPECTED_ERROR, error: error.message, status: 400 }
     }
   }
 }

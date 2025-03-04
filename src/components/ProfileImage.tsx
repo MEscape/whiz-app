@@ -15,11 +15,11 @@ interface ProfileImageProps {
 }
 
 const ProfileImageComponent: React.FC<ProfileImageProps> = ({
+  disabled,
   equippedEmojiId,
   imageUrl,
   onPress,
   showHint,
-  disabled
 }) => {
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false)
   const equippedEmoji = EMOJI_INVENTORY.find(e => e.id === equippedEmojiId)
@@ -83,14 +83,11 @@ const ProfileImageComponent: React.FC<ProfileImageProps> = ({
   return (
     <>
       <View className="relative">
-        {/* Keep overflow-hidden but emoji outside */}
         {ImageContent}
 
-        {/* Emoji moved outside to prevent clipping */}
         {EmojiContent}
       </View>
 
-      {/* BottomSheet should now open properly */}
       <BottomSheet
         snapPoints={['25%']}
         isVisible={isBottomSheetVisible}

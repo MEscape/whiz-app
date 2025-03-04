@@ -10,7 +10,7 @@ import { blackGradient } from '@/constants'
 import { useAppContext } from '@/context'
 import { useAudioPlayer } from '@/hooks'
 import { translate } from '@/i18n'
-import { decodeIp } from '@/util'
+import { decodeIp, showErrorToast } from '@/util'
 
 import { Audios, AudioUris } from 'assets/audios'
 import { Images, ImageUris } from 'assets/images'
@@ -20,11 +20,12 @@ import { useHeader } from '@/hooks/useHeader'
 import TcpEventManager from '@/services/TcpEventManager'
 
 const HomeScreen = observer(() => {
-  const { gameStore, handleCreateLobby, handleJoinLobby, router, userStore } = useAppContext()
+  const { createLobby, gameStore, joinLobby, router, userStore } = useAppContext()
   const { loadAudio } = useAudioPlayer('music', 0.2)
 
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false)
   const [lobbyId, setLobbyId] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   useHeader(
     {
@@ -47,14 +48,32 @@ const HomeScreen = observer(() => {
   useEffect(() => {
     gameStore.clearStore()
 
-    TcpEventManager.on('connected', (isHost: boolean) => {
-      return router.push({ params: { isHost }, pathname: '/(game)/lobby' })
+    TcpEventManager.on('connected', response => {
+      setIsLoading(false)
+      gameStore.setIsHost(response.isHost)
+      gameStore.setMyId(response.id)
+      return router.push('/(game)/lobby')
+    })
+
+    TcpEventManager.on('error', response => {
+      showErrorToast(`error.${response?.code}` || response.error)
+      setIsLoading(false)
     })
 
     return () => {
       TcpEventManager.removeAllListeners()
     }
-  }, [router])
+  }, [router, gameStore])
+
+  const handleCreateLobby = () => {
+    setIsLoading(true)
+    createLobby({ ...userStore.transferUser, isHost: true })
+  }
+
+  const handleJoinLobby = () => {
+    setIsLoading(true)
+    joinLobby(decodeIp(lobbyId), userStore.transferUser)
+  }
 
   return (
     <>
@@ -77,8 +96,9 @@ const HomeScreen = observer(() => {
               <Button
                 className="h-12"
                 text="Lobby erstellen"
+                isLoading={isLoading}
                 variant="primary"
-                onPress={() => handleCreateLobby({ ...userStore.transferUser, isHost: true })}
+                onPress={handleCreateLobby}
               />
               <Button
                 className="h-12"
@@ -106,8 +126,9 @@ const HomeScreen = observer(() => {
           <Button
             tx="common.join"
             outerClassName="flex-1"
+            isLoading={isLoading}
             disabled={lobbyId.trim().length !== 8}
-            onPress={() => handleJoinLobby(decodeIp(lobbyId), userStore.transferUser)}
+            onPress={handleJoinLobby}
             className="h-12"
           />
         </View>

@@ -1,5 +1,8 @@
-import QuestionComponent from '../components/QuestionComponent'
+import { BestAnswer, Challenge, Guess, Question } from './stages'
 
 export const contentRegistry = {
-  question: QuestionComponent,
+  1: Question,
+  2: Guess,
+  3: BestAnswer,
+  4: Challenge,
 }

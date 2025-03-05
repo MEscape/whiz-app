@@ -2,16 +2,9 @@
 
 import TcpServer from 'react-native-tcp-socket'
 
-import LobbyController from '../controllers/LobbyController'
+import LobbyController, { ResponseObject } from '../controllers/LobbyController'
 
 import { Codes } from '@/services/Codes'
-
-interface ResponseObject {
-  data?: any
-  error?: string
-  status: number
-  code: string
-}
 
 export class LobbyRoutes {
   /**
@@ -35,6 +28,10 @@ export class LobbyRoutes {
 
       if (path === '/lobby' && method === 'POST') {
         return await LobbyController.joinLobby(socket, body)
+      }
+
+      if (path === '/lobby' && method === 'DELETE') {
+        return await LobbyController.leaveLobby(socket)
       }
 
       if (path === '/collection' && method === 'POST') {

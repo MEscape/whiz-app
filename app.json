@@ -50,7 +50,16 @@
         }
       ],
       "expo-localization",
-      "expo-asset"
+      "expo-asset",
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "note": "Use SENTRY_AUTH_TOKEN env to authenticate with Sentry.",
+          "project": "example-project",
+          "organization": "example-org"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

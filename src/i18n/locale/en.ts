@@ -41,6 +41,7 @@ const en = {
     [Codes.ROUTE_NOT_FOUND]: 'Unknown Route',
   },
   game: {
+    noEnemy: 'No Enemy',
     yourRank: 'Your Rank',
   },
   info: {

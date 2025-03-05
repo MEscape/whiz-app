@@ -20,7 +20,7 @@ export const Stinger = ({ onAnimationComplete }) => {
     scale.value = withTiming(1.5, { duration: 700, easing: Easing.inOut(Easing.ease) })
 
     // Call the onAnimationComplete once the transition is done
-    setTimeout(onAnimationComplete, 700)
+    setTimeout(onAnimationComplete, 500)
   }, [])
 
   // Animated style for the image with rotation

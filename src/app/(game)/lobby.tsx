@@ -13,6 +13,7 @@ import { Text } from 'blueprints/Text'
 import { LobbySkeleton, StartSection } from '@/components/lobby'
 import ProfileImage from '@/components/ProfileImage'
 import { Codes } from '@/services/Codes'
+import { ResponseObject } from '@/services/controllers/LobbyController'
 import TcpEventManager from '@/services/TcpEventManager'
 
 const LobbyScreen = observer(() => {
@@ -36,7 +37,7 @@ const LobbyScreen = observer(() => {
   )
 
   useEffect(() => {
-    const handleData = (data: any) => {
+    const handleData = (data: ResponseObject) => {
       if (data.code === Codes.COLLECTION) {
         gameStore.setRemoteCollection(data.data.collection)
       }
@@ -95,7 +96,7 @@ const LobbyScreen = observer(() => {
       ) : (
         <LobbySkeleton />
       )}
-      <StartSection disabled={!gameStore.isHost} />
+      <StartSection disabled={Object.keys(gameStore.users).length > 1 || !gameStore.isHost} />
     </>
   )
 })

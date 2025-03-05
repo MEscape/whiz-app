@@ -2,6 +2,7 @@ import React from 'react'
 
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack'
+import * as Sentry from '@sentry/react-native'
 import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
@@ -20,13 +21,31 @@ import { useInitialRootStore } from '@/models'
 
 SplashScreen.preventAutoHideAsync()
 
+Sentry.init({
+  dsn: 'https://examplePublicKey@o0.ingest.sentry.io/0',
+
+  // profilesSampleRate is relative to tracesSampleRate.
+  // Here, we'll capture profiles for 100% of transactions.
+  profilesSampleRate: 1.0,
+
+  // Adds more context data to events (IP address, cookies, user, etc.)
+  // For more information, visit: https://docs.sentry.io/platforms/react-native/data-management/data-collected/
+  sendDefaultPii: true,
+
+  // Set tracesSampleRate to 1.0 to capture 100% of transactions for tracing.
+  // We recommend adjusting this value in production.
+  // Learn more at
+  // https://docs.sentry.io/platforms/react-native/configuration/options/#traces-sample-rate
+  tracesSampleRate: 1.0,
+})
+
 const stackScreenOptions: NativeStackNavigationOptions = {
   animation: 'slide_from_right',
   headerShown: false,
   presentation: 'transparentModal',
 }
 
-export default function RootLayout() {
+const RootLayout = () => {
   const [areFontsLoaded, fontLoadError] = useFonts(customFontsToLoad)
   const isLoadingAssets = usePreloadAssets()
 
@@ -62,3 +81,5 @@ export default function RootLayout() {
     </ThemeProvider>
   )
 }
+
+export default Sentry.wrap(RootLayout)

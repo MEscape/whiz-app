@@ -67,12 +67,23 @@ export const joinLobby = async (ip: string, transferUser: TransferUser) => {
     })
 
     tcpClient.on('data', async data => {
+      // Append new data to the accumulated buffer.
       messageBuffer += data.toString('utf-8')
-      if (data.toString('utf-8').endsWith(MESSAGE_DELIMITER)) {
+
+      // Look for the delimiter in the current buffer.
+      let delimiterIndex = messageBuffer.indexOf(MESSAGE_DELIMITER)
+
+      // Process each complete message (data before a delimiter)
+      while (delimiterIndex !== -1) {
+        // Extract the complete message (without the delimiter)
+        const completeMessage = messageBuffer.slice(0, delimiterIndex)
+
+        // Remove the processed message and the delimiter from the buffer.
+        messageBuffer = messageBuffer.slice(delimiterIndex + MESSAGE_DELIMITER.length)
+
         try {
-          const cleanMessage = messageBuffer.slice(0, -MESSAGE_DELIMITER.length)
-          console.log('Received from server:', shortenString(cleanMessage))
-          const parsedData = JSON.parse(cleanMessage)
+          console.log('Received from server:', shortenString(completeMessage))
+          const parsedData = JSON.parse(completeMessage)
 
           if (parsedData?.code === Codes.IMAGE) {
             TcpEventManager.emit('image', parsedData.data.image)
@@ -111,7 +122,7 @@ export const joinLobby = async (ip: string, transferUser: TransferUser) => {
           console.error('Error processing message:', error)
         }
 
-        messageBuffer = ''
+        delimiterIndex = messageBuffer.indexOf(MESSAGE_DELIMITER)
       }
     })
 
@@ -159,6 +170,7 @@ export const sendData = (data: RequestObject) => {
 export const handleDisconnect = () => {
   if (tcpClient) {
     console.log('Disconnecting TCP client...')
+    sendData({ method: 'DELETE', path: `/lobby` })
     tcpClient.destroy()
     tcpClient = null
 

@@ -1,18 +1,26 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useAppContext } from '@/context'
+import { translate } from '@/i18n'
 import { sendData } from '@/services'
 
 import { Task } from '@/app/library'
 import { useDataForItem } from '@/hooks/useDataForItem'
 import { Codes } from '@/services/Codes'
+import { ResponseObject } from '@/services/controllers/LobbyController'
 import TcpEventManager from '@/services/TcpEventManager'
+
+export interface EnemyState {
+  id: string | null
+  username: string
+}
 
 export const useStage = () => {
   const { gameStore } = useAppContext()
   const data = useDataForItem(gameStore.collection.id)
 
   const [currentStage, setCurrentStage] = useState<Task | null>(null)
+  const [enemy, setEnemy] = useState<EnemyState>({ id: null, username: '' })
   const [triggerStage, setTriggerStage] = useState(false)
 
   const timeout = useRef<NodeJS.Timeout>()
@@ -36,11 +44,20 @@ export const useStage = () => {
   }, [gameStore.isHost, triggerStage])
 
   useEffect(() => {
-    const handleNewStage = response => {
+    const handleNewStage = (response: ResponseObject) => {
       if (response.code === Codes.STAGE) {
         console.log('Setting new Stage', response.data)
         clearTimeout(timeout.current)
         setCurrentStage(response.data)
+      }
+
+      if (response.code === Codes.PAIR) {
+        if (response.status === 204) {
+          setEnemy({ id: '', username: translate('game.noEnemy') as string })
+          return
+        }
+
+        setEnemy(response.data)
       }
     }
 
@@ -56,5 +73,5 @@ export const useStage = () => {
     setTriggerStage(prev => !prev)
   }
 
-  return { currentStage, triggerStageUpdate }
+  return { currentStage, enemy, triggerStageUpdate }
 }

@@ -9,4 +9,5 @@ export enum Codes {
   TOO_MANY_USERS = 'tooManyUsers',
   STAGE = 'stage',
   ROUTE_NOT_FOUND = 'routeNotFound',
+  PAIR = 'pair',
 }

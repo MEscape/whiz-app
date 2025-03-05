@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ScrollView, View } from 'react-native'
 
 import { playTypesIcon, playTypesName } from '@/constants'
+import { useAppContext } from '@/context'
+import { EnemyState } from '@/hooks'
 import { translate } from '@/i18n'
 
 import { Button } from 'blueprints/Button'
@@ -16,7 +18,13 @@ interface QuestionProps {
   id: string
 }
 
-export const Challenge = ({ stage }: { stage: QuestionProps }) => {
+export const Challenge = ({ enemy, stage }: { stage: QuestionProps; enemy: EnemyState }) => {
+  const { userStore } = useAppContext()
+
+  useEffect(() => {
+    console.log(enemy)
+  }, [enemy])
+
   return (
     <ScrollView
       className="flex-1 p-4"
@@ -31,8 +39,20 @@ export const Challenge = ({ stage }: { stage: QuestionProps }) => {
         <Icon name={playTypesIcon[stage.type]} library="Ionicons" color="text-accent" />
       </View>
       <View className="h-36 my-8 flex-row gap-x-2">
-        <Button variant="tertiary" tx="common.guess" className="flex-1" outerClassName="flex-1" />
-        <Button variant="tertiary" tx="common.guess" className="flex-1" outerClassName="flex-1" />
+        <Button
+          variant="tertiary"
+          text={userStore.username}
+          className="flex-1"
+          outerClassName="flex-1"
+        />
+        <Button
+          variant="tertiary"
+          text={enemy.username}
+          className="flex-1"
+          outerClassName="flex-1"
+          isLoading={enemy.id === null}
+          disabled={enemy.id === null || enemy.id.length === 0}
+        />
       </View>
     </ScrollView>
   )

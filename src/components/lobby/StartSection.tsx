@@ -39,7 +39,7 @@ export const StartSection = observer(({ disabled }: { disabled: boolean }) => {
         <Text variant="h2" text={gameStore?.collection.name} />
       </TouchableOpacity>
       <Button
-        //disabled={Object.keys(gameStore.users).length > 1 || disabled}
+        //disabled={disabled}
         tx="common.start"
         className="h-12 rounded-tr-none rounded-tl-none"
         onPress={handleStartGame}

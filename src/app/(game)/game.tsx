@@ -11,7 +11,7 @@ import { StageSkeleton } from '@/components/game/stages'
 
 const GameScreen = () => {
   const { router } = useAppContext()
-  const { currentStage, triggerStageUpdate } = useStage()
+  const { currentStage, enemy, triggerStageUpdate } = useStage()
 
   const [isTransitioning, setIsTransitioning] = useState(true)
 
@@ -27,8 +27,8 @@ const GameScreen = () => {
         <Stinger onAnimationComplete={() => setIsTransitioning(false)} />
       ) : (
         <SafeAreaView className="flex-1 bg-primary">
-          <GameHeader resetProgress={currentStage} />
-          {currentStage ? <GameContent stage={currentStage} /> : <StageSkeleton />}
+          <GameHeader resetProgress={currentStage} disabledTimer={currentStage?.type === 4} />
+          {currentStage ? <GameContent stage={currentStage} enemy={enemy} /> : <StageSkeleton />}
           <GameFooter onLeave={handleLeave} onSkip={triggerStageUpdate} />
         </SafeAreaView>
       )}

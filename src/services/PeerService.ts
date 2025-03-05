@@ -4,10 +4,12 @@ import { shortenString } from '@/util'
 
 import { LobbyRoutes } from './routes/LobbyRoutes'
 
+import { ResponseObject } from '@/services/controllers/LobbyController'
+
 export class PeerService {
   private static instance: PeerService | null = null
   private server: TcpServer.Server | null = null
-  private connections = new Map<string, TcpServer.Socket>()
+  public connections = new Map<string, TcpServer.Socket>()
   public isServerRunning = false
 
   private messageBuffers = new Map<string, string>()
@@ -34,27 +36,35 @@ export class PeerService {
 
       console.log('User connected:', remoteAddress)
 
-      socket.on('data', async (data) => {
-        const buffer = this.messageBuffers.get(remoteAddress) || ''
-        const newBuffer = buffer + data.toString('utf-8')
+      socket.on('data', async data => {
+        // Get the existing buffer for this client and append new data.
+        const currentBuffer = this.messageBuffers.get(remoteAddress) || ''
+        const newBuffer = currentBuffer + data.toString('utf-8')
         this.messageBuffers.set(remoteAddress, newBuffer)
 
-        if (data.toString('utf-8').endsWith(this.MESSAGE_DELIMITER)) {
-          try {
-            const cleanMessage = newBuffer.slice(0, -this.MESSAGE_DELIMITER.length)
-            const parsedData = JSON.parse(cleanMessage)
-            if (!parsedData.path || !parsedData.method) {
-              throw new Error('Invalid request: path and method are required')
-            }
+        // Process all complete messages in the buffer.
+        let delimiterIndex = newBuffer.indexOf(this.MESSAGE_DELIMITER)
+        while (delimiterIndex !== -1) {
+          // Extract complete message (without the delimiter).
+          const completeMessage = newBuffer.slice(0, delimiterIndex)
+          // Update the buffer with the remaining part.
+          this.messageBuffers.set(
+            remoteAddress,
+            newBuffer.slice(delimiterIndex + this.MESSAGE_DELIMITER.length),
+          )
 
-            console.log('Received message <server>:', shortenString(cleanMessage))
+          try {
+            const parsedData = JSON.parse(completeMessage)
+            console.log('Received message <server>:', shortenString(completeMessage))
             await this.routeRequest(socket, parsedData)
           } catch (error) {
             console.error('Error processing message:', error)
             socket.write(JSON.stringify({ error: 'Invalid request format', status: 400 }))
           }
 
-          this.messageBuffers.set(remoteAddress, '')
+          // Get the updated buffer and check for another complete message.
+          const updatedBuffer = this.messageBuffers.get(remoteAddress)
+          delimiterIndex = updatedBuffer.indexOf(this.MESSAGE_DELIMITER)
         }
       })
 
@@ -83,10 +93,10 @@ export class PeerService {
     }
   }
 
-  public sendData(data: any, clientId?: string) {
+  public sendData(data: ResponseObject, clientId?: string) {
     const message = JSON.stringify(data) + this.MESSAGE_DELIMITER
 
-    if (clientId) {
+    if (clientId || data?.clientId) {
       // Send to specific client
       const socket = this.connections.get(clientId)
       if (socket) {

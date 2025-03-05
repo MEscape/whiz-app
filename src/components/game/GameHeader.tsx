@@ -61,17 +61,21 @@ const TimerBar = memo(({ timer, widthInterpolation }: TimerBarProps) => {
 TimerBar.displayName = 'TimerBar'
 
 export const GameHeader = ({
+  disabledTimer,
   resetProgress,
   timerDuration = 60,
 }: {
   timerDuration?: number
   resetProgress?: any
+  disabledTimer?: boolean
 }) => {
   const [timer, setTimer] = useState(timerDuration)
   const [containerWidth, setContainerWidth] = useState(0)
   const progressAnim = useRef(new Animated.Value(1)).current
 
   useEffect(() => {
+    if (disabledTimer) return
+
     const interval = setInterval(() => {
       setTimer(prevTimer => {
         if (prevTimer > 0) {
@@ -92,7 +96,7 @@ export const GameHeader = ({
       })
     }, 1000)
     return () => clearInterval(interval)
-  }, [timerDuration, progressAnim])
+  }, [timerDuration, progressAnim, disabledTimer])
 
   // Interpolate progress value to container width once we know it
   const widthInterpolation = progressAnim.interpolate({
@@ -103,11 +107,10 @@ export const GameHeader = ({
   // Reset progress bar and timer when resetProgress is called
   useEffect(() => {
     if (resetProgress) {
-      setTimer(timerDuration) // Reset timer to the initial value
+      setTimer(timerDuration)
       Animated.timing(progressAnim, {
-        // Reset animation to full width
         duration: 0,
-        toValue: 1, // Instant reset
+        toValue: 1,
         useNativeDriver: false,
       }).start()
     }
@@ -122,7 +125,7 @@ export const GameHeader = ({
           const { width } = e.nativeEvent.layout
           setContainerWidth(width)
         }}>
-        <TimerBar timer={timer} widthInterpolation={widthInterpolation} />
+        {!disabledTimer && <TimerBar timer={timer} widthInterpolation={widthInterpolation} />}
       </View>
     </View>
   )

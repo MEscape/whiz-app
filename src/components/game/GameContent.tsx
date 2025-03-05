@@ -3,7 +3,7 @@ import { Text, View } from 'react-native'
 
 import { contentRegistry } from './contentRegistry'
 
-export const GameContent = ({ stage }) => {
+export const GameContent = ({ enemy, stage }) => {
   const Component = contentRegistry[stage.type]
 
   if (!Component) {
@@ -14,5 +14,5 @@ export const GameContent = ({ stage }) => {
     )
   }
 
-  return <Component stage={stage} />
+  return <Component stage={stage} enemy={enemy} />
 }

@@ -1,8 +1,10 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
+import * as Localization from 'expo-localization'
+
 import { ContentLanguage, i18n } from '@/i18n'
-import { StorageKeys } from '@/storage'
 import * as storage from '@/storage'
+import { StorageKeys } from '@/storage'
 
 export type LocalizationAppContextType = {
   language: ContentLanguage
@@ -23,7 +25,10 @@ export const useLanguage = () => {
 
 // LocalizationProvider Component
 export const LocalizationProvider = ({ children }: React.PropsWithChildren) => {
-  const [language, setLanguage] = useState<ContentLanguage>(ContentLanguage.English)
+  const [language, setLanguage] = useState<ContentLanguage>(
+    (Localization.getLocales()[0]?.languageTag.split('-')[0] as ContentLanguage) ||
+      ContentLanguage.English,
+  )
 
   // Set Language and persist to storage
   const setAppLanguage = useCallback(
@@ -51,7 +56,7 @@ export const LocalizationProvider = ({ children }: React.PropsWithChildren) => {
       if (storedLanguage) await setAppLanguage(storedLanguage)
     }
     loadLanguage()
-  }, [setLanguage, setAppLanguage])
+  }, [setAppLanguage])
 
   return (
     <LocalizationAppContext.Provider value={contextValue}>

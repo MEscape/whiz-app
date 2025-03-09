@@ -10,12 +10,13 @@ import { GameContent, GameFooter, GameHeader } from '@/components/game'
 import { StageSkeleton } from '@/components/game/stages'
 
 const GameScreen = () => {
-  const { router } = useAppContext()
+  const { gameStore, router } = useAppContext()
   const { currentStage, enemy, triggerStageUpdate } = useStage()
 
   const [isTransitioning, setIsTransitioning] = useState(true)
 
   const handleLeave = () => {
+    gameStore.sessionStats.stopTimer()
     handleDisconnect()
     router.dismissAll()
     router.dismissAll()

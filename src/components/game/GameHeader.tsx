@@ -30,12 +30,7 @@ const UserDisplay = memo(() => {
           />
         </View>
       </View>
-      <Rank
-        currentRank={gameStore.myUser.rank}
-        previousRank={gameStore.myUser.prevRank}
-        top3={gameStore.topThreeUsers}
-        profileImage={userStore.profileImage}
-      />
+      <Rank />
     </View>
   )
 })

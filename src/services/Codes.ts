@@ -10,4 +10,8 @@ export enum Codes {
   STAGE = 'stage',
   ROUTE_NOT_FOUND = 'routeNotFound',
   PAIR = 'pair',
+  GAME_ALREADY_STARTED = 'gameAlreadyStarted',
+  FORCE = 'force',
+  QUESTION_ANSWER = 'questionAnswer',
+  SHOW_SOLUTION_QUESTION = 'showSolutionQuestion',
 }

@@ -4,7 +4,7 @@ import { shortenString } from '@/util'
 
 import { LobbyRoutes } from './routes/LobbyRoutes'
 
-import { ResponseObject } from '@/services/controllers/LobbyController'
+import LobbyController, { ResponseObject } from '@/services/controllers/LobbyController'
 
 export class PeerService {
   private static instance: PeerService | null = null
@@ -90,6 +90,7 @@ export class PeerService {
       this.connections.forEach(socket => socket.end())
       this.server.close()
       this.isServerRunning = false
+      LobbyController.clearCurrentLobby()
     }
   }
 

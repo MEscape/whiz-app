@@ -45,6 +45,8 @@ export interface HeaderProps<
   RightActionComponent?: ReactElement
   rightTxOptions?: TextProps['txOptions']
   onRightPress?: PressableProps['onPress']
+
+  FullActionComponent?: ReactElement
 }
 
 interface HeaderActionProps<T extends LibraryTypes> {
@@ -83,6 +85,16 @@ const HeaderComponent = (props: HeaderProps<LibraryTypes, LibraryTypes, LibraryT
     ${className} bg-${backgroundColor}
   `
 
+  if (props.FullActionComponent) {
+    return (
+      <View
+        style={containerInsets}
+        className={`flex w-full flex-row items-center ${className} bg-${backgroundColor}`}>
+        {props.FullActionComponent}
+      </View>
+    )
+  }
+
   return (
     <View style={containerInsets} className={containerStyles}>
       {/* Left Action - Align to the left */}
@@ -117,7 +129,7 @@ const HeaderComponent = (props: HeaderProps<LibraryTypes, LibraryTypes, LibraryT
         renderOrder={props.rightOrder}
         ActionComponent={props.RightActionComponent}
         color={color}
-        baseStyles='text-right'
+        baseStyles="text-right"
       />
     </View>
   )
@@ -163,7 +175,12 @@ const HeaderAction = (props: HeaderActionProps<LibraryTypes>) => {
 
   if (props.icon) {
     return (
-      <Icon name={props.icon} library={props.library} className={`mt-4 flex-1 ${props.baseStyles}`} onPress={props.onPress} />
+      <Icon
+        name={props.icon}
+        library={props.library}
+        className={`mt-4 flex-1 ${props.baseStyles}`}
+        onPress={props.onPress}
+      />
     )
   }
 

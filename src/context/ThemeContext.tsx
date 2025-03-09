@@ -33,10 +33,10 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) =
   // Toggle theme and persist to storage
   const toggleTheme = useCallback(async () => {
     const newTheme = !isDarkMode
-    await storage.save(StorageKeys.APP_THEME, newTheme)
     setIsDarkMode(newTheme)
     setColorScheme(newTheme ? 'dark' : 'light')
-  }, [isDarkMode])
+    await storage.save(StorageKeys.APP_THEME, newTheme)
+  }, [isDarkMode, setColorScheme])
 
   // Memoized context value
   const contextValue = useMemo(
@@ -51,11 +51,14 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) =
   useEffect(() => {
     const loadTheme = async () => {
       const storedTheme = await storage.load(StorageKeys.APP_THEME)
-      const initialTheme = (
-        storedTheme !== undefined ? storedTheme : colorScheme === 'dark'
-      ) as boolean
-      setIsDarkMode(initialTheme)
-      setColorScheme(initialTheme ? 'dark' : 'light')
+      if (storedTheme !== null) {
+        setIsDarkMode(storedTheme as boolean)
+        setColorScheme(storedTheme ? 'dark' : 'light')
+      } else {
+        const systemPrefersDark = colorScheme === 'dark'
+        setIsDarkMode(systemPrefersDark)
+        setColorScheme(systemPrefersDark ? 'dark' : 'light')
+      }
     }
     loadTheme()
   }, [colorScheme])

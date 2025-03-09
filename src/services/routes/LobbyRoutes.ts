@@ -34,6 +34,18 @@ export class LobbyRoutes {
         return await LobbyController.leaveLobby(socket)
       }
 
+      if (path === '/force' && method === 'POST') {
+        return await LobbyController.forceGame(body)
+      }
+
+      if (path === '/question' && method === 'POST') {
+        return await LobbyController.addQuestionAnswer(socket, body)
+      }
+
+      if (path === '/question' && method === 'PUT') {
+        return await LobbyController.forceShowQuestionSolution()
+      }
+
       if (path === '/collection' && method === 'POST') {
         return await LobbyController.setCollection(body)
       }

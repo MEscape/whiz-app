@@ -12,7 +12,7 @@ const shuffleArray = array => {
 interface SelectorProps {
   answers: Array<string>
   disabled?: boolean
-  onSubmit?: (success: boolean) => void
+  onSubmit?: (success: boolean, selection: string) => void
   solution?: number
   editable?: boolean
   showSolution?: boolean
@@ -41,7 +41,7 @@ export const Selector = ({
   const [shuffledState] = useState(initialShuffledState)
 
   const handlePress = (selectedIndex: number) => {
-    onSubmit?.(selectedIndex === shuffledState.solutionIndex)
+    onSubmit?.(selectedIndex === shuffledState.solutionIndex, shuffledState.answers[selectedIndex])
   }
 
   const handleChangeAnswer = (index: number, name: string) => {

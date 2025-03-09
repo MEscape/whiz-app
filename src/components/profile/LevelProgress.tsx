@@ -1,15 +1,15 @@
-import React, { memo } from 'react'
+import React from 'react'
 import { View } from 'react-native'
 
 import { Text } from 'blueprints'
 import { LinearGradient } from 'expo-linear-gradient'
+import { observer } from 'mobx-react-lite'
 
 import { progressGradient, progressGradientDark } from '@/constants'
 import { useAppContext } from '@/context'
-import { observer } from 'mobx-react-lite'
 
 export const LevelProgress = observer(() => {
-  const { userStore, isDarkMode } = useAppContext()
+  const { isDarkMode, userStore } = useAppContext()
   const gradientColors = isDarkMode ? progressGradientDark : progressGradient
 
   return (

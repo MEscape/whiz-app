@@ -2,6 +2,7 @@ import React from 'react'
 import { ScrollView, View } from 'react-native'
 
 import { playTypesIcon, playTypesName } from '@/constants'
+import { useAppContext } from '@/context'
 import { translate } from '@/i18n'
 
 import { Icon } from 'blueprints/Icon'
@@ -9,7 +10,7 @@ import { Text } from 'blueprints/Text'
 
 import { Selector } from '../../Selector'
 
-interface QuestionProps {
+export interface QuestionProps {
   type: string
   name: string
   answers: string[]
@@ -18,13 +19,17 @@ interface QuestionProps {
 }
 
 export const Question = ({ stage }: { stage: QuestionProps }) => {
-  const handleSubmit = (success: boolean) => {
-    console.log(success)
+  const { gameStore, router } = useAppContext()
+
+  const handleSubmit = (success: boolean, selection: string) => {
+    router.push('/(result)/question')
+    gameStore.myUser?.setAnswer({ selection, success })
   }
 
   return (
     <ScrollView
       className="flex-1 p-4"
+      showsVerticalScrollIndicator={false}
       contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
       <Text variant="h1" text={stage.name} />
       <View className="flex-row items-center gap-x-2 py-2">

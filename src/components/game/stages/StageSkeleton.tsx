@@ -7,6 +7,7 @@ export const StageSkeleton = () => {
   return (
     <ScrollView
       className="flex-1 p-4"
+      showsVerticalScrollIndicator={false}
       contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
       <Skeleton className="h-12 w-full rounded-lg mb-2" />
       <Skeleton className="h-6 w-full rounded-lg" />

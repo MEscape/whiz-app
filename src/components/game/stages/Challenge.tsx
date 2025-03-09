@@ -21,13 +21,10 @@ interface QuestionProps {
 export const Challenge = ({ enemy, stage }: { stage: QuestionProps; enemy: EnemyState }) => {
   const { userStore } = useAppContext()
 
-  useEffect(() => {
-    console.log(enemy)
-  }, [enemy])
-
   return (
     <ScrollView
       className="flex-1 p-4"
+      showsVerticalScrollIndicator={false}
       contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
       <Text variant="h1" text={stage.name} />
       <View className="flex-row items-center gap-x-2 py-2">

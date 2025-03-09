@@ -9,6 +9,7 @@ const de = {
     classicChaos: 'Klassischer Chaos',
     create: 'Sammlung erstellen',
     disorderly: 'Betrunken & Unordnung',
+    noContent: 'Die Sammlung hat keinen Inhalt.',
     own: 'Eigene Sammlungen',
     served: 'Bereitgestellte Sammlungen',
     survival: 'Überlebensmodus',
@@ -19,6 +20,7 @@ const de = {
     collect: 'Einsammeln',
     create: 'Erstellen',
     elements: 'Elemente',
+    games: 'Spiele',
     guess: 'Schätze',
     join: 'Beitreten',
     left: 'übrig',
@@ -39,9 +41,17 @@ const de = {
     [Codes.IMAGE_NOT_FOUND]: 'Bild konnte nicht gefunden werden',
     [Codes.TOO_MANY_USERS]: 'Zu viele Benutzer in der Lobby (16/16)',
     [Codes.ROUTE_NOT_FOUND]: 'Unbekannte Route',
+    [Codes.GAME_ALREADY_STARTED]: 'Das Spiel hat bereits begonnen',
+  },
+  explain: {
+    winRate: 'Dieser Wert bezieht sich auf die aktuelle Sitzung.',
+    winRateOverall: 'Dieser Wert bezieht sich auf alle Sitzungen.',
   },
   game: {
+    achievements: 'Meine Erfolge',
+    goRanking: 'Weiter zum Ranking',
     noEnemy: 'Kein Gegner',
+    submissions: 'Abgaben',
     yourRank: 'Dein Rang',
   },
   info: {
@@ -99,10 +109,13 @@ const de = {
     removeImage: 'Foto entfernen',
     stats: {
       gamesPlayed: 'Gespielte Spiele',
+      loses: 'Verloren',
       partiesHosted: 'Gehostete Partien',
       playTime: 'Spielzeit',
       title: 'Party Stats',
       winRate: 'Gewinnrate',
+      winRateOverall: 'Gesamt Gewinnrate',
+      wins: 'Gewonnen',
     },
   },
   pushNotifications: {
@@ -151,6 +164,8 @@ const de = {
     home: 'Start',
     lobby: 'Lobby',
     profile: 'Profil',
+    ranking: 'Plazierung',
+    result: 'Ergebnis',
     settings: 'Einstellungen',
   },
   task: {

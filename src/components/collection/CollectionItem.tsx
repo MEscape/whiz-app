@@ -3,6 +3,7 @@ import { LogBox, Pressable, View } from 'react-native'
 
 import { useAppContext } from '@/context'
 import { translate, TxKeyPath } from '@/i18n'
+import { showErrorToast } from '@/util'
 
 import { ImageUris } from 'assets/images'
 
@@ -46,6 +47,8 @@ const CollectionItem = memo(({ item }: { item: CollectionItemProps }) => {
 
     setTimeout(() => {
       if (gameStore.collection.currentlySelecting) {
+        if (item.elements === 0) return showErrorToast('collection.noContent')
+
         gameStore.setCollection({
           id: item.id,
           image: item.image,

@@ -1,7 +1,7 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { memo, useCallback, useMemo, useState } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 
-import { BottomSheet, BottomSheetOption, Icon, Image, Text } from 'blueprints'
+import { BottomSheet, BottomSheetOption, Icon, Image, Text, TextVariants } from 'blueprints'
 
 import { EMOJI_INVENTORY } from '@/constants/emojis'
 import { pickImage } from '@/util/imagePicker'
@@ -12,6 +12,20 @@ interface ProfileImageProps {
   showHint?: boolean
   equippedEmojiId?: string | null
   disabled?: boolean
+  size?: 'small' | 'normal'
+}
+
+const sizeChart = {
+  normal: {
+    box: 'h-20 w-20',
+    emoji: 'h1' as TextVariants,
+    placeholder: 70,
+  },
+  small: {
+    box: 'h-10 w-10',
+    emoji: 'caption' as TextVariants,
+    placeholder: 35,
+  },
 }
 
 const ProfileImageComponent: React.FC<ProfileImageProps> = ({
@@ -20,6 +34,7 @@ const ProfileImageComponent: React.FC<ProfileImageProps> = ({
   imageUrl,
   onPress,
   showHint,
+  size = 'normal',
 }) => {
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false)
   const equippedEmoji = EMOJI_INVENTORY.find(e => e.id === equippedEmojiId)
@@ -51,13 +66,18 @@ const ProfileImageComponent: React.FC<ProfileImageProps> = ({
     () => (
       <TouchableOpacity
         disabled={disabled}
-        className="h-20 w-20 bg-secondary rounded-full overflow-hidden items-center justify-center"
+        className="h-full w-full bg-secondary rounded-full overflow-hidden items-center justify-center"
         onPress={handleImagePress}>
         {imageUrl ? (
           <Image src={{ uri: imageUrl }} classNameContainer="w-full h-full" />
         ) : (
           <>
-            <Icon library="Ionicons" name="person" size={70} color="text-white" />
+            <Icon
+              library="Ionicons"
+              name="person"
+              size={sizeChart[size].placeholder}
+              color="text-white"
+            />
             {showHint && (
               <View className="absolute inset-0 bg-secondary opacity-50 justify-center items-center">
                 <Icon name="camera" library="Ionicons" color="text-black" size={30} />
@@ -74,7 +94,7 @@ const ProfileImageComponent: React.FC<ProfileImageProps> = ({
     () =>
       equippedEmoji && (
         <View className="absolute -bottom-1 -right-1 p-1  rounded-full z-20">
-          <Text variant="h1">{equippedEmoji.emoji}</Text>
+          <Text variant={sizeChart[size].emoji}>{equippedEmoji.emoji}</Text>
         </View>
       ),
     [equippedEmoji],
@@ -82,7 +102,7 @@ const ProfileImageComponent: React.FC<ProfileImageProps> = ({
 
   return (
     <>
-      <View className="relative">
+      <View className={`relative ${sizeChart[size].box}`}>
         {ImageContent}
 
         {EmojiContent}

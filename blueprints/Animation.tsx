@@ -11,6 +11,7 @@ interface CreateAnimationProps extends LottieViewProps {
   loop?: boolean
   source: any
   children?: React.ReactNode
+  stopFrame?: number
 }
 
 export const Animation = ({
@@ -20,6 +21,7 @@ export const Animation = ({
   loop = false,
   onAnimationFinish,
   source,
+  stopFrame,
   ...props
 }: CreateAnimationProps) => {
   const animationRef = useRef<LottieView>(null)
@@ -33,7 +35,7 @@ export const Animation = ({
     }).start()
 
     const timer = setTimeout(() => {
-      animationRef.current?.play()
+      animationRef.current?.play(0, stopFrame)
     }, 100)
 
     return () => clearTimeout(timer)

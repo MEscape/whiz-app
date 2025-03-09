@@ -49,6 +49,7 @@ export const useStage = () => {
         console.log('Setting new Stage', response.data)
         clearTimeout(timeout.current)
         setCurrentStage(response.data)
+        gameStore.collection.setCurrentStage(response.data)
       }
 
       if (response.code === Codes.PAIR) {

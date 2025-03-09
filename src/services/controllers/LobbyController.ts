@@ -13,6 +13,7 @@ export interface Lobby {
   users: Record<string, TransferUser>
   collection?: { image: string; name: string }
   stage?: Task
+  started?: boolean
 }
 
 export interface ResponseObject {
@@ -27,6 +28,10 @@ export interface ResponseObject {
 class LobbyController {
   private static currentLobby: Lobby | null = null
 
+  public static clearCurrentLobby() {
+    this.currentLobby = null
+  }
+
   static async joinLobby(
     socket: TcpServer.Socket,
     body: { user: TransferUser } | null,
@@ -38,8 +43,13 @@ class LobbyController {
         const ip = await getIpV4()
         this.currentLobby = {
           id: encodeIp(ip),
+          started: false,
           users: {},
         }
+      }
+
+      if (this.currentLobby.started) {
+        return { code: Codes.GAME_ALREADY_STARTED, error: 'Game already started', status: 400 }
       }
 
       if (Object.keys(this.currentLobby.users).length >= 16) {
@@ -141,12 +151,12 @@ class LobbyController {
       if (body.type === 4) setImmediate(() => this.buildRandomPairs())
       return { code: Codes.STAGE, data: body, status: 201 }
     } catch (error: any) {
-      console.error('Error setting collection:', error)
+      console.error('Error setting stage:', error)
       return { code: error.code || Codes.UNEXPECTED_ERROR, error: error.message, status: 400 }
     }
   }
 
-  static async buildRandomPairs() {
+  private static async buildRandomPairs() {
     const users = Object.keys(this.currentLobby.users)
     for (let i = users.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
@@ -181,6 +191,75 @@ class LobbyController {
         PeerService.getInstance().sendData({ code: Codes.PAIR, status: 204 }, users[i])
         console.warn(`User ${users[i]} has no pair`)
       }
+    }
+  }
+
+  static async forceGame(body: { route: string }): Promise<ResponseObject> {
+    try {
+      if (!this.currentLobby) {
+        return { code: Codes.LOBBY_NOT_FOUND, error: 'No lobby found', status: 400 }
+      }
+
+      if (body.route === '/(game)/game') this.currentLobby.started = true
+
+      return { code: Codes.FORCE, data: body, status: 204 }
+    } catch (error: any) {
+      console.error('Error starting game:', error)
+      return { code: error.code || Codes.UNEXPECTED_ERROR, error: error.message, status: 400 }
+    }
+  }
+
+  static async addQuestionAnswer(
+    socket: TcpServer.Socket,
+    body: { success: boolean; selection: string },
+  ): Promise<ResponseObject> {
+    try {
+      const remoteAddress = socket.remoteAddress || ''
+
+      if (!this.currentLobby) {
+        return { code: Codes.LOBBY_NOT_FOUND, error: 'No lobby found', status: 400 }
+      }
+
+      if (!this.currentLobby.users[remoteAddress]) {
+        return { code: Codes.USER_NOT_FOUND, error: 'User not found in lobby', status: 404 }
+      }
+
+      this.currentLobby.users[remoteAddress].answer = body
+      const allAnswers = Object.entries(this.currentLobby.users).map(([userId, user]) => ({
+        answer: user.answer,
+        userId,
+      }))
+
+      return { code: Codes.QUESTION_ANSWER, data: allAnswers, status: 200 }
+    } catch (error: any) {
+      console.error('Error starting game:', error)
+      return { code: error.code || Codes.UNEXPECTED_ERROR, error: error.message, status: 400 }
+    }
+  }
+
+  static async forceShowQuestionSolution(): Promise<ResponseObject> {
+    try {
+      if (!this.currentLobby) {
+        return { code: Codes.LOBBY_NOT_FOUND, error: 'No lobby found', status: 400 }
+      }
+
+      const sendDataPromises = Object.entries(this.currentLobby.users).map(([userId, user]) => {
+        if (!user.answer) {
+          return PeerService.getInstance().sendData(
+            { code: Codes.FORCE, data: { route: '/(result)/question' }, status: 204 },
+            userId,
+          )
+        } else {
+          this.currentLobby.users[userId].answer = null
+        }
+      })
+
+      await Promise.all(sendDataPromises)
+
+      return { code: Codes.SHOW_SOLUTION_QUESTION, status: 204 }
+    } catch (error: any) {
+      console.error('Error starting game:', error)
+      return { code: error.code || Codes.UNEXPECTED_ERROR, error: error.message, status: 400 }
     }
   }
 }

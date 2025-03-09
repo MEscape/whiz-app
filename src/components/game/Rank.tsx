@@ -4,33 +4,16 @@ import { View } from 'react-native'
 import { Icon, Image, Text } from 'blueprints'
 import { LinearGradient } from 'expo-linear-gradient'
 
+import { useAppContext } from '@/context'
 import { translate } from '@/i18n'
 import { truncateMiddle } from '@/util'
 
-// Example usage:
-// <Rank
-//   currentRank={5}
-//   previousRank={7}
-//   top3={[
-//     { rank: 1, username: 'Alice', points: 1500, profileImage: 'https://example.com/alice.png' },
-//     { rank: 2, username: 'Bob', points: 1400, profileImage: 'https://example.com/bob.png' },
-//     { rank: 3, username: 'Charlie', points: 1350, profileImage: 'https://example.com/charlie.png' },
-//   ]}
-// />
+export const Rank = () => {
+  const { gameStore } = useAppContext()
 
-interface RankProps {
-  currentRank: number
-  previousRank: number
-  profileImage: any
-  top3: {
-    rank: number
-    username: string
-    points: number
-    profileImage: string
-  }[]
-}
+  const currentRank = gameStore.myUser.rank
+  const previousRank = gameStore.myUser.prevRank
 
-export const Rank = ({ currentRank, previousRank, profileImage, top3 = [] }: RankProps) => {
   const rankDiff = previousRank ? previousRank - currentRank : 0
   const rankChangeIcon = rankDiff > 0 ? 'arrowup' : rankDiff < 0 ? 'arrowdown' : 'minus'
   const rankChangeColor = rankDiff > 0 ? 'text-green' : rankDiff < 0 ? 'text-red' : 'text-gray'
@@ -60,7 +43,7 @@ export const Rank = ({ currentRank, previousRank, profileImage, top3 = [] }: Ran
 
       {/* Top 3 Rankings */}
       <View className="flex-row justify-around">
-        {top3.map(user => {
+        {gameStore.topThreeUsers.map((user, index) => {
           let gradientColors = ['transparent', 'rgba(0,0,0,0.8)'] // default fallback
           if (user.rank === 1) {
             gradientColors = ['transparent', 'rgba(199,168,51,0.8)'] // yellow for 1st
@@ -70,14 +53,13 @@ export const Rank = ({ currentRank, previousRank, profileImage, top3 = [] }: Ran
             gradientColors = ['transparent', 'rgba(251, 146, 60, 0.8)'] // orange for 3rd
           }
 
+          const profileImage = gameStore.processedImages.get(user.userId)
+
           return (
-            <View key={user.rank} className="items-center rounded-lg pt-1">
+            <View key={index} className="items-center rounded-lg pt-1">
               <View className="w-10 h-10 relative rounded-full overflow-hidden flex justify-center items-center">
-                {profileImage || user.profileImage ? (
-                  <Image
-                    src={currentRank === user.rank ? profileImage : user.profileImage}
-                    classNameContainer="w-full h-full"
-                  />
+                {profileImage ? (
+                  <Image src={profileImage} classNameContainer="w-full h-full" />
                 ) : (
                   <Icon library="Ionicons" name="person" size={30} color="text-white" />
                 )}
@@ -91,7 +73,7 @@ export const Rank = ({ currentRank, previousRank, profileImage, top3 = [] }: Ran
                   className="absolute"
                   textColor="text-black"
                   textAlign="center">
-                  {currentRank === user.rank
+                  {gameStore.myId === user.userId
                     ? translate('common.me')
                     : truncateMiddle(user.username)}
                 </Text>

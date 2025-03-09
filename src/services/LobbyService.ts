@@ -19,6 +19,7 @@ export interface TransferUser {
   points: number
   rank: number
   prevRank: number
+  answer?: any
 }
 
 export const createLobby = async (transferUser: TransferUser) => {
@@ -100,8 +101,11 @@ export const joinLobby = async (ip: string, transferUser: TransferUser) => {
           } else {
             if (initialize) {
               TcpEventManager.emit('connected', {
+                collection: parsedData?.data?.collection,
                 id: tcpClient.remoteAddress,
                 isHost: transferUser.isHost,
+                lobbyId: parsedData?.data?.id,
+                users: parsedData?.data?.users,
               })
               initialize = false
 
@@ -114,9 +118,9 @@ export const joinLobby = async (ip: string, transferUser: TransferUser) => {
                   path: '/image',
                 })
               }
+            } else {
+              TcpEventManager.emit('data', parsedData)
             }
-
-            TcpEventManager.emit('data', parsedData)
           }
         } catch (error) {
           console.error('Error processing message:', error)

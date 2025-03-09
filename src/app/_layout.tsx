@@ -22,7 +22,7 @@ import { useInitialRootStore } from '@/models'
 SplashScreen.preventAutoHideAsync()
 
 Sentry.init({
-  dsn: 'https://examplePublicKey@o0.ingest.sentry.io/0',
+  dsn: 'https://ef3eb8306b9a61067bc052f2e695d0c2@o4508925277175808.ingest.de.sentry.io/4508925280059472',
 
   // profilesSampleRate is relative to tracesSampleRate.
   // Here, we'll capture profiles for 100% of transactions.
@@ -37,6 +37,9 @@ Sentry.init({
   // Learn more at
   // https://docs.sentry.io/platforms/react-native/configuration/options/#traces-sample-rate
   tracesSampleRate: 1.0,
+
+  // uncomment the line below to enable Spotlight (https://spotlightjs.com)
+  // spotlight: __DEV__,
 })
 
 const stackScreenOptions: NativeStackNavigationOptions = {

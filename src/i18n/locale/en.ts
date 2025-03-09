@@ -9,6 +9,7 @@ const en = {
     classicChaos: 'Classic Chaos',
     create: 'Create Collection',
     disorderly: 'Drunk & Disorderly',
+    noContent: 'The collection has no content.',
     own: 'Own Collections',
     served: 'Served Collections',
     survival: 'Survival Mode',
@@ -19,6 +20,7 @@ const en = {
     collect: 'Collect',
     create: 'Create',
     elements: 'Elements',
+    games: 'Spiele',
     guess: 'Guess',
     join: 'Join',
     left: 'left',
@@ -39,9 +41,17 @@ const en = {
     [Codes.IMAGE_NOT_FOUND]: 'Image could not be found',
     [Codes.TOO_MANY_USERS]: 'Too many users in the lobby (16/16)',
     [Codes.ROUTE_NOT_FOUND]: 'Unknown Route',
+    [Codes.GAME_ALREADY_STARTED]: 'The already started',
+  },
+  explain: {
+    winRate: 'This value refers to the current session.',
+    winRateOverall: 'This value refers to all sessions.',
   },
   game: {
+    achievements: 'My achievements',
+    goRanking: 'Continue to ranking',
     noEnemy: 'No Enemy',
+    submissions: 'Submissions',
     yourRank: 'Your Rank',
   },
   info: {
@@ -99,10 +109,13 @@ const en = {
     removeImage: 'Remove Photo',
     stats: {
       gamesPlayed: 'Games Played',
+      loses: 'Loses',
       partiesHosted: 'Parties Hosted',
       playTime: 'Play Time',
       title: 'Party Stats',
       winRate: 'Win rate',
+      winRateOverall: 'Overall win rate',
+      wins: 'Wins',
     },
   },
   pushNotifications: {
@@ -146,12 +159,13 @@ const en = {
   success: {
     delete: 'Successfully deleted {{itemName}}',
   },
-
   tabs: {
     collections: 'Collections',
     home: 'Start',
     lobby: 'Lobby',
     profile: 'Profile',
+    ranking: 'Placement',
+    result: 'Result',
     settings: 'Settings',
   },
   task: {

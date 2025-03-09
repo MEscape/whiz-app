@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView, View } from 'react-native'
 
+import * as Sentry from '@sentry/react-native'
 import { BottomSheet, BottomSheetInput, Button, Image } from 'blueprints'
 import { LinearGradient } from 'expo-linear-gradient'
 import { observer } from 'mobx-react-lite'
@@ -9,7 +10,7 @@ import { BackgroundVideo, Typewriter } from '@/components'
 import { blackGradient } from '@/constants'
 import { useAppContext } from '@/context'
 import { useAudioPlayer } from '@/hooks'
-import { translate } from '@/i18n'
+import { translate, TxKeyPath } from '@/i18n'
 import { decodeIp, showErrorToast } from '@/util'
 
 import { Audios, AudioUris } from 'assets/audios'
@@ -48,15 +49,19 @@ const HomeScreen = observer(() => {
   useEffect(() => {
     gameStore.clearStore()
 
-    TcpEventManager.on('connected', response => {
+    TcpEventManager.on('connected', async response => {
       setIsLoading(false)
       gameStore.setIsHost(response.isHost)
       gameStore.setMyId(response.id)
+      response.lobbyId && gameStore.setLobbyId(response.lobbyId)
+      response.users && gameStore.setUsers(response.users)
+      response.collection && (await gameStore.setRemoteCollection(response.collection))
+
       return router.push('/(game)/lobby')
     })
 
     TcpEventManager.on('error', response => {
-      showErrorToast(`error.${response?.code}` || response.error)
+      showErrorToast(translate(`error.${response?.code}` as TxKeyPath) || response.error)
       setIsLoading(false)
     })
 

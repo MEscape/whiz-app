@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
+import { View } from 'react-native'
 
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs'
+import { useNavigationState } from '@react-navigation/core'
 import { Icon, Text } from 'blueprints'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Tabs, useRootNavigationState } from 'expo-router'
@@ -11,16 +13,22 @@ import { blackGradient } from '@/constants'
 import { useAppContext } from '@/context'
 
 const TabLayout = observer(() => {
-  const { gameStore, router, userStore } = useAppContext()
+  const { gameStore, isDarkMode, router, userStore } = useAppContext()
   const { bottom } = useSafeAreaInsets()
   const rootNavigationState = useRootNavigationState()
+  const currentRoute = useNavigationState(state => state?.routes[state.index].state?.index)
+
   const tabHeight = bottom + 50
+  const withGradient = !isDarkMode || currentRoute === 0 || currentRoute === undefined
 
   const screenOptions: BottomTabNavigationOptions = {
     headerShown: false,
-    tabBarBackground: () => (
-      <LinearGradient colors={blackGradient} style={{ height: tabHeight + 20 }} />
-    ),
+    tabBarBackground: () =>
+      withGradient ? (
+        <LinearGradient colors={blackGradient} style={{ height: tabHeight + 20 }} />
+      ) : (
+        <View style={{ backgroundColor: 'transparent', height: tabHeight + 20 }} />
+      ),
     tabBarHideOnKeyboard: true,
     tabBarStyle: {
       backgroundColor: 'transparent',
@@ -45,9 +53,18 @@ const TabLayout = observer(() => {
         name="index"
         options={{
           tabBarIcon: ({ focused }) => (
-            <Icon library="Ionicons" name={focused ? 'home' : 'home-outline'} color="text-white" />
+            <Icon
+              library="Ionicons"
+              name={focused ? 'home' : 'home-outline'}
+              color={withGradient ? 'text-white' : 'text-black'}
+            />
           ),
-          tabBarLabel: () => <Text variant="caption" textColor="text-white" tx="tabs.home"></Text>,
+          tabBarLabel: () => (
+            <Text
+              variant="caption"
+              textColor={withGradient ? 'text-white' : 'text-black'}
+              tx="tabs.home"></Text>
+          ),
         }}
       />
       <Tabs.Screen
@@ -57,11 +74,14 @@ const TabLayout = observer(() => {
             <Icon
               library="Ionicons"
               name={focused ? 'library' : 'library-outline'}
-              color="text-white"
+              color={withGradient ? 'text-white' : 'text-black'}
             />
           ),
           tabBarLabel: () => (
-            <Text variant="caption" textColor="text-white" tx="tabs.collections"></Text>
+            <Text
+              variant="caption"
+              textColor={withGradient ? 'text-white' : 'text-black'}
+              tx="tabs.collections"></Text>
           ),
         }}
       />
@@ -72,11 +92,14 @@ const TabLayout = observer(() => {
             <Icon
               library="Ionicons"
               name={focused ? 'person' : 'person-outline'}
-              color="text-white"
+              color={withGradient ? 'text-white' : 'text-black'}
             />
           ),
           tabBarLabel: () => (
-            <Text variant="caption" textColor="text-white" tx="tabs.profile"></Text>
+            <Text
+              variant="caption"
+              textColor={withGradient ? 'text-white' : 'text-black'}
+              tx="tabs.profile"></Text>
           ),
         }}
       />

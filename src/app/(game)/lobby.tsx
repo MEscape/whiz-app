@@ -46,6 +46,12 @@ const LobbyScreen = observer(() => {
         gameStore.setLobbyId(data.data?.id)
         gameStore.setUsers(data.data?.users)
       }
+
+      if (data.code === Codes.FORCE) {
+        //if (data.data.route === '/(game)/game')
+        //gameStore.sessionStats.startTimer()
+        router.push(data.data.route)
+      }
     }
 
     const handleImage = (image: Record<string, string>) => {
@@ -60,7 +66,7 @@ const LobbyScreen = observer(() => {
       TcpEventManager.removeListener('image', handleImage)
       gameStore.clearStore()
     }
-  }, [gameStore])
+  }, [])
 
   useEffect(() => {
     ;(async () => {
@@ -77,7 +83,7 @@ const LobbyScreen = observer(() => {
     <>
       {gameStore.lobbyId ? (
         <View className="bg-primary flex-1 p-4">
-          <ScrollView className="flex-row flex-wrap gap-4">
+          <ScrollView className="flex-row flex-wrap gap-4" showsVerticalScrollIndicator={false}>
             {Array.from(gameStore.users.entries()).map(([id, user]) => (
               <View className="items-center w-24" key={id}>
                 <ProfileImage

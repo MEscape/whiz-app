@@ -5,7 +5,7 @@ import { Skeleton } from '../Skeleton'
 
 export function ProfileSkeleton() {
   return (
-    <ScrollView className="flex-1 bg-primary">
+    <ScrollView className="flex-1 bg-primary" showsVerticalScrollIndicator={false}>
       {/* Profile Header Skeleton */}
       <View className="flex-row items-center p-4">
         <Skeleton className="h-20 w-20 rounded-full" />
@@ -34,4 +34,4 @@ export function ProfileSkeleton() {
       </View>
     </ScrollView>
   )
-} 
+}
